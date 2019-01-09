@@ -29,7 +29,7 @@ for proc in psutil.process_iter():
         ffxiv_pid = int(findingPID.group(1))
 
 if not findingPID:
-	print('Error: Process name not found, try changing it.')
+    print('Error: Process name not found, try changing it.')
 
 # If auto PID doesnt work, then add process manually `connect(process=1234)`
 app = Application().connect(process=ffxiv_pid)
@@ -37,19 +37,19 @@ app = Application().connect(process=ffxiv_pid)
 # Setup sleep times accordingly, and your keystrokes
 print('Press Ctrl-C to quit crafting.')
 try:
-	while True:
-		time.sleep(2)
-		# SELECT "SYNTHESIZE"
-		app.window(title='FINAL FANTASY XIV').send_keystrokes('{VK_NUMPAD0}')
-		time.sleep(1)
-		# PRESS "SYNTHESIZE"
-		app.window(title='FINAL FANTASY XIV').send_keystrokes('{VK_NUMPAD0}')
-		time.sleep(3)
-		# CRAFTING MACRO 1
-		app.window(title='FINAL FANTASY XIV').send_keystrokes('{VK_NUMPAD0}')
-		time.sleep(39)
-		# CRAFTING MACRO 2
-		app.window(title='FINAL FANTASY XIV').send_keystrokes('{VK_NUMPAD0}')
-		time.sleep(46)
+    while True:
+        time.sleep(2)
+        # SELECT "SYNTHESIZE"
+        app.window(title='FINAL FANTASY XIV').send_keystrokes('{VK_NUMPAD0}')
+        time.sleep(1)
+        # PRESS "SYNTHESIZE"
+        app.window(title='FINAL FANTASY XIV').send_keystrokes('{VK_NUMPAD0}')
+        time.sleep(3)
+        # CRAFTING MACRO 1
+        app.window(title='FINAL FANTASY XIV').send_keystrokes('{VK_NUMPAD0}')
+        time.sleep(39)
+        # CRAFTING MACRO 2
+        app.window(title='FINAL FANTASY XIV').send_keystrokes('{VK_NUMPAD0}')
+        time.sleep(46)
 except KeyboardInterrupt:
-	print('\n')
+    print('\n')
