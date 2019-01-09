@@ -6,6 +6,7 @@
 
 * (get python 3)
 * pip install -U pywinauto
+* pip install psutil
 
 ---
 
