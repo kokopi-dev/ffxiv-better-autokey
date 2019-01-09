@@ -33,7 +33,7 @@ try:
 		time.sleep(3)
 		# CRAFTING MACRO 1
 		app.window(title='FINAL FANTASY XIV').send_keystrokes('{VK_NUMPAD0}')
-		time.sleep(2)
+		time.sleep(39)
 		# CRAFTING MACRO 2
 		app.window(title='FINAL FANTASY XIV').send_keystrokes('{VK_NUMPAD0}')
 		time.sleep(46)
