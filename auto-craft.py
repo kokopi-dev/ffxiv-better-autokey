@@ -1,4 +1,6 @@
 #!/usr/bin/python3
+import psutil
+import re
 import time
 from pywinauto.application import Application
 from pywinauto.keyboard import *
@@ -17,11 +19,23 @@ time.sleep(46)
 """
 
 
-# Setup FFXIV here, change PID process=YOURNUMBER
-app = Application().connect(process=3376)
+# Task Manager -> Right click FFXIV -> Go to details
+process_name = "ffxiv_dx11.exe"
+
+# AUTO PID
+for proc in psutil.process_iter():
+    if proc.name() == process_name:
+        findingPID = re.search('pid=(.+?), name=', str(proc))
+        ffxiv_pid = int(findingPID.group(1))
+
+if not findingPID:
+	print('Error: Process name not found, try changing it.')
+
+# If auto PID doesnt work, then add process manually `connect(process=1234)`
+app = Application().connect(process=ffxiv_pid)
 
 # Setup sleep times accordingly, and your keystrokes
-print('Press Ctrl-C to quit.')
+print('Press Ctrl-C to quit crafting.')
 try:
 	while True:
 		time.sleep(2)
