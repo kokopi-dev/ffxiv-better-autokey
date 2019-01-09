@@ -28,6 +28,6 @@ Automating crafting in FFXIV with a small script that runs in the background unt
 1. Make sure your crafting window is active, and that you've selected the item to craft.
 ![highlighted_item_craft_window](../assets/window.jpg)
 
-2. Open up the terminal and navigate to the program `auto-py`
+2. Open up the terminal and navigate to the program `auto-craft.py`
 3. Enter the command `python auto-craft.py`
 4. Press Ctrl+C when you want to end the script
