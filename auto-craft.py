@@ -218,12 +218,12 @@ for proc in psutil.process_iter():
         findingPID = re.search('pid=(.+?), name=', str(proc))
         ffxiv_pid = int(findingPID.group(1))
 
-if not findingPID:
-    print("  <Error: Process name not found, try changing it.>")
+# If auto PID doesnt work, check if the 'process_name' is correct in your task manager`
+try:
+    app = Application().connect(process=ffxiv_pid)
+except NameError:
+    print("  <Error: Process not found.>\n  ... Either make sure FFXIV is running or change 'process_name'")
     sys.exit()
-
-# If auto PID doesnt work, then add process manually `connect(process=1234)`
-app = Application().connect(process=ffxiv_pid)
 
 # Setup sleep times accordingly, and your keystrokes
 print('\nPress Ctrl-C to quit crafting.')
