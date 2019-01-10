@@ -18,8 +18,10 @@ Automating crafting in FFXIV with a small script that runs in the background unt
 
 * **Install required things above**
 
-**Setting correct PID in auto-craft:**
-![finding_PID](../assets/pid.jpg)
+**Make sure your ffxiv process is this name:**
+* If it is incorrect, change `process_name` variable in ffxiv-autocraft.py
+
+![finding_process](../assets/detailpid.jpg)
 
 **Calculating wait times for corresponding macro:**
 
