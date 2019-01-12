@@ -44,7 +44,19 @@ Automating crafting in FFXIV with a small script that runs in the background unt
 * `python ffxiv-autocraft.py` : runs the autocrafter with current timer settings
 * `python ffxiv-autocraft.py edit` : allows you to edit timers one by one, follow prompt messages
 * `python ffxiv-autocraft.py editkeys` : allows you to edit keystrokes one by one, follow prompt messages
+* `python ffxiv-autocraft.py autobuff` : check below for instructions
 * CTRL+C will quit the program, make sure you get the message `Program has stopped.` to know that it stopped
+
+---
+
+## Autobuff Feature
+
+* Cannot use food time extending buffs (will implement later)
+* Default: Make sure your macro 1 is on key 1, macro 2 is on key 2, pot buff is on key 3, food buff is on key 4, and crafting item is on key 5. Image example below
+* Make sure your keys and macro timers are correct
+* Running this command will prompt you to enter your current buff timers for both food and pot
+
+![autobuff bar](../assets/autobuff.png)
 
 ---
 
