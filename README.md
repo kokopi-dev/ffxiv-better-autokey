@@ -44,6 +44,7 @@ Automating crafting in FFXIV with a small script that runs in the background unt
 * `python ffxiv-autocraft.py` : runs the autocrafter with current timer settings
 * `python ffxiv-autocraft.py edit` : allows you to edit timers one by one, follow prompt messages
 * `python ffxiv-autocraft.py editkeys` : allows you to edit keystrokes one by one, follow prompt messages
+* `python ffxiv-autocraft.py editprocess` : allows you to edit process name, incase you are not using dx11
 * `python ffxiv-autocraft.py autobuff` : check below for instructions
 * CTRL+C will quit the program, make sure you get the message `Program has stopped.` to know that it stopped
 
