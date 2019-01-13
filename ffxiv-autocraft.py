@@ -40,28 +40,27 @@ argv = sys.argv[1:]
 argc = len(argv)
 
 # argument checker
-acceptedArguments = ["edit", "editkeys", "autobuff"]
+acceptedArguments = ["edit", "editkeys", "editprocess", "autobuff"]
 if argc > 1:
     print("  <Error: Too many arguments (must be one).>")
     sys.exit()
 
 if argc == 1 and sys.argv[1] not in acceptedArguments:
-    print("  <Error: %s command not found.>" % sys.argv[1])
+    print("  <Error: {:s} command not found.>".format(sys.argv[1]))
     sys.exit()
 
 editor = ""
 editedTimerCount = 0
 editedKeyCount = 0
+editedProcessCount = 0
 try:
     # EDITING MACRO TIMERS
     if sys.argv[1] == "edit":
         editor = "y"
         while editor == "y":
             print("\nFormat example: m1 35")
-            print("Which macro timer do you want to edit?")
             # User input
-            editThis = input()
-            print()
+            editThis = input("Which macro timer do you want to edit?\n")
 
             # Format checker for macro timer on user input
             editThis = FormatCheck.timer_format(editThis)
@@ -89,25 +88,22 @@ try:
             editedTimerCount += 1
 
             # Continue or exit
-            print("\nDo you want to edit another macro timer? (y/n)")
-            editor = input()
-            print()
-            if editor == "y":
-                pass
-            elif editor == "n":
+            acceptedOptions = ["y", "n"]
+            editor = input("\nDo you want to edit another macro timer? (y/n)\n")
+            while editor not in acceptedOptions:
+                print("  ... You need to input 'y' or 'n' only.")
+                editor = input("\nDo you want to edit another macro timer? (y/n)\n")
+
+            if editor == "n":
                 print("  ... Program will continue to auto craft")
                 break
-            else:
-                print(" <Error: input needs to be 'y' or 'n', exiting program.>")
-                sys.exit()
     # EDITING KEYS
     if sys.argv[1] == "editkeys":
         editor = "y"
         while editor == "y":
             print("\nFormat example: k1 1")
-            print("Which keystroke do you want to edit?")
             # User input
-            editThis = input()
+            editThis = input("Which keystroke do you want to edit?\n")
             print()
 
             # Format checker for keystrokes on user input
@@ -136,33 +132,72 @@ try:
             editedKeyCount += 1
 
             # Continue or exit
-            print("\nDo you want to edit another keystroke? (y/n)")
-            editor = input()
-            print()
-            if editor == "y":
-                pass
-            elif editor == "n":
+            acceptedOptions = ["y", "n"]
+            editor = input("\nDo you want to edit another keystroke? (y/n)\n")
+            while editor not in acceptedOptions:
+                print("  ... You need to input 'y' or 'n' only.")
+                editor = input("\nDo you want to edit another keystroke? (y/n)\n")
+                
+            if editor == "n":
                 print("  ... Program will continue to auto craft")
                 break
-            else:
-                print(" <Error: input needs to be 'y' or 'n', exiting program.>")
-                sys.exit()
-    # FOOD POT OPTION
+            
+    # EDITING PROCESS NAME
+    if sys.argv[1] == "editprocess":
+        editor = "y"
+        while editor == "y":
+            print("\nProcess name should end with a '.exe'")
+            # User input for new process name
+            editThis = input("Enter your new process name:\n")
+
+            # Format check for new process name
+            editThis = FormatCheck.processname_checker(editThis)
+
+            # Returns a variable that allows adding to json file
+            add_process = JsonExec.adding_to_json(json_file)
+
+            # Saving to json using the above 'add_key'
+            JsonExec.saving_to_json(json_file, add_process)
+
+            add_process["process_name"] = editThis
+            print("  ... editing requested process name.")
+
+            # Rereading json
+            json_data = JsonExec.reading_from_json(json_file)
+            print("  ...rereading data...done.")
+
+            # Increment times edited
+            editedProcessCount += 1
+
+            # Continue or exit
+            acceptedOptions = ["y", "n"]
+            editor = input("\nDo you want to re-edit the process name? (y/n)\n")
+            while editor not in acceptedOptions:
+                print("  ... You need to input 'y' or 'n' only.")
+                editor = input("\nDo you want to re-edit the process name? (y/n)\n")
+                
+            if editor == "n":
+                print("  ... Program will continue to auto craft")
+                break
+
+    # AUTO FOOD POT OPTION
     if sys.argv[1] == "autobuff":
         editor = "y"
         while editor == "y":
-            # Food/pot tracking variables
+            # User input for food and pot timers
             print("\nEnter your current food buff timer in minutes:")
             foodBuff = input()
-            
             print("Enter your current pot timer in minutes:")
             potBuff = input()
 
+            # Format checker for both food and pot timers
             temp_list = FormatCheck.autobuff_checker( [foodBuff, potBuff] )
 
+            # Splitting food and pot after checking format
             foodBuff = temp_list[0]
             potBuff = temp_list[1]
 
+            # Calculating when to execute auto food and auto pot
             print("  ... Calculating food and pot timers.")
             foodBuffSeconds = (foodBuff * 60) - 40
             potBuffSeconds = (potBuff * 60) - 40
@@ -170,8 +205,8 @@ try:
             print("  ... Your pot buff will wear off in {:d} seconds".format(potBuffSeconds))
             print("  ... Proceeding to craft.")
 
-            # Task Manager -> Right click FFXIV -> Go to details
-            process_name = "ffxiv_dx11.exe"
+            # Editable through program arugment `editprocess`
+            process_name = json_data["process_name"]
 
             # AUTO PID
             for proc in psutil.process_iter():
@@ -195,6 +230,7 @@ try:
                     time.sleep(3)
                     food_loss += 3
                     pot_loss += 3
+                    # AUTO POT BUFF SEQUENCE
                     if pot_loss >= foodBuffSeconds:
                         time.sleep(1)
                         app.window(title='FINAL FANTASY XIV').send_keystrokes('{VK_ESCAPE}')
@@ -214,6 +250,7 @@ try:
                         pot_loss = 0
                         # default 15 min pot buff minus 30 seconds
                         foodBuffSeconds = 870
+                    # AUTO FOOD BUFF SEQUENCE
                     if food_loss >= foodBuffSeconds:
                         time.sleep(1)
                         app.window(title='FINAL FANTASY XIV').send_keystrokes('{VK_ESCAPE}')
@@ -277,8 +314,12 @@ if editedKeyCount > 0:
     print("k1\tk2\tk3\tk4\tk5")
     print(*k_list, sep='\t')
 
-# Task Manager -> Right click FFXIV -> Go to details
-process_name = "ffxiv_dx11.exe"
+# Displaying new process if edited
+if editedProcessCount > 0:
+    print("The new process is {:s}".format(json_data["process_name"]))
+
+# Editable through program arugment `editprocess`
+process_name = json_data["process_name"]
 
 # AUTO PID
 for proc in psutil.process_iter():
