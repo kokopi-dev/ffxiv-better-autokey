@@ -8,13 +8,12 @@ in the .json file
 """
 import os
 import sys
-import psutil
 import re
 import time
-from pywinauto.application import Application
-from pywinauto.keyboard import *
 from functions.json_exec import JsonExec
 from functions.format_checker import FormatCheck
+from functions.process_exec import ProcessExec
+
 # This is the name of the json dictionary
 json_file = "ffxiv-autocraft_data.json"
 
@@ -199,101 +198,26 @@ try:
 
             # Calculating when to execute auto food and auto pot
             print("  ... Calculating food and pot timers.")
-            foodBuffSeconds = (foodBuff * 60) - 40
-            potBuffSeconds = (potBuff * 60) - 40
-            print("  ... Your food buff will wear off in {:d} seconds".format(foodBuffSeconds))
-            print("  ... Your pot buff will wear off in {:d} seconds".format(potBuffSeconds))
+            foodBufft = (foodBuff * 60) - 40
+            potBufft = (potBuff * 60) - 40
+            print("  ... Your food buff will wear off in {:d} seconds".format(foodBufft))
+            print("  ... Your pot buff will wear off in {:d} seconds".format(potBufft))
             print("  ... Proceeding to craft.")
 
-            # Editable through program arugment `editprocess`
+            # Process name: editable through program arugment `editprocess`
             process_name = json_data["process_name"]
 
-            # AUTO PID
-            for proc in psutil.process_iter():
-                if proc.name() == process_name:
-                    findingPID = re.search('pid=(.+?), name=', str(proc))
-                    ffxiv_pid = int(findingPID.group(1))
+            # AUTO PID: Returns the PID of process
+            ffxiv_pid = ProcessExec.auto_pid(process_name)
 
-            # If auto PID doesnt work, check if the 'process_name' is correct in your task manager`
-            try:
-                app = Application().connect(process=ffxiv_pid)
-            except NameError:
-                print("  <Error: Process not found.>\n  ... Either make sure FFXIV is running or change 'process_name'")
-                sys.exit()
+            # Connecting to process's PID
+            opened_process = ProcessExec.connect_process(ffxiv_pid)
 
-            # Setup sleep times accordingly, and your keystrokes
+            # Auto Craft Loop w/ Auto Buff: takes in connected process and json dict
+            # Tracks food and pot timers with foodBufft and potBufft
             print('\nPress Ctrl-C to quit crafting.')
             try:
-                food_loss = 0
-                pot_loss = 0
-                while True:
-                    time.sleep(3)
-                    food_loss += 3
-                    pot_loss += 3
-                    # AUTO POT BUFF SEQUENCE
-                    if pot_loss >= foodBuffSeconds:
-                        time.sleep(1)
-                        app.window(title='FINAL FANTASY XIV').send_keystrokes('{VK_ESCAPE}')
-                        print("  ... STANDING UP BY EXITING")
-                        time.sleep(4)
-                        # POT KEY
-                        app.window(title='FINAL FANTASY XIV').send_keystrokes(json_data["k3"])
-                        print("  ... EATING FOOD")
-                        time.sleep(2)
-                        # CRAFT ITEM BUTTON
-                        app.window(title='FINAL FANTASY XIV').send_keystrokes(json_data["k5"])
-                        print("  ... SELECTING CRAFT")
-                        time.sleep(3)
-                        app.window(title='FINAL FANTASY XIV').send_keystrokes('{VK_NUMPAD0}')
-                        print("  ... HIGHLIGHT SELECT CRAFT")
-                        time.sleep(2)
-                        pot_loss = 0
-                        # default 15 min pot buff minus 30 seconds
-                        foodBuffSeconds = 870
-                    # AUTO FOOD BUFF SEQUENCE
-                    if food_loss >= foodBuffSeconds:
-                        time.sleep(1)
-                        app.window(title='FINAL FANTASY XIV').send_keystrokes('{VK_ESCAPE}')
-                        print("  ... STANDING UP BY EXITING")
-                        time.sleep(4)
-                        # FOOD KEY
-                        app.window(title='FINAL FANTASY XIV').send_keystrokes(json_data["k4"])
-                        print("  ... EATING FOOD")
-                        time.sleep(2)
-                        # CRAFT ITEM BUTTON
-                        app.window(title='FINAL FANTASY XIV').send_keystrokes(json_data["k5"])
-                        print("  ... SELECTING CRAFT")
-                        time.sleep(3)
-                        app.window(title='FINAL FANTASY XIV').send_keystrokes('{VK_NUMPAD0}')
-                        print("  ... HIGHLIGHT SELECT CRAFT")
-                        time.sleep(2)
-                        pot_loss = 0
-                        # default 30 min pot buff minus 30 seconds
-                        foodBuffSeconds = 1770
-                    # SELECT "SYNTHESIZE"
-                    app.window(title='FINAL FANTASY XIV').send_keystrokes('{VK_NUMPAD0}')
-                    print("  ... Selecting the button 'Synthesize'.")
-                    time.sleep(3)
-                    food_loss += 3
-                    pot_loss += 3
-                    # PRESS "SYNTHESIZE"
-                    app.window(title='FINAL FANTASY XIV').send_keystrokes('{VK_NUMPAD0}')
-                    print("  ... Pressing the button 'Synthesize'.")
-                    time.sleep(3)
-                    food_loss += 3
-                    pot_loss += 3
-                    # CRAFTING MACRO 1
-                    app.window(title='FINAL FANTASY XIV').send_keystrokes(json_data["k1"])
-                    print("  ... Pressing macro 1 ... <wait.{:d}>.".format(json_data["m1"]))
-                    time.sleep(json_data["m1"])
-                    food_loss += json_data["m1"]
-                    pot_loss += json_data["m1"]
-                    # CRAFTING MACRO 2
-                    app.window(title='FINAL FANTASY XIV').send_keystrokes(json_data["k2"])
-                    print("  ... Pressing macro 2 ... <wait.{:d}>.".format(json_data["m2"]))
-                    time.sleep(json_data["m2"])
-                    food_loss += json_data["m2"]
-                    pot_loss += json_data["m2"]
+                ProcessExec.auto_craft_buff(opened_process, json_data, foodBufft, potBufft)
             except KeyboardInterrupt:
                 print("Program has stopped.")
                 sys.exit()
@@ -318,44 +242,19 @@ if editedKeyCount > 0:
 if editedProcessCount > 0:
     print("The new process is {:s}".format(json_data["process_name"]))
 
-# Editable through program arugment `editprocess`
+# Process name: editable through program arugment `editprocess`
 process_name = json_data["process_name"]
 
-# AUTO PID
-for proc in psutil.process_iter():
-    if proc.name() == process_name:
-        findingPID = re.search('pid=(.+?), name=', str(proc))
-        ffxiv_pid = int(findingPID.group(1))
-        
+# AUTO PID: Returns the PID of process
+ffxiv_pid = ProcessExec.auto_pid(process_name)
 
-# If auto PID doesnt work, check if the 'process_name' is correct in your task manager`
-try:
-    app = Application().connect(process=ffxiv_pid)
-except NameError:
-    print("  <Error: Process not found.>\n  ... Either make sure FFXIV is running or change 'process_name'")
-    sys.exit()
+# Connecting to process's PID
+opened_process = ProcessExec.connect_process(ffxiv_pid)
 
-# Setup sleep times accordingly, and your keystrokes
+# Auto Craft Loop: takes in connected process and json dict
 print('\nPress Ctrl-C to quit crafting.')
 try:
-    while True:
-        time.sleep(3)
-        # SELECT "SYNTHESIZE"
-        app.window(title='FINAL FANTASY XIV').send_keystrokes('{VK_NUMPAD0}')
-        print("  ... Selecting the button 'Synthesize'.")
-        time.sleep(3)
-        # PRESS "SYNTHESIZE"
-        app.window(title='FINAL FANTASY XIV').send_keystrokes('{VK_NUMPAD0}')
-        print("  ... Pressing the button 'Synthesize'.")
-        time.sleep(3)
-        # CRAFTING MACRO 1
-        app.window(title='FINAL FANTASY XIV').send_keystrokes(json_data["k1"])
-        print("  ... Pressing macro 1 ... <wait.{:d}>.".format(json_data["m1"]))
-        time.sleep(json_data["m1"])
-        # CRAFTING MACRO 2
-        app.window(title='FINAL FANTASY XIV').send_keystrokes(json_data["k2"])
-        print("  ... Pressing macro 2 ... <wait.{:d}>.".format(json_data["m2"]))
-        time.sleep(json_data["m2"])
+    ProcessExec.auto_craft(opened_process, json_data)
 except KeyboardInterrupt:
     print("Program has stopped.")
     sys.exit()
