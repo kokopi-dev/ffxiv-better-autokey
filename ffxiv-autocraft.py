@@ -15,7 +15,6 @@ from pywinauto.application import Application
 from pywinauto.keyboard import *
 from functions.json_exec import JsonExec
 from functions.format_checker import FormatCheck
-
 # This is the name of the json dictionary
 json_file = "ffxiv-autocraft_data.json"
 
@@ -153,34 +152,23 @@ try:
         editor = "y"
         while editor == "y":
             # Food/pot tracking variables
-            print("Enter your current food buff timer in minutes:")
+            print("\nEnter your current food buff timer in minutes:")
             foodBuff = input()
-            while not isinstance(foodBuff, int):
-                try:
-                    foodBuff = int(foodBuff)
-                except ValueError:
-                    print("Food buff timer must be an integer. Please try again:")
-                    foodBuff = input()
-
-            while not 3 <= foodBuff <= 60:
-                print("Food buff timer needs to be an integer between 3 to 60. Please try again:")
-                foodBuff = input()
-                foodBuff = int(foodBuff)
-
+            
             print("Enter your current pot timer in minutes:")
             potBuff = input()
-            while not isinstance(potBuff, int):
-                try:
-                    potBuff = int(potBuff)
-                except ValueError:
-                    print("Pot buff timer must be an integer. Please try again:")
-                    foodBuff = input()
-            while not 3 <= foodBuff <= 15:
-                print("Pot buff timer needs to be between 3 to 15. Please try again:")
-                foodBuff = input()
 
+            temp_list = FormatCheck.autobuff_checker( [foodBuff, potBuff] )
+
+            foodBuff = temp_list[0]
+            potBuff = temp_list[1]
+
+            print("  ... Calculating food and pot timers.")
             foodBuffSeconds = (foodBuff * 60) - 40
             potBuffSeconds = (potBuff * 60) - 40
+            print("  ... Your food buff will wear off in {:d} seconds".format(foodBuffSeconds))
+            print("  ... Your pot buff will wear off in {:d} seconds".format(potBuffSeconds))
+            print("  ... Proceeding to craft.")
 
             # Task Manager -> Right click FFXIV -> Go to details
             process_name = "ffxiv_dx11.exe"
