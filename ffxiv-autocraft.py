@@ -48,6 +48,7 @@ if argc > 1:
 
 if argc == 1 and sys.argv[1] not in acceptedArguments:
     print("  <Error: %s command not found.>" % sys.argv[1])
+    sys.exit()
 
 editor = ""
 editedTimerCount = 0
