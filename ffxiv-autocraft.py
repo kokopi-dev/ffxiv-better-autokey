@@ -6,7 +6,6 @@ YOUR_MACRO_WAIT_TOTAL + 5
 You can manually edit the timers and keystrokes
 in the .json file
 """
-import json
 import os
 import sys
 import psutil
@@ -14,23 +13,27 @@ import re
 import time
 from pywinauto.application import Application
 from pywinauto.keyboard import *
+from functions.json_exec import JsonExec
+from functions.format_checker import FormatCheck
+
+# This is the name of the json dictionary
+json_file = "ffxiv-autocraft_data.json"
+
+# Reading json file to use and display timers/keystroke info
+json_data = JsonExec.reading_from_json(json_file)
 
 #############
 ### Intro ###
 #############
-current_path = os.path.dirname(os.path.abspath(__file__))
-# Opening json data file to read
-with open(("%s/ffxiv-autocraft_data.json" % current_path), "r") as time_data:
-    json_data = json.load(time_data)
 # Displaying current macro timers
 m_list = [json_data["m1"], json_data["m2"], json_data["m3"], json_data["m4"]]
 print("The current macro timers are:\n")
 print("m1\tm2\tm3\tm4")
 print(*m_list, sep='\t')
 # Displaying current keystrokes
-k_list = [json_data["k1"], json_data["k2"], json_data["k3"], json_data["k4"]]
+k_list = [json_data["k1"], json_data["k2"], json_data["k3"], json_data["k4"], json_data["k5"]]
 print("\nThe current keystrokes are:\n")
-print("k1\tk2\tk3\tk4")
+print("k1\tk2\tk3\tk4\tk5")
 print(*k_list, sep='\t')
 
 # argc, argv
@@ -38,7 +41,7 @@ argv = sys.argv[1:]
 argc = len(argv)
 
 # argument checker
-acceptedArguments = ["edit", "editkeys", "autobuff"]
+acceptedArguments = ["edit", "editkeys", "foodtest"]
 if argc > 1:
     print("  <Error: Too many arguments (must be one).>")
     sys.exit()
@@ -60,48 +63,27 @@ try:
             editThis = input()
             print()
 
-            try:
-                if editThis == "":
-                    print("  <Error: input cannot be none, try again.>")
-                    sys.exit()
-                if editThis[2] != ' ':
-                    print("Wrong format.\nFormat example: m1 35")
-                    sys.exit()
-                if len(editThis) < 3:
-                    print("Wrong format.\nFormat example: k1 3")
-                    sys.exit()
-            except IndexError:
-                print("Wrong format.\nFormat example: k1 3")
-                sys.exit()
-            # Splitting input into macro and macro timer
-            try:
-                mtime = int(editThis[3:])
-                m = editThis[:2]
-            except:
-                print("Wrong format.\nFormat example: m1 35")
-                sys.exit()
+            # Format checker for macro timer on user input
+            editThis = FormatCheck.timer_format(editThis)
 
-            if m[0] != 'm':
-                print("Wrong format.\nFormat example: m1 35")
-                sys.exit()
-            if mtime < 0 or mtime > 300:
-                print("Wrong format.\nFormat example: m1 35\nTime limit is 300")
-                sys.exit()
+            # Splitting input
+            temp_list = FormatCheck.input_splitter(editThis)
+            m = temp_list[1]
+            mtime = temp_list[0]
 
-            # Temp adding to json
-            with open("%s/ffxiv-autocraft_data.json" % current_path) as add_time_data:
-                add_time = json.load(add_time_data)
+            # Returns a variable that allows adding to json file
+            add_timer = JsonExec.adding_to_json(json_file)
 
+            # Adding user input's timer to json dictionary
+            add_timer[m] = mtime
             print("  ... editing requested macro timer.")
-            add_time[m] = mtime
 
-            # Saving to json
-            with open(("%s/ffxiv-autocraft_data.json" % current_path), "w") as save_time_data:
-                json.dump(add_time, save_time_data)
+            # Saving to json using the above 'add_this'
+            JsonExec.saving_to_json(json_file, add_timer)
+
             # Rereading json
-            with open(("%s/ffxiv-autocraft_data.json" % current_path), "r") as time_data:
-                json_data = json.load(time_data)
-                print("  ... saving data...rereading data...done.")
+            json_data = JsonExec.reading_from_json(json_file)
+            print("  ...rereading data...done.")
 
             # Increment times edited
             editedTimerCount += 1
@@ -122,61 +104,33 @@ try:
     if sys.argv[1] == "editkeys":
         editor = "y"
         while editor == "y":
-            acceptedKeys = ["1", "2", "3", "4", "5", "6", "7",
-                            "8", "9", "0", "-", "="]
-            acceptedPlace = ["k1", "k2", "k3", "k4", "k5"]
-
-            print("\nAccepted key edits are the following:\n")
-            print(' '.join(map(str, acceptedKeys)))
-            print("\nFormat example: k1 3")
+            print("\nFormat example: k1 1")
             print("Which keystroke do you want to edit?")
             # User input
             editThis = input()
             print()
 
-            try:
-                if editThis == "":
-                    print("  <Error: input cannot be none, try again.>")
-                    sys.exit()
-                if editThis[2] != ' ':
-                    print("Wrong format.\nFormat example: k1 3")
-                    sys.exit()
-                if len(editThis) < 3:
-                    print("Wrong format.\nFormat example: k1 3")
-                    sys.exit()
-            except IndexError:
-                print("Wrong format.\nFormat example: k1 3")
-                sys.exit()
+            # Format checker for keystrokes on user input
+            editThis = FormatCheck.keystroke_checker(editThis)
 
             # Splitting input into keys and keystrokes
-            try:
-                kstroke = str(editThis[3:])
-                k = str(editThis[:2])
-            except:
-                print("Wrong format.\nFormat example: k1 3")
-                sys.exit()
+            temp_list = FormatCheck.input_splitter(editThis)
+            k = temp_list[1]
+            kstroke = temp_list[0]
 
-            if k not in acceptedPlace:
-                print("Wrong format.\nFormat example: k1 3")
-                sys.exit()
-            if kstroke not in acceptedKeys:
-                print("Keystroke not accepted, check accepted key edits above.")
-                sys.exit()
+            # Returns a variable that allows adding to json file
+            add_key = JsonExec.adding_to_json(json_file)
 
-            # Temp adding to json
-            with open("%s/ffxiv-autocraft_data.json" % current_path) as add_key_data:
-                add_key = json.load(add_key_data)
-
-            print("  ... editing requested keystrokes.")
+            # Adding user input's keystroke to json dictionary
             add_key[k] = kstroke
+            print("  ... editing requested keystrokes.")
 
-            # Saving to json
-            with open(("%s/ffxiv-autocraft_data.json" % current_path), "w") as save_key_data:
-                json.dump(add_key, save_key_data)
+            # Saving to json using the above 'add_key'
+            JsonExec.saving_to_json(json_file, add_key)
+
             # Rereading json
-            with open(("%s/ffxiv-autocraft_data.json" % current_path), "r") as time_data:
-                json_data = json.load(time_data)
-                print("  ... saving data...rereading data...done.")
+            json_data = JsonExec.reading_from_json(json_file)
+            print("  ...rereading data...done.")
 
             # Increment times edited
             editedKeyCount += 1
@@ -194,7 +148,7 @@ try:
                 print(" <Error: input needs to be 'y' or 'n', exiting program.>")
                 sys.exit()
     # FOOD POT OPTION
-    if sys.argv[1] == "autobuff":
+    if sys.argv[1] == "autofood":
         editor = "y"
         while editor == "y":
             # Food/pot tracking variables
@@ -329,9 +283,9 @@ if editedTimerCount > 0:
 
 # Displaying new timers if edited
 if editedKeyCount > 0:
-    k_list = [json_data["k1"], json_data["k2"], json_data["k3"], json_data["k4"]]
+    k_list = [json_data["k1"], json_data["k2"], json_data["k3"], json_data["k4"], json_data["k5"]]
     print("\nThe new keystrokes are:\n")
-    print("k1\tk2\tk3\tk4")
+    print("k1\tk2\tk3\tk4\tk5")
     print(*k_list, sep='\t')
 
 # Task Manager -> Right click FFXIV -> Go to details
