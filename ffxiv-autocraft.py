@@ -41,7 +41,7 @@ argv = sys.argv[1:]
 argc = len(argv)
 
 # argument checker
-acceptedArguments = ["edit", "editkeys", "foodtest"]
+acceptedArguments = ["edit", "editkeys", "autobuff"]
 if argc > 1:
     print("  <Error: Too many arguments (must be one).>")
     sys.exit()
@@ -148,7 +148,7 @@ try:
                 print(" <Error: input needs to be 'y' or 'n', exiting program.>")
                 sys.exit()
     # FOOD POT OPTION
-    if sys.argv[1] == "autofood":
+    if sys.argv[1] == "autobuff":
         editor = "y"
         while editor == "y":
             # Food/pot tracking variables
