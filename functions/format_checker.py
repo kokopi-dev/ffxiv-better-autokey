@@ -62,6 +62,20 @@ class FormatCheck:
 
         return user_input
 
+    def processname_checker(user_input):
+        """ Checks json file's process_name's format
+            Makes sure it is an .exe
+            Loops input() until correct format is given
+        """
+
+        pformat = ".exe"
+
+        while pformat not in user_input:
+            print("Please try again. Input must end with '.exe'")
+            user_input = input()
+
+        return user_input
+
     def autobuff_checker(user_input):
         """ Checks user input's format, returns format if ok
             Food timer must be between 3 and 60
@@ -71,7 +85,7 @@ class FormatCheck:
 
         food_lock = 0
         pot_lock = 0
-        
+
         try:
             temp_food = int(user_input[0])
             if not temp_food in range(3, 61):
