@@ -19,7 +19,8 @@ Automating crafting in FFXIV with a small script that runs in the background unt
 * **Install required things above**
 
 **Make sure your ffxiv process is this name:**
-* If it is incorrect, change `process_name` variable in ffxiv-autocraft.py
+* If it is incorrect, you can change it via command `editprocess`
+* Go to `task manager->right click FFXIV's process->go to details` to find the process name
 
 ![finding_process](../assets/detailpid.png)
 
