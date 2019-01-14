@@ -76,7 +76,7 @@ class ProcessExec:
                 time.sleep(4)
                 # POT KEY
                 process_input.window(title='FINAL FANTASY XIV').send_keystrokes(json_data["k3"])
-                print("  ... EATING FOOD")
+                print("  ... EATING POT")
                 time.sleep(2)
                 # CRAFT ITEM BUTTON
                 process_input.window(title='FINAL FANTASY XIV').send_keystrokes(json_data["k5"])
