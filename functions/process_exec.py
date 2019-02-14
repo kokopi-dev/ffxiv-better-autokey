@@ -62,9 +62,13 @@ class ProcessExec:
             print("  ... Pressing macro 2 ... <wait.{:d}>.".format(json_data["m2"]))
             time.sleep(json_data["m2"])
 
-    def auto_craft_buff(process_input, json_data, food, pot):
+    def auto_craft_buff(process_input, json_data, food, pot, extender):
+        """ Starts auto pot and food sequence depending on food, pot, and extender
+            Current timers on food and pot are taken in
+            The extender var affects whether after the food buff sequence finishing resets
+            ... timer to 30 mins or 40 mins
         """
-        """
+
         food_loss = 0
         pot_loss = 0
         while True:
@@ -106,8 +110,11 @@ class ProcessExec:
                 print("  ... HIGHLIGHT SELECT CRAFT")
                 time.sleep(2)
                 pot_loss = 0
-                # default 30 min pot buff minus 30 seconds
-                food = 1770
+                # extender on is 40 min, default is 30 food buff minus 30 seconds
+                if extender == "y":
+                    food = 2370
+                else:
+                    food = 1770
             time.sleep(3)
             food_loss += 3
             pot_loss += 3

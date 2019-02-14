@@ -183,11 +183,16 @@ try:
     if sys.argv[1] == "autobuff":
         editor = "y"
         while editor == "y":
-            # User input for food and pot timers
-            print("\nEnter your current food buff timer in minutes:")
-            foodBuff = input()
-            print("Enter your current pot timer in minutes:")
-            potBuff = input()
+            # User input for food and pot timers, and if there is an extender buff on
+            foodBuff = input("\nEnter your current food buff timer in minutes:\n")
+            potBuff = input("\nEnter your current pot timer in minutes:\n")
+            extenderBuff = input("\nDo you have a 10m food timer extender buff on? (y/n):\n")
+
+            # y/n format checker, passes to auto_craft_buff()
+            acceptedOptions = ["y", "n"]
+            while extenderBuff not in acceptedOptions:
+                print("  ... You need to input 'y' or 'n' only.")
+                extenderBuff = input("\nDo you have a 10m food timer extender buff on? (y/n):\n")
 
             # Format checker for both food and pot timers
             temp_list = FormatCheck.autobuff_checker( [foodBuff, potBuff] )
@@ -215,9 +220,10 @@ try:
 
             # Auto Craft Loop w/ Auto Buff: takes in connected process and json dict
             # Tracks food and pot timers with foodBufft and potBufft
+            # Tracks if extenderBuff is 'y' or 'n'
             print('\nPress Ctrl-C to quit crafting.')
             try:
-                ProcessExec.auto_craft_buff(opened_process, json_data, foodBufft, potBufft)
+                ProcessExec.auto_craft_buff(opened_process, json_data, foodBufft, potBufft, extenderBuff)
             except KeyboardInterrupt:
                 print("Program has stopped.")
                 sys.exit()
