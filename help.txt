@@ -1,0 +1,9 @@
+
+Usage:
+  python ffxiv_jidoucraft.py <command>
+
+Commands:
+  counter           Limits the amount of crafts the program will do.
+  collectable       Adds extra 0 numpad key pushes for collectable menu.
+  foodbuff          Reapplies food when it drops.
+  potbuff           Reapplies pot when it drops.

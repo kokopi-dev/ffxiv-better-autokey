@@ -18,6 +18,12 @@ def args_checker():
     return args
 
 if __name__ == "__main__":
+    if sys.argv[1] == "--help":
+        with open("help.txt", "r") as f:
+            helper = f.read()
+            print(helper)
+        quit()
+
     json_data = json_reader()
     ffxiv = Process(json_data["process_name"])
 
@@ -111,6 +117,8 @@ if __name__ == "__main__":
             food_limiter += 4
             pot_limiter += 4
 
+        # TODO Create a loop and have a json key telling how many macros user is using
+        # Loop will have 2 lists that contains m1-4 and k1-4, loop for i = 0
         ffxiv.press_key(json_data["k1"])
         print("  -> Pressing Macro 1")
         print("    -> Waiting {} seconds.".format(json_data["m1"]))
