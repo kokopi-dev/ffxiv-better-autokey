@@ -50,8 +50,11 @@ python setup.py
 
 ```
 python ffxiv_jidoucraft.py
+python ffxiv_jidoucraft.py collectable
 python ffxiv_jidoucraft.py foodbuff
+python ffxiv_jidoucraft.py potbuff
 python ffxiv_jidoucraft.py foodbuff potbuff
+python ffxiv_jidoucraft.py foodbuff potbuff collectable
 ```
 
 ## Json Editor
