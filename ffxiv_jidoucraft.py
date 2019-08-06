@@ -9,11 +9,13 @@ if __name__ == "__main__":
 
     # Regular auto-craft
     print("Starting crafting automation...")
+    print("TO QUIT: PRESS CTRL+C\n")
     while True:
         print("  -> Pressing + Selecting 'Synthesis'")
-        for zero_counter in range(10):
+        for zero_counter in range(25):
             ffxiv.press_key("{VK_NUMPAD0}")
-        sleep(2)
+
+        sleep(5)
 
         ffxiv.press_key(json_data["k1"])
         print("  -> Pressing Macro 1")
@@ -24,3 +26,5 @@ if __name__ == "__main__":
         print("  -> Pressing Macro 2")
         print("    -> Waiting {} seconds.".format(json_data["m2"]))
         sleep(json_data["m2"])
+
+        sleep(3)
