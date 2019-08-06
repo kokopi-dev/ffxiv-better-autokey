@@ -11,6 +11,9 @@ def json_reader():
         return None
 
 def json_writer(key, value, data):
+    data[key] = value
+    with open("settings.json", "w+") as f:
+        json.dump(data, f)
     return data
 
 def value_checker(key, value, data):
@@ -47,8 +50,8 @@ if __name__ == "__main__":
             if user_input in json_keys:
                 print("  -> What do you want to change {} to?".format(user_input))
                 new_value = input()
-                checker = value_checker(user_input, new_value, json_data)
-                json_data = json_writer(user_input, new_value, json_data)
+                new_checked_value = value_checker(user_input, new_value, json_data)
+                json_data = json_writer(user_input, new_checked_value, json_data)
                 print("{} was changed to {}.\n".format(user_input, new_value))
             elif user_input == "quit":
                 print("Quitting...")
