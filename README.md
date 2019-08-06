@@ -24,11 +24,14 @@ python setup.py
 ---
 
 **Finding `process_name`**
+
 ![finding_process](../assets/detailpid.png)
 
 **Calculating wait times for corresponding macro:**
+
 ![adding_wait_example](../assets/macro.jpg)
 
+---
 
 ## Usage :computer:
 **Executing the program:**
@@ -38,6 +41,7 @@ python setup.py
 2. Open up the terminal and navigate to the script `ffxiv_jidoucraft.py`
 3. Enter the command `python ffxiv_jidoucraft.py`
 4. Press Ctrl+C when you want to end the script
+
 ![stopping program](../assets/stopped.jpg)
 
 ---
