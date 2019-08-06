@@ -22,6 +22,7 @@ if __name__ == "__main__":
     ffxiv = Process(json_data["process_name"])
 
     args = args_checker()
+    just_buffed = 0
 
     foodbuff = 0
     food_time = None
@@ -46,12 +47,35 @@ if __name__ == "__main__":
     while True:
         if foodbuff == 1:
             if food_limiter >= food_time:
+                print("  -> Standing up by pressing ESC")
+                for esc_counter in range(20):
+                    ffxiv.press_key("{VK_ESCAPE}")
+                sleep(5)
+                print("  -> Eating food")
+                for food_counter in range(3):
+                    ffxiv.press_key(json_data["food_key"])
+                sleep(7)
                 food_limiter = 0
                 food_time = 1770 # Default 30 min pot buff minus 30 seconds
+                just_buffed += 1
         if potbuff == 1:
             if pot_limiter >= pot_time:
+                print("  -> Standing up by pressing ESC")
+                for esc_counter in range(20):
+                    ffxiv.press_key("{VK_ESCAPE}")
+                sleep(5)
+                print("  -> Eating pot")
+                for food_counter in range(3):
+                    ffxiv.press_key(json_data["pot_key"])
+                sleep(7)
                 pot_limiter = 0
                 pot_time = 870 # Default 15 min pot buff minus 30 seconds
+                just_buffed += 1
+
+        if just_buffed >= 1:
+            print("  -> Selecting Craft")
+            ffxiv.press_key(json_data["craft_key"])
+            just_buffed = 0
 
         print("  -> Pressing + Selecting 'Synthesis'")
         for zero_counter in range(25):
