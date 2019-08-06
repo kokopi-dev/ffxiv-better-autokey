@@ -6,7 +6,7 @@ from process import Process
 from time import sleep
 
 def args_checker():
-    accepted_args = ["foodbuff", "potbuff", "collectable"]
+    accepted_args = ["foodbuff", "potbuff", "collectable", "counter"]
     args = sys.argv[1:]
     all_ok = 0
     for arg in args:
@@ -34,6 +34,9 @@ if __name__ == "__main__":
 
     collectable = 0
 
+    craft_limiter = 0
+    craft_counter = 0
+
     if "foodbuff" in args:
         print("Adding foodbuffer to crafting automation...")
         food_time = input("What is your current food buff time?\n")
@@ -45,6 +48,15 @@ if __name__ == "__main__":
     if "collectable" in args:
         print("Collectable mode activated...")
         collectable = 1
+    if "counter" in args:
+        print("How many crafts do you want to limit to?")
+        craft_amount = input()
+        try:
+            craft_amount = int(craft_amount)
+        except ValueError:
+            print("  -> ERROR: Enter a number. Run ffxiv_jidoucraft.py again.")
+            quit()
+        craft_limiter = 1
 
     # Regular auto-craft
     print("Starting crafting automation...")
@@ -116,3 +128,9 @@ if __name__ == "__main__":
         sleep(3)
         food_limiter += 3
         pot_limiter += 3
+
+        if craft_limiter = 1:
+            craft_counter += 1
+            if craft_counter > craft_amount:
+                print("Crafted {} times, quitting program.".format(craft_amount))
+                quit()
