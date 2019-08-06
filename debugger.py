@@ -10,6 +10,6 @@ if __name__ == "__main__":
     # Regular auto-craft
     print("Starting crafting automation...")
     while True:
-        a = input("pressing 0")
+        a = input("Type anything for pressing the numpad 0")
         ffxiv.press_key("{VK_NUMPAD0}")
         print("  -> Pressing")
