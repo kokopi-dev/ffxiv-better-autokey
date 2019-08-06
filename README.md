@@ -48,6 +48,13 @@ python setup.py
 
 ## Commands
 
+`counter` : Limits how many crafts you want to do.
+`collectable` : Adds extra 0 key pushes for collectable success menu.
+`foodbuff` : Automatically reapplies food when it drops.
+`potbuff` : Automatically reapplies pot when it drops.
+
+## Usage
+
 ```
 python ffxiv_jidoucraft.py
 python ffxiv_jidoucraft.py collectable
