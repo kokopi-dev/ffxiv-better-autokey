@@ -13,13 +13,28 @@ def json_reader():
 def json_writer(key, value, data):
     return data
 
-def value_checker(key, value):
-    pass
+def value_checker(key, value, data):
+    data_keys = list(data)
+    int_value_key_list = ["m1", "m2", "m3", "m4"]
+    int_value = None
+
+    if key not in data_keys:
+        print("    -> Incorrect key name, check the key list and restart the json_editor.")
+        quit()
+
+    for i in int_value_key_list:
+        if i == key:
+            try:
+                int_value = int(value)
+                return int_value
+            except ValueError:
+                print("    -> A timer needs to be a number. Restart the json_editor.py.")
+                quit()
 
 if __name__ == "__main__":
     print("Editing settings.json...")
     print("  -> Type quit whenever to quit.")
-    print("  -> (Note) Macro timer calculator: (total <wait>) + (5)")
+    print("  -> (Note) Macro timer calculator: (total <wait>) + (5)\n")
 
     json_data = json_reader()
 
@@ -32,8 +47,8 @@ if __name__ == "__main__":
             if user_input in json_keys:
                 print("  -> What do you want to change {} to?".format(user_input))
                 new_value = input()
-                checker = value_checker(user_input, new_value)
-                json_data = json_writer()
+                checker = value_checker(user_input, new_value, json_data)
+                json_data = json_writer(user_input, new_value, json_data)
                 print("{} was changed to {}.\n".format(user_input, new_value))
             elif user_input == "quit":
                 print("Quitting...")
