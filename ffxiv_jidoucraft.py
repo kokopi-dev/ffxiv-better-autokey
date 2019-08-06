@@ -131,6 +131,6 @@ if __name__ == "__main__":
 
         if craft_limiter == 1:
             craft_counter += 1
-            if craft_counter > craft_amount:
+            if craft_counter >= craft_amount:
                 print("Crafted {} times, quitting program.".format(craft_amount))
                 quit()
