@@ -1,12 +1,23 @@
-# Automating FFXIV Crafting
+# FFXIV Jidou Crafter
 
 ---
 
-## Required things
+## Setup :wrench:
 
-* (get python 3)
-* pip install -U pywinauto
-* pip install psutil
+[Python Ver: 3.7.4 (64-bit)](https://www.python.org/ftp/python/3.7.3/python-3.7.3-amd64.exehttps://www.python.org/ftp/python/3.7.3/python-3.7.3-amd64.exe)
+  - **Add Python PATH**
+
+Install required packages with snippet below:
+
+```
+pip install -r requirements.txt
+```
+
+Setup the program's JSON file with snippet below:
+
+```
+python setup.py
+```
 
 ---
 
