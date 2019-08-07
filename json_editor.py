@@ -58,3 +58,5 @@ if __name__ == "__main__":
                 quit()
             else:
                 print("\nYour input was not listed in the keys. Try again.\n")
+    else:
+        print("ERROR: settings.json not found. Run setup.py and try again.")
