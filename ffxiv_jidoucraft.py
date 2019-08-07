@@ -122,7 +122,7 @@ if __name__ == "__main__":
         button_list = ["k1", "k2", "k3", "k4"]
         for i in range(macro_amount):
             ffxiv.press_key(json_data[button_list[i]])
-            print("  -> Pressing Macro 1")
+            print("  -> Pressing Macro {}".format(i + 1))
             print("    -> Waiting {} seconds.".format(json_data[timer_list[i]]))
             sleep(json_data[timer_list[i]])
             food_limiter += json_data[timer_list[i]]
