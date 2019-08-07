@@ -117,21 +117,16 @@ if __name__ == "__main__":
             food_limiter += 4
             pot_limiter += 4
 
-        # TODO Create a loop and have a json key telling how many macros user is using
-        # Loop will have 2 lists that contains m1-4 and k1-4, loop for i = 0
-        ffxiv.press_key(json_data["k1"])
-        print("  -> Pressing Macro 1")
-        print("    -> Waiting {} seconds.".format(json_data["m1"]))
-        sleep(json_data["m1"])
-        food_limiter += json_data["m1"]
-        pot_limiter += json_data["m1"]
-
-        ffxiv.press_key(json_data["k2"])
-        print("  -> Pressing Macro 2")
-        print("    -> Waiting {} seconds.".format(json_data["m2"]))
-        sleep(json_data["m2"])
-        food_limiter += json_data["m2"]
-        pot_limiter += json_data["m2"]
+        macro_amount = json_data["macro_amount"]
+        timer_list = ["m1", "m2", "m3", "m4"]
+        button_list = ["k1", "k2", "k3", "k4"]
+        for i in range(macro_amount):
+            ffxiv.press_key(json_data[button_list[i]])
+            print("  -> Pressing Macro 1")
+            print("    -> Waiting {} seconds.".format(json_data[timer_list[i]]))
+            sleep(json_data[timer_list[i]])
+            food_limiter += json_data[timer_list[i]]
+            pot_limiter += json_data[timer_list[i]]
 
         sleep(3)
         food_limiter += 3
