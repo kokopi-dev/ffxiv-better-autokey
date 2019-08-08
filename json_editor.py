@@ -18,7 +18,7 @@ def json_writer(key, value, data):
 
 def value_checker(key, value, data):
     data_keys = list(data)
-    int_value_key_list = ["m1", "m2", "m3", "m4"]
+    int_value_key_list = ["m1", "m2", "m3", "m4", "macro_amount"]
     int_value = None
 
     if key not in data_keys:
@@ -33,6 +33,11 @@ def value_checker(key, value, data):
             except ValueError:
                 print("    -> A timer needs to be a number. Restart the json_editor.py.")
                 quit()
+
+    if key == "process_name":
+        if ".exe" not in value:
+            print("    -> Process name needs to end with '.exe'. Restart the json_editor.py.")
+            quit()
 
 if __name__ == "__main__":
     print("Editing settings.json...")
