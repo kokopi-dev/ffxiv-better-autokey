@@ -55,6 +55,7 @@ if __name__ == "__main__":
         print("  -> process_name is the name of your FFXIV program name in task manager i - details.")
         print("  -> food_key pot_key craft_key are the keys the food, pot, and craft are using.\n")
         user_input = None
+        json_keys = list(json_data)
         while True:
             user_input = input("{}\n\n".format(json_data))
             if user_input in json_keys:
