@@ -47,17 +47,22 @@ if __name__ == "__main__":
     json_data = json_reader()
 
     if json_data != None:
+        print("What do you want to change? (Type in a key listed below)")
+        print("Here are the list of keys you can edit:\n")
+        print("  -> m1 m2 m3 m4 are macro timing (amount of time the macro takes).")
+        print("  -> k1 k2 k3 k4 are the keys the macros are using.")
+        print("  -> macro_amount is the amount of macros you are using for the current craft.")
+        print("  -> process_name is the name of your FFXIV program name in task manager i - details.")
+        print("  -> food_key pot_key craft_key are the keys the food, pot, and craft are using.\n")
         user_input = None
-        json_keys = list(json_data)
         while True:
-            print("What do you want to change? (Type in a key listed below)")
-            user_input = input("{}\n".format(json_keys))
+            user_input = input("{}\n\n".format(json_data))
             if user_input in json_keys:
                 print("  -> What do you want to change {} to?".format(user_input))
                 new_value = input()
                 new_checked_value = value_checker(user_input, new_value, json_data)
                 json_data = json_writer(user_input, new_checked_value, json_data)
-                print("{} was changed to {}.\n".format(user_input, new_value))
+                print("    -> {} was changed to {}.\n".format(user_input, new_value))
             elif user_input == "quit":
                 print("Quitting...")
                 quit()
