@@ -17,6 +17,15 @@ def args_checker():
         quit()
     return args
 
+def int_validator(value=None):
+    if value != None:
+        try:
+            value = int(value)
+        except ValueError:
+            print("Error: Input needs to be a number. Restart ffxiv_jidoucraft.py.")
+            quit()
+        return value
+
 if __name__ == "__main__":
     if sys.argv[1] == "--help":
         with open("help.txt", "r") as f:
@@ -46,10 +55,12 @@ if __name__ == "__main__":
     if "foodbuff" in args:
         print("Adding foodbuffer to crafting automation...")
         food_time = input("What is your current food buff time?\n")
+        food_time = int_validator(food_time)
         foodbuff = 1
     if "potbuff" in args:
         print("Adding potbuffer to crafting automation...")
         pot_time = input("What is your current pot buff time?\n")
+        pot_time = int_validator(pot_time)
         potbuff = 1
     if "collectable" in args:
         print("Collectable mode activated...")
