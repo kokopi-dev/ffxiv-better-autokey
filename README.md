@@ -6,7 +6,7 @@ Automating crafting in FFXIV with a small script that runs in the background unt
 
 ## Setup :wrench:
 
-[Python for Windows Ver: 3.7.4 (64-bit)](https://www.python.org/ftp/python/3.7.3/python-3.7.3-amd64.exehttps://www.python.org/ftp/python/3.7.3/python-3.7.3-amd64.exe)
+[Python for Windows Ver: 3.7.4 (64-bit)](https://www.python.org/ftp/python/3.7.3/python-3.7.3-amd64.exe)
   - **Add Python PATH**
 
 Install required packages with snippet below:
