@@ -50,6 +50,7 @@ if __name__ == "__main__":
         print("What do you want to change? (Type in a key listed below)")
         print("Here are the list of keys you can edit:\n")
         print("  -> m1 m2 m3 m4 are macro timing (amount of time the macro takes).")
+        print("    -> To calculate m time, add all your <wait> together in that macro and + 5")
         print("  -> k1 k2 k3 k4 are the keys the macros are using.")
         print("  -> macro_amount is the amount of macros you are using for the current craft.")
         print("  -> process_name is the name of your FFXIV program name in task manager i - details.")
