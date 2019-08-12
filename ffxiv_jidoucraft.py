@@ -142,6 +142,9 @@ if __name__ == "__main__":
 
         print("  -> Pressing + Selecting 'Synthesis'")
         for zero_counter in range(10):
+            # Escaping chat edge case
+            if zero_counter == 7:
+                ffxiv.press_key("{VK_ESCAPE}")
             ffxiv.press_key("{VK_NUMPAD0}")
         sleep(2)
         food_limiter += 4
