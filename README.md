@@ -6,16 +6,27 @@ Automating crafting in FFXIV with a small script that runs in the background unt
 
 ## Setup :wrench:
 
-[Python for Windows Ver: 3.7.4 (64-bit)](https://www.python.org/ftp/python/3.7.3/python-3.7.3-amd64.exe)
-  - **Add Python PATH**
+[Python for Windows Ver: 3.7.4 (64-bit)](https://www.python.org/ftp/python/3.7.3/python-3.7.3-amd64.exe) - 
+[https://www.python.org/downloads/windows/](https://www.python.org/downloads/windows/)
+  - **Add Python PATH Checkbox**
+  
+### Setup Shortcut
 
-Install required packages with snippet below:
+Go to where you installed the github repo's folder in Windows and type `cmd` in search to go to the file path in terminal. A shortcut is shown in the pictures below:
+
+![windows_step](../assets/windows0.png)
+![windows_step](../assets/windows1.png)
+![windows_step](../assets/windows2.png)
+![windows_step](../assets/windows3.png)
+
+
+Install required packages inside the file path with snippet below:
 
 ```
 pip install -r requirements.txt
 ```
 
-Setup the program's JSON file with snippet below:
+Setup the program's JSON file inside the file path with snippet below:
 
 ```
 python setup.py
@@ -48,18 +59,20 @@ python setup.py
 
 ## Commands
 
-`counter` : Limits how many crafts you want to do.
+`limit` : Limits how many crafts you want to do.
 `collectable` : Adds extra 0 key pushes for collectable success menu.
 `foodbuff` : Automatically reapplies food when it drops.
 `potbuff` : Automatically reapplies pot when it drops.
+`notify` : Gives you a Window's notification when craft is completed.
 
 ## Usage
 
 ```
 python ffxiv_jidoucraft.py
 python ffxiv_jidoucraft.py collectable
+python ffxiv_jidoucraft.py collectable limit
 python ffxiv_jidoucraft.py foodbuff
-python ffxiv_jidoucraft.py potbuff
+python ffxiv_jidoucraft.py potbuff notify
 python ffxiv_jidoucraft.py foodbuff potbuff
 python ffxiv_jidoucraft.py foodbuff potbuff collectable
 ```
