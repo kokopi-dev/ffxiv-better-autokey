@@ -111,9 +111,9 @@ if __name__ == "__main__":
         if foodbuff == 1:
             if food_limiter >= food_time:
                 print("  -> Standing up by pressing ESC")
-                for esc_counter in range(20):
+                for esc_counter in range(15):
                     ffxiv.press_key("{VK_ESCAPE}")
-                sleep(5)
+                sleep(4)
                 print("  -> Eating food")
                 for food_counter in range(3):
                     ffxiv.press_key(json_data["food_key"])
@@ -124,9 +124,9 @@ if __name__ == "__main__":
         if potbuff == 1:
             if pot_limiter >= pot_time:
                 print("  -> Standing up by pressing ESC")
-                for esc_counter in range(20):
+                for esc_counter in range(15):
                     ffxiv.press_key("{VK_ESCAPE}")
-                sleep(5)
+                sleep(4)
                 print("  -> Eating pot")
                 for food_counter in range(3):
                     ffxiv.press_key(json_data["pot_key"])
@@ -141,22 +141,20 @@ if __name__ == "__main__":
             just_buffed = 0
 
         print("  -> Pressing + Selecting 'Synthesis'")
-        for zero_counter in range(10):
-            # Escaping chat edge case
-            if zero_counter == 7:
-                ffxiv.press_key("{VK_ESCAPE}")
+        for i in range(7):
             ffxiv.press_key("{VK_NUMPAD0}")
-        sleep(2)
-        food_limiter += 4
-        pot_limiter += 4
+
+        sleep(1)
+        food_limiter += 2
+        pot_limiter += 2
 
         if collectable == 1:
             print("  -> Collectable mode selected, please wait.")
-            for zero_counter in range(15):
+            for zero_counter in range(10):
                 ffxiv.press_key("{VK_NUMPAD0}")
-            sleep(2)
-            food_limiter += 4
-            pot_limiter += 4
+            sleep(1)
+            food_limiter += 3
+            pot_limiter += 3
 
         for i in range(macro_amount):
             ffxiv.press_key(json_data[button_list[i]])
