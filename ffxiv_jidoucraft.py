@@ -140,21 +140,22 @@ if __name__ == "__main__":
             ffxiv.press_key(json_data["craft_key"])
             just_buffed = 0
 
+        sleep(0.01)
         print("  -> Pressing + Selecting 'Synthesis'")
-        for i in range(7):
+        for i in range(5):
             ffxiv.press_key("{VK_NUMPAD0}")
 
-        sleep(1)
-        food_limiter += 2
-        pot_limiter += 2
+        sleep(0.5)
+        food_limiter += 1
+        pot_limiter += 1
 
         if collectable == 1:
             print("  -> Collectable mode selected, please wait.")
-            for zero_counter in range(10):
+            for zero_counter in range(6):
                 ffxiv.press_key("{VK_NUMPAD0}")
-            sleep(1)
-            food_limiter += 3
-            pot_limiter += 3
+            sleep(0.5)
+            food_limiter += 2
+            pot_limiter += 2
 
         for i in range(macro_amount):
             ffxiv.press_key(json_data[button_list[i]])
