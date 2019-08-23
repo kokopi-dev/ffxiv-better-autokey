@@ -100,13 +100,13 @@ if __name__ == "__main__":
     print("\nMake sure your MOUSE CURSOR is NOT HIGHLIGHTING ANYTHING BEFORE MINIMIZING\n")
     while True:
         if "limit" in args:
-            print("Craft #{}".format(craft_counter + 1))
             if craft_counter >= craft_amount:
                 print("Crafted {} times, quitting program.".format(craft_amount))
                 if notify == 1:
                     notify_message = "Crafted {} times.".format(craft_amount)
                     notifier("Crafting Batch Finished", notify_message)
                 quit()
+            print("Craft #{}".format(craft_counter + 1))
 
         if foodbuff == 1:
             if food_limiter >= food_time:
