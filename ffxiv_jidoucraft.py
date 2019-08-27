@@ -9,6 +9,7 @@ from win10toast import ToastNotifier
 
 class AutoCraft:
     def __init__(self, json_data=None, mode=None):
+        self.opt_help = 0
         self.opt_foodbuff = 0
         self.opt_potbuff = 0
         self.opt_collectable = 0
@@ -22,6 +23,9 @@ class AutoCraft:
         self.json_data = json_data
         if self.json_data:
             self.ffxiv = Process(self.json_data["process_name"])
+            self.macro_amount = self.json_data["macro_amount"]
+            self.timer_list = ["m1", "m2", "m3", "m4"]
+            self.button_list = ["k1", "k2", "k3", "k4"]
         self.crafter()
 
     def args_checker(self):
@@ -30,6 +34,8 @@ class AutoCraft:
         all_ok = 0
         for arg in args:
             if arg in accepted_args:
+                if arg == "--help":
+                    self.opt_help = 1
                 if arg == "repair":
                     self.opt_repair = 1
                 if arg == "foodbuff":
@@ -62,15 +68,15 @@ class AutoCraft:
 
     def time_estimater(self, json_data, craft_amount):
         m_time = 0
-        for i in range(macro_amount):
-            m_time += self.json_data[timer_list[i]]
+        for i in range(self.macro_amount):
+            m_time += self.json_data[self.timer_list[i]]
             m_time += 8 # Numpad 0 presses estimated amount of time it takes
         res = (craft_amount * m_time) / 60
         print("  -> Estimated completion time: {:.2f} minutes.".format(res))
 
-    def auto_end(self, craft_count, craft_amount, notify):
+    def auto_end(self, craft_count, craft_amount):
         print("Crafted {} times, quitting program.".format(craft_amount))
-        if notify == 1:
+        if self.opt_notify == 1:
             notify_message = "Crafted {} times.".format(craft_amount)
             self.notifier("Crafting Batch Finished", notify_message)
         quit()
@@ -97,7 +103,7 @@ class AutoCraft:
 
     def crafter(self):
         self.args_checker()
-        if "--help" in args:
+        if self.opt_help == 1:
             with open("help.txt", "r") as f:
                 helper = f.read()
                 print(helper)
@@ -118,9 +124,6 @@ class AutoCraft:
         craft_counter = 0
         craft_amount = None
 
-        macro_amount = self.json_data["macro_amount"]
-        timer_list = ["m1", "m2", "m3", "m4"]
-        button_list = ["k1", "k2", "k3", "k4"]
 
         notify = 0
 
@@ -152,9 +155,9 @@ class AutoCraft:
         print("Starting crafting automation...")
         print("TO QUIT: PRESS CTRL+C")
         while True:
-            if "limit" in args:
+            if self.opt_limit == 1:
                 if craft_counter >= craft_amount:
-                    self.auto_notify(craft_counter, craft_amount, notify)
+                    self.auto_notify(craft_counter, craft_amount)
                 print("Craft #{}".format(craft_counter + 1))
 
             if foodbuff == 1:
@@ -177,7 +180,7 @@ class AutoCraft:
 
             sleep(0.01)
             print("  -> Pressing + Selecting 'Synthesis'")
-            for i in range(5):
+            for i in range(4):
                 self.ffxiv.press_key("{VK_NUMPAD0}")
 
             sleep(0.5)
@@ -192,13 +195,13 @@ class AutoCraft:
                 food_limiter += 2
                 pot_limiter += 2
 
-            for i in range(macro_amount):
-                self.ffxiv.press_key(self.json_data[button_list[i]])
+            for i in range(self.macro_amount):
+                self.ffxiv.press_key(self.json_data[self.button_list[i]])
                 print("  -> Pressing Macro {}".format(i + 1))
-                print("    -> Waiting {} seconds.".format(self.json_data[timer_list[i]]))
-                sleep(self.json_data[timer_list[i]])
-                food_limiter += self.json_data[timer_list[i]]
-                pot_limiter += self.json_data[timer_list[i]]
+                print("    -> Waiting {} seconds.".format(self.json_data[self.timer_list[i]]))
+                sleep(self.json_data[self.timer_list[i]])
+                food_limiter += self.json_data[self.timer_list[i]]
+                pot_limiter += self.json_data[self.timer_list[i]]
 
             sleep(3)
             food_limiter += 3
