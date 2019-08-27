@@ -6,166 +6,205 @@ from process import Process
 from time import sleep
 from win10toast import ToastNotifier
 
-def notifier(title=None, message=None):
-    toaster = ToastNotifier()
-    toaster.show_toast(title, message, duration=7)
 
-def args_checker():
-    accepted_args = ["foodbuff", "potbuff", "collectable", "limit", "notify", "--help"]
-    args = sys.argv[1:]
-    all_ok = 0
-    for arg in args:
-        if arg in accepted_args:
-            all_ok += 1
-    if all_ok != len(args):
-        print("Incorrect argument(s). Choose from this list:\n{}\n".format(accepted_args))
-        quit()
-    return args
+class AutoCraft:
+    def __init__(self, json_data=None, mode=None):
+        self.opt_foodbuff = 0
+        self.opt_potbuff = 0
+        self.opt_collectable = 0
+        self.opt_limit = 0
+        self.opt_notify = 0
+        self.opt_repair = 0
+        # Used for Flask if 2nd arg is 'Flask'
+        self.flask = 0
+        if mode == "Flask":
+            self.flask = 1
+        self.json_data = json_data
+        if self.json_data:
+            self.ffxiv = Process(self.json_data["process_name"])
+        self.crafter()
 
-def int_validator(value=None):
-    if value != None:
-        try:
-            value = int(value)
-        except ValueError:
-            print("Error: Input needs to be a number. Restart ffxiv_jidoucraft.py.")
+    def args_checker(self):
+        accepted_args = ["repair", "foodbuff", "potbuff", "collectable", "limit", "notify", "--help"]
+        args = sys.argv[1:]
+        all_ok = 0
+        for arg in args:
+            if arg in accepted_args:
+                if arg == "repair":
+                    self.opt_repair = 1
+                if arg == "foodbuff":
+                    self.opt_foodbuff = 1
+                if arg == "potbuff":
+                    self.opt_potbuff = 1
+                if arg == "collectable":
+                    self.opt_collectable = 1
+                if arg == "limit":
+                    self.opt_limit = 1
+                if arg == "notify":
+                    self.opt_notify = 1
+                all_ok += 1
+        if all_ok != len(args):
+            print("Incorrect argument(s). Choose from this list:\n{}\n".format(accepted_args))
             quit()
-        return value
 
-if __name__ == "__main__":
-    json_data = json_reader()
-    ffxiv = Process(json_data["process_name"])
+    def notifier(self, title=None, message=None):
+        toaster = ToastNotifier()
+        toaster.show_toast(title, message, duration=7)
 
-    args = args_checker()
-    if "--help" in args:
-        with open("help.txt", "r") as f:
-            helper = f.read()
-            print(helper)
-        quit()
+    def int_validator(self, value=None):
+        if value != None:
+            try:
+                value = int(value)
+            except ValueError:
+                print("Error: Input needs to be a number. Restart ffxiv_jidoucraft.py.")
+                quit()
+            return value
 
-    just_buffed = 0
-
-    foodbuff = 0
-    food_time = None
-    food_limiter = 0
-
-    potbuff = 0
-    pot_time = None
-    pot_limiter = 0
-
-    collectable = 0
-
-    craft_counter = 0
-    craft_amount = None
-
-    macro_amount = json_data["macro_amount"]
-    timer_list = ["m1", "m2", "m3", "m4"]
-    button_list = ["k1", "k2", "k3", "k4"]
-
-    notify = 0
-
-    if "notify" in args:
-        notify = 1
-    if "foodbuff" in args:
-        print("Adding foodbuffer to crafting automation...")
-        food_time = input("What is your current food buff time?\n")
-        food_time = int_validator(food_time)
-        foodbuff = 1
-    if "potbuff" in args:
-        print("Adding potbuffer to crafting automation...")
-        pot_time = input("What is your current pot buff time?\n")
-        pot_time = int_validator(pot_time)
-        potbuff = 1
-    if "collectable" in args:
-        print("Collectable mode activated...")
-        collectable = 1
-    if "limit" in args:
-        print("How many crafts do you want to limit to?")
-        craft_amount = input()
-        try:
-            craft_amount = int(craft_amount)
-        except ValueError:
-            print("  -> ERROR: Enter a number. Run ffxiv_jidoucraft.py again.")
-            quit()
+    def time_estimater(self, json_data, craft_amount):
         m_time = 0
         for i in range(macro_amount):
-            m_time += json_data[timer_list[i]]
+            m_time += self.json_data[timer_list[i]]
             m_time += 8 # Numpad 0 presses estimated amount of time it takes
         res = (craft_amount * m_time) / 60
         print("  -> Estimated completion time: {:.2f} minutes.".format(res))
 
-    # Regular auto-craft
-    print("Starting crafting automation...")
-    print("TO QUIT: PRESS CTRL+C")
-    print("\nMake sure your MOUSE CURSOR is HIGHLIGHTING THE CRAFT ITEM BEFORE MINIMIZING\n")
-    print("\nMake sure your MOUSE CURSOR is NOT HIGHLIGHTING ANYTHING BEFORE MINIMIZING\n")
-    while True:
-        if "limit" in args:
-            if craft_counter >= craft_amount:
-                print("Crafted {} times, quitting program.".format(craft_amount))
-                if notify == 1:
-                    notify_message = "Crafted {} times.".format(craft_amount)
-                    notifier("Crafting Batch Finished", notify_message)
+    def auto_end(self, craft_count, craft_amount, notify):
+        print("Crafted {} times, quitting program.".format(craft_amount))
+        if notify == 1:
+            notify_message = "Crafted {} times.".format(craft_amount)
+            self.notifier("Crafting Batch Finished", notify_message)
+        quit()
+
+    def auto_foodbuff(self):
+        print("  -> Standing up by pressing ESC")
+        for esc_counter in range(12):
+            self.ffxiv.press_key("{VK_ESCAPE}")
+        sleep(2)
+        print("  -> Eating food")
+        for food_counter in range(2):
+            self.ffxiv.press_key(self.json_data["food_key"])
+        sleep(7)
+
+    def auto_potbuff(self):
+        print("  -> Standing up by pressing ESC")
+        for esc_counter in range(12):
+            self.ffxiv.press_key("{VK_ESCAPE}")
+        sleep(2)
+        print("  -> Eating pot")
+        for food_counter in range(2):
+            self.ffxiv.press_key(self.json_data["pot_key"])
+        sleep(7)
+
+    def crafter(self):
+        self.args_checker()
+        if "--help" in args:
+            with open("help.txt", "r") as f:
+                helper = f.read()
+                print(helper)
+            quit()
+
+        just_buffed = 0
+
+        foodbuff = 0
+        food_time = None
+        food_limiter = 0
+
+        potbuff = 0
+        pot_time = None
+        pot_limiter = 0
+
+        collectable = 0
+
+        craft_counter = 0
+        craft_amount = None
+
+        macro_amount = self.json_data["macro_amount"]
+        timer_list = ["m1", "m2", "m3", "m4"]
+        button_list = ["k1", "k2", "k3", "k4"]
+
+        notify = 0
+
+        if self.opt_notify == 1:
+            notify = 1
+        if self.opt_foodbuff == 1:
+            print("Adding foodbuffer to crafting automation...")
+            food_time = input("What is your current food buff time?\n")
+            food_time = self.int_validator(food_time)
+            foodbuff = 1
+        if self.opt_potbuff == 1:
+            print("Adding potbuffer to crafting automation...")
+            pot_time = input("What is your current pot buff time?\n")
+            pot_time = self.int_validator(pot_time)
+            potbuff = 1
+        if self.opt_collectable == 1:
+            print("Collectable mode activated...")
+        if self.opt_limit == 1:
+            print("How many crafts do you want to limit to?")
+            craft_amount = input()
+            try:
+                craft_amount = int(craft_amount)
+            except ValueError:
+                print("  -> ERROR: Enter a number. Run ffxiv_jidoucraft.py again.")
                 quit()
-            print("Craft #{}".format(craft_counter + 1))
+            self.time_estimater(self.json_data, craft_amount)
 
-        if foodbuff == 1:
-            if food_limiter >= food_time:
-                print("  -> Standing up by pressing ESC")
-                for esc_counter in range(15):
-                    ffxiv.press_key("{VK_ESCAPE}")
-                sleep(4)
-                print("  -> Eating food")
-                for food_counter in range(3):
-                    ffxiv.press_key(json_data["food_key"])
-                sleep(7)
-                food_limiter = 0
-                food_time = 1770 # Default 30 min pot buff minus 30 seconds
-                just_buffed += 1
-        if potbuff == 1:
-            if pot_limiter >= pot_time:
-                print("  -> Standing up by pressing ESC")
-                for esc_counter in range(15):
-                    ffxiv.press_key("{VK_ESCAPE}")
-                sleep(4)
-                print("  -> Eating pot")
-                for food_counter in range(3):
-                    ffxiv.press_key(json_data["pot_key"])
-                sleep(7)
-                pot_limiter = 0
-                pot_time = 870 # Default 15 min pot buff minus 30 seconds
-                just_buffed += 1
+        # Regular auto-craft
+        print("Starting crafting automation...")
+        print("TO QUIT: PRESS CTRL+C")
+        while True:
+            if "limit" in args:
+                if craft_counter >= craft_amount:
+                    self.auto_notify(craft_counter, craft_amount, notify)
+                print("Craft #{}".format(craft_counter + 1))
 
-        if just_buffed >= 1:
-            print("  -> Selecting Craft")
-            ffxiv.press_key(json_data["craft_key"])
-            just_buffed = 0
+            if foodbuff == 1:
+                if food_limiter >= food_time:
+                    self.auto_foodbuff()
+                    food_limiter = 0
+                    food_time = 1770 # Default 30 min pot buff minus 30 seconds
+                    just_buffed += 1
+            if potbuff == 1:
+                if pot_limiter >= pot_time:
+                    self.auto_potbuff()
+                    pot_limiter = 0
+                    pot_time = 870 # Default 15 min pot buff minus 30 seconds
+                    just_buffed += 1
 
-        sleep(0.01)
-        print("  -> Pressing + Selecting 'Synthesis'")
-        for i in range(5):
-            ffxiv.press_key("{VK_NUMPAD0}")
+            if just_buffed >= 1:
+                print("  -> Selecting Craft")
+                self.ffxiv.press_key(self.json_data["craft_key"])
+                just_buffed = 0
 
-        sleep(0.5)
-        food_limiter += 1
-        pot_limiter += 1
+            sleep(0.01)
+            print("  -> Pressing + Selecting 'Synthesis'")
+            for i in range(5):
+                self.ffxiv.press_key("{VK_NUMPAD0}")
 
-        if collectable == 1:
-            print("  -> Collectable mode selected, please wait.")
-            for zero_counter in range(6):
-                ffxiv.press_key("{VK_NUMPAD0}")
             sleep(0.5)
             food_limiter += 2
             pot_limiter += 2
 
-        for i in range(macro_amount):
-            ffxiv.press_key(json_data[button_list[i]])
-            print("  -> Pressing Macro {}".format(i + 1))
-            print("    -> Waiting {} seconds.".format(json_data[timer_list[i]]))
-            sleep(json_data[timer_list[i]])
-            food_limiter += json_data[timer_list[i]]
-            pot_limiter += json_data[timer_list[i]]
+            if self.opt_collectable == 1:
+                print("  -> Collectable mode selected, please wait.")
+                for zero_counter in range(6):
+                    self.ffxiv.press_key("{VK_NUMPAD0}")
+                sleep(0.5)
+                food_limiter += 2
+                pot_limiter += 2
 
-        sleep(3)
-        food_limiter += 3
-        pot_limiter += 3
-        craft_counter += 1
+            for i in range(macro_amount):
+                self.ffxiv.press_key(self.json_data[button_list[i]])
+                print("  -> Pressing Macro {}".format(i + 1))
+                print("    -> Waiting {} seconds.".format(self.json_data[timer_list[i]]))
+                sleep(self.json_data[timer_list[i]])
+                food_limiter += self.json_data[timer_list[i]]
+                pot_limiter += self.json_data[timer_list[i]]
+
+            sleep(3)
+            food_limiter += 3
+            pot_limiter += 3
+            craft_counter += 1
+
+if __name__ == "__main__":
+    json_data = json_reader()
+    ff = AutoCraft(json_data)
