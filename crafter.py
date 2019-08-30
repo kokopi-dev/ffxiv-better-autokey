@@ -20,6 +20,7 @@ class AutoCraft:
         self.flask = 0
         if mode == "Flask":
             self.flask = 1
+            # self.macro_profiles = json_reader("/macro_profiles/macro_profiles.json")
         self.json_data = json_data
         if self.json_data:
             self.ffxiv = Process(self.json_data["process_name"])
@@ -101,6 +102,21 @@ class AutoCraft:
             self.ffxiv.press_key(self.json_data["pot_key"])
         sleep(7)
 
+    def auto_repair(self):
+        print("  -> Standing up by pressing ESC")
+        for esc_counter in range(12):
+            self.ffxiv.press_key("{VK_ESCAPE}")
+        sleep(2)
+        print("  -> Pressing repair menu")
+        self.ffxiv.press_key("q")
+        sleep(0.1)
+        self.ffxiv.press_key("{VK_NUMPAD0}")
+        sleep(0.1)
+        self.ffxiv.press_key("{VK_NUMPAD6}")
+        self.ffxiv.press_key("{VK_NUMPAD0}")
+        self.ffxiv.press_key("{VK_ESCAPE}")
+        sleep(8)
+
     def crafter(self):
         self.args_checker()
         if self.opt_help == 1:
@@ -157,7 +173,7 @@ class AutoCraft:
         while True:
             if self.opt_limit == 1:
                 if craft_counter >= craft_amount:
-                    self.auto_notify(craft_counter, craft_amount)
+                    self.auto_end(craft_counter, craft_amount)
                 print("Craft #{}".format(craft_counter + 1))
 
             if foodbuff == 1:
