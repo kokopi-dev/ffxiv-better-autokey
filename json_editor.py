@@ -4,7 +4,7 @@ import json
 
 def json_reader():
     try:
-        with open("settings.json", "r") as f:
+        with open("automation_settings.json", "r") as f:
             data = json.load(f)
             return data
     except FileNotFoundError:
