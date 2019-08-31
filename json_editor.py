@@ -12,7 +12,7 @@ def json_reader():
 
 def json_writer(key, value, data):
     data[key] = value
-    with open("settings.json", "w+") as f:
+    with open("automation_settings.json", "w+") as f:
         json.dump(data, f)
     return data
 
