@@ -274,16 +274,16 @@ if __name__ == "__main__":
     if "flask" in args:
         settings = args[-10:]
         ff = AutoCraft(json_data, "Flask")
-        ff.opt_help = settings[0]
-        ff.opt_foodbuff = settings[1]
-        ff.opt_potbuff = settings[2]
-        ff.opt_collectable = settings[3]
-        ff.opt_limit = settings[4]
-        ff.opt_notify = settings[5]
-        ff.opt_repair = settings[6]
-        ff.food_time = settings[7]
-        ff.craft_amount = settings[8]
-        ff.pot_time = settings[9]
+        ff.opt_help = int(settings[0])
+        ff.opt_foodbuff = int(settings[1])
+        ff.opt_potbuff = int(settings[2])
+        ff.opt_collectable = int(settings[3])
+        ff.opt_limit = int(settings[4])
+        ff.opt_notify = int(settings[5])
+        ff.opt_repair = int(settings[6])
+        ff.food_time = int(settings[7])
+        ff.craft_amount = int(settings[8])
+        ff.pot_time = int(settings[9])
         ff.crafter()
     else:
         ff = AutoCraft(json_data)
