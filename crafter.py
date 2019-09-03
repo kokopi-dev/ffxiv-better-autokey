@@ -273,7 +273,7 @@ if __name__ == "__main__":
     json_data = json_reader()
     if "flask" in args:
         settings = args[-10:]
-        ff = AutoCraft(json_data, flask)
+        ff = AutoCraft(json_data, "Flask")
         ff.opt_help = settings[0]
         ff.opt_foodbuff = settings[1]
         ff.opt_potbuff = settings[2]
