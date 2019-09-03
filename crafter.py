@@ -17,10 +17,11 @@ class AutoCraft:
         self.opt_notify = 0
         self.opt_repair = 0
         self.flask = 0
-        # if flask becomes 1, use bottom 3
-        self.food_time = 0
-        self.craft_amount = 0
-        self.pot_time = 0
+        if mode == "Flask":
+            self.flask = 1
+            self.food_time = 0
+            self.craft_amount = 0
+            self.pot_time = 0
         self.json_data = json_data
         if self.json_data:
             self.ffxiv = Process(self.json_data["process_name"])
@@ -139,7 +140,8 @@ class AutoCraft:
         sleep(8)
 
     def crafter(self):
-        self.args_checker()
+        if self.flask == 0:
+            self.args_checker()
         if self.opt_help == 1:
             with open("help.txt", "r") as f:
                 helper = f.read()
@@ -266,5 +268,22 @@ class AutoCraft:
             craft_counter += 1
 
 if __name__ == "__main__":
+    args = sys.argv[1:]
+    flask_check = set(args)
     json_data = json_reader()
-    ff = AutoCraft(json_data)
+    if "flask" in args:
+        settings = args[-10:]
+        ff = AutoCraft(json_data, flask)
+        ff.opt_help = settings[0]
+        ff.opt_foodbuff = settings[1]
+        ff.opt_potbuff = settings[2]
+        ff.opt_collectable = settings[3]
+        ff.opt_limit = settings[4]
+        ff.opt_notify = settings[5]
+        ff.opt_repair = settings[6]
+        ff.food_time = settings[7]
+        ff.craft_amount = settings[8]
+        ff.pot_time = settings[9]
+        ff.crafter()
+    else:
+        ff = AutoCraft(json_data)
