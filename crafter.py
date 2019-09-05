@@ -205,6 +205,16 @@ class AutoCraft:
         print("Starting crafting automation...")
         print("TO QUIT: PRESS CTRL+C")
         while True:
+            if self.opt_collectable == 1:
+                if craft_counter != 0:
+                    print("  -> Collectable mode selected, please wait.")
+                    sleep(5)
+                    self.ffxiv.press_key("{VK_ESCAPE}")
+                    sleep(2)
+                    food_limiter += 7
+                    pot_limiter += 7
+                    repair_limiter += 7
+
             if self.opt_limit == 1:
                 if craft_counter >= craft_amount:
                     self.auto_end(craft_counter, craft_amount)
@@ -233,6 +243,7 @@ class AutoCraft:
                 self.ffxiv.press_key(self.json_data["craft_key"])
                 just_buffed = 0
 
+
             sleep(0.01)
             print("  -> Pressing + Selecting 'Synthesis'")
             for i in range(4):
@@ -242,15 +253,6 @@ class AutoCraft:
             food_limiter += 2
             pot_limiter += 2
             repair_limiter += 2
-
-            if self.opt_collectable == 1:
-                print("  -> Collectable mode selected, please wait.")
-                for zero_counter in range(6):
-                    self.ffxiv.press_key("{VK_NUMPAD0}")
-                sleep(0.5)
-                food_limiter += 2
-                pot_limiter += 2
-                repair_limiter += 2
 
             for i in range(self.macro_amount):
                 self.ffxiv.press_key(self.json_data[self.button_list[i]])
