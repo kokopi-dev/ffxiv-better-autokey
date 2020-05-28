@@ -16,7 +16,9 @@ https://www.python.org/downloads/windows/
 
 ### Requirements
 Run `cmd.bat`
+
 Type and enter `setup.bat` in cmd
+
 If it doesn't download, re-read the top of this README.
 
 ---
@@ -25,19 +27,20 @@ If it doesn't download, re-read the top of this README.
 Make a text file in the auto crafter folder with the key you press for your macro, and the macro below it like in the image below:
 ![demo1](../assets/demo1.PNG)
 
+### Creating a macro profile
 Make a macro profile with this command in the cmd:
 ```
 python main.py make whitescripts.txt
 ```
 * Your filename will become the macro profile's name
 
-
+### Deleting a macro profile
 Delete a macro profile with this command in cmd:
 ```
 python main.py delete whitescripts
 ```
 
-
+### Crafting with a macro profile
 Start crafting with this command in cmd:
 ```
 python main.py craft whitescripts 8
