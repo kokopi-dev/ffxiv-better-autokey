@@ -1,3 +1,0 @@
-pywinauto
-psutil==5.6.3
-win10toast==0.9
