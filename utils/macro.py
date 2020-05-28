@@ -19,39 +19,41 @@ def read_all_macro() -> dict:
             return json.load(f)
 
 def parse_macro(filetext: list) -> dict:
-    macro = {}
+    res = {}
     step = 0
     re_wait = re.compile(r"<wait.(.+?)>")
     re_key = re.compile(r"KEY")
     temp = 3 # Time padding for misclicks
     for line in filetext:
         wait = re_wait.findall(line)
+        # Finding key push
         if wait == [] and re_key.findall(line) == ["KEY"]:
-            macro[step] = {}
+            res[step] = {}
             key = line.split()[1]
-            macro[step]["key"] = key
+            res[step]["key"] = key
+        # Finding next key push
         elif line == "\n":
-            macro[step]["wait"] = temp
+            res[step]["wait"] = temp
             temp = 3
             step += 1
         else:
             temp += int(wait[0])
-    macro[step]["wait"] = temp
-    return macro
+    res[step]["wait"] = temp
+    return res
 
 def make_macro(filename: str):
     """Writes to CONFIG_PATH, adds new macro to current macro list"""
     if not os.path.exists(filename):
         print("ERROR: Filename does not exist in this directory")
         quit()
-    currentmacros = read_all_macro()
+    all_macros = read_all_macro()
     filepath = os.path.join(CWDPATH, filename)
     macroname = os.path.splitext(filename)[0]
     with open(filepath, "r") as f:
         macro = parse_macro(f.readlines())
     with open(CONFIG_PATH, "w+") as f:
-        currentmacros[macroname] = macro
-        json.dump(currentmacros, f)
+        all_macros[macroname] = macro
+        json.dump(all_macros, f)
 
 def read_macro(name: str) -> list:
     if not os.path.exists(CONFIG_PATH):
