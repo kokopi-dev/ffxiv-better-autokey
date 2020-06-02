@@ -40,6 +40,12 @@ Delete a macro profile with this command in cmd:
 python main.py delete whitescripts
 ```
 
+### Listing macro profiles
+List all profiles saved with this command in cmd:
+```
+python main.py list
+```
+
 ### Crafting with a macro profile
 Start crafting with this command in cmd:
 ```
