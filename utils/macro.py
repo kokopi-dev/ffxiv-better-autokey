@@ -54,6 +54,7 @@ def make_macro(filename: str):
     with open(CONFIG_PATH, "w+") as f:
         all_macros[macroname] = macro
         json.dump(all_macros, f)
+        print(f"Created macro profile: {macroname}")
 
 def read_macro(name: str) -> list:
     if not os.path.exists(CONFIG_PATH):
@@ -71,6 +72,7 @@ def delete_macro(name: str):
     macros = read_all_macro()
     if macro:
         del macros[name]
+        print(f"Deleted macro profile: {name}")
 
 def use_macro(macro: dict, amt: int):
     """Uses the selected macro on a set amt of cycles.
@@ -96,3 +98,13 @@ def use_macro(macro: dict, amt: int):
             print(f"   > Waiting {wait}s")
             sleep(wait)
     print("Crafts finished.")
+
+def list_macros():
+    macros = read_all_macro()
+    if macros != {}:
+        print("Current macro profiles:")
+        for m in macros:
+            print(f"  {m}")
+    else:
+        print("Make a macro profile with the 'make' command")
+    quit()

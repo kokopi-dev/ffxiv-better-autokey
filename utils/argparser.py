@@ -7,7 +7,8 @@ import utils.macro as macro
 COMMANDS = {
 	"make": macro.make_macro,
 	"delete": macro.delete_macro,
-	"craft": macro.use_macro
+	"craft": macro.use_macro,
+	"list": macro.list_macros
 }
 
 
@@ -17,5 +18,7 @@ def parse(args: list):
 	if args[0] == "craft":
 		profile = macro.read_macro(args[1])
 		COMMANDS[args[0]](profile, int(args[2]))
-	else:
+	if len(args) > 1:
 		COMMANDS[args[0]](args[1])
+	else:
+		COMMANDS[args[0]]()
