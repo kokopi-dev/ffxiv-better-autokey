@@ -10,7 +10,7 @@ ABSPATH = os.path.dirname(os.path.realpath(__file__))
 CONFIG_PATH = os.path.join(Path(ABSPATH).parent, ".profiles.json")
 
 
-def read_all_macro() -> dict:
+def read_all_macros() -> dict:
     """Creates a config file if not exists, then returns entire file in dict"""
     if not os.path.exists(CONFIG_PATH):
         with open(CONFIG_PATH, "w") as f:
@@ -19,26 +19,30 @@ def read_all_macro() -> dict:
             return json.load(f)
 
 def parse_macro(filetext: list) -> dict:
+    """Parses the text files of macros into wait time for autocrafting.
+    Macro format:
+        {macro_name: {index: {key: CHAR, timer: INT}}}
+    """
     res = {}
-    step = 0
+    idx = 0
     re_wait = re.compile(r"<wait.(.+?)>")
     re_key = re.compile(r"KEY")
     temp = 3 # Time padding for misclicks
     for line in filetext:
-        wait = re_wait.findall(line)
+        timer = re_wait.findall(line)
         # Finding key push
-        if wait == [] and re_key.findall(line) == ["KEY"]:
-            res[step] = {}
+        if timer == [] and re_key.findall(line) == ["KEY"]:
+            res[idx] = {}
             key = line.split()[1]
-            res[step]["key"] = key
+            res[idx]["key"] = key
         # Finding next key push
         elif line == "\n":
-            res[step]["wait"] = temp
+            res[idx]["wait"] = temp
             temp = 3
-            step += 1
+            idx += 1
         else:
-            temp += int(wait[0])
-    res[step]["wait"] = temp
+            temp += int(timer[0])
+    res[idx]["wait"] = temp
     return res
 
 def make_macro(filename: str):
@@ -46,7 +50,7 @@ def make_macro(filename: str):
     if not os.path.exists(filename):
         print("ERROR: Filename does not exist in this directory")
         quit()
-    all_macros = read_all_macro()
+    all_macros = read_all_macros()
     filepath = os.path.join(CWDPATH, filename)
     macroname = os.path.splitext(filename)[0]
     with open(filepath, "r") as f:
@@ -69,13 +73,15 @@ def delete_macro(name: str):
     Reads macro first to check if profile exists.
     """
     macro = read_macro(name)
-    macros = read_all_macro()
+    macros = read_all_macros()
     if macro:
         del macros[name]
         print(f"Deleted macro profile: {name}")
 
 def use_macro(macro: dict, amt: int):
     """Uses the selected macro on a set amt of cycles.
+    macro returns None if there is no macro read.
+    macro format: check parse_macro() docstring.
     Args:
         macro: Comes from read_macro()
     """
@@ -100,7 +106,7 @@ def use_macro(macro: dict, amt: int):
     print("Crafts finished.")
 
 def list_macros():
-    macros = read_all_macro()
+    macros = read_all_macros()
     if macros != {}:
         print("Current macro profiles:")
         for m in macros:
