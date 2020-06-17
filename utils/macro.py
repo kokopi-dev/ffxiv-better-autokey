@@ -41,7 +41,8 @@ def parse_macro(filetext: list) -> dict:
             temp = 3
             idx += 1
         else:
-            temp += int(timer[0])
+            if len(timer) == 1:
+                temp += int(timer[0])
     res[idx]["wait"] = temp
     return res
 
@@ -76,7 +77,9 @@ def delete_macro(name: str):
     macros = read_all_macros()
     if macro:
         del macros[name]
-        print(f"Deleted macro profile: {name}")
+        with open(CONFIG_PATH, "w") as f:
+            json.dump(macros, f)
+            print(f"Deleted macro profile: {name}")
 
 def use_macro(macro: dict, amt: int):
     """Uses the selected macro on a set amt of cycles.
@@ -113,4 +116,3 @@ def list_macros():
             print(f"  {m}")
     else:
         print("Make a macro profile with the 'make' command")
-    quit()

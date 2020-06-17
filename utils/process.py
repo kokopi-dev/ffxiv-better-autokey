@@ -7,12 +7,12 @@ PROCESS_TARGET = "ffxiv_dx11.exe"
 WINDOW_TITLE = "FINAL FANTASY XIV"
 
 class Process:
-    """Gets PID, then hooks onto the PID to be able to send keystrokes to"""
+    """Gets PID of PROCESS_TARGET, then hooks onto the PID on init"""
     def __init__(self):
         self.pid = self.find_pid()
         self.app = self.connect_to_pid()
 
-    def find_pid(self):
+    def find_pid(self) -> int:
         pid = None
         for p in psutil.process_iter():
             try:
@@ -25,6 +25,7 @@ class Process:
         return pid
 
     def connect_to_pid(self):
+        """Returns a pywinauto Application object created with find_pid()"""
         if not self.pid:
             print(f"ERROR: Could not find process name: {PROCESS_TARGET}.")
             quit()

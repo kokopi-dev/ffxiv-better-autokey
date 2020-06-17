@@ -18,7 +18,7 @@ def parse(args: list):
 	if args[0] == "craft":
 		profile = macro.read_macro(args[1])
 		COMMANDS[args[0]](profile, int(args[2]))
-	if len(args) > 1:
+	elif len(args) > 1:
 		COMMANDS[args[0]](args[1])
 	else:
 		COMMANDS[args[0]]()
