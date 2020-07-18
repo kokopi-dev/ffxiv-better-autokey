@@ -17,7 +17,7 @@ def parse(args: list):
 		print(f"ERROR: {args[0]} is not a command.")
 	if args[0] == "craft":
 		profile = macro.read_macro(args[1])
-		COMMANDS[args[0]](profile, int(args[2]))
+		COMMANDS[args[0]](profile, int(args[2]), args[3:])
 	elif len(args) > 1:
 		COMMANDS[args[0]](args[1])
 	else:

@@ -81,13 +81,19 @@ def delete_macro(name: str):
             json.dump(macros, f)
             print(f"Deleted macro profile: {name}")
 
-def use_macro(macro: dict, amt: int):
+def use_macro(macro: dict, amt: int, flags: list):
     """Uses the selected macro on a set amt of cycles.
     macro returns None if there is no macro read.
     macro format: check parse_macro() docstring.
     Args:
         macro: Comes from read_macro()
     """
+    options = {
+        "-collect": False
+    }
+    for f in flags:
+        if options.get(f, "") != "":
+            options[f] = True
     if not macro:
         print("ERROR: Macro name does not exist your profiles")
         quit()
@@ -106,6 +112,11 @@ def use_macro(macro: dict, amt: int):
             proc.press_key(key)
             print(f"   > Waiting {wait}s")
             sleep(wait)
+        if options["-collect"] == True:
+            print(f"   > Collectable Menu")
+            for i in range(4):
+                proc.press_key(select)
+            sleep(2.5)
     print("Crafts finished.")
 
 def list_macros():
