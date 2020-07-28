@@ -104,11 +104,12 @@ def use_macro(macro: dict, amt: int, flags: list):
         print(f" > Craft #{i}")
         for i in range(4):
             proc.press_key(select)
-        sleep(0.5)
+        sleep(1)
         for step in macro:
             wait = macro[step]["wait"]
             key = macro[step]["key"]
             print(f"   > Pressing {key}")
+            sleep(0.5)
             proc.press_key(key)
             print(f"   > Waiting {wait}s")
             sleep(wait)

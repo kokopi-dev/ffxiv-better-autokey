@@ -6,6 +6,7 @@ from pywinauto.keyboard import *
 PROCESS_TARGET = "ffxiv_dx11.exe"
 WINDOW_TITLE = "FINAL FANTASY XIV"
 
+
 class Process:
     """Gets PID of PROCESS_TARGET, then hooks onto the PID on init"""
     def __init__(self):
@@ -27,8 +28,7 @@ class Process:
     def connect_to_pid(self):
         """Returns a pywinauto Application object created with find_pid()"""
         if not self.pid:
-            print(f"ERROR: Could not find process name: {PROCESS_TARGET}.")
-            quit()
+            return f"ERROR: Could not find process name: {PROCESS_TARGET}."
         app = Application().connect(process=self.pid)
         return app
 
