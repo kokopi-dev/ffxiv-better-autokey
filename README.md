@@ -52,3 +52,15 @@ Start crafting with this command in cmd:
 python main.py craft whitescripts 8
 ```
 * python main.py craft PROFILE_NAME CRAFT_AMOUNT
+
+
+### Crafting options
+Collectables:
+```
+python main.py craft whitescripts 8 -collect
+```
+
+---
+
+## Author
+* [kai-dg](https://github.com/kai-dg)
