@@ -2,6 +2,7 @@
 MACRO_LIST = []
 MACRO_LIST_CRAFT_TAB = None # Dropdown menu
 MACRO_LIST_MACRO_TAB = None # Dropdown menu
+FFXIV = None
 # APP SETTINGS
 W_WIDTH = 500
 W_HEIGHT = 600
@@ -18,5 +19,6 @@ MACRO_LIST_LABEL = "Macro:"
 ERR_CRAFT_AMT = "Please enter a Craft Amt."
 CRAFT_PROGRESS = "Crafting #"
 CRAFT_EST = "Estimated time:"
+CONNECTED = "FFXIV Connected"
 # FILES
 JSON_FILE_NAME = "profiles.json"

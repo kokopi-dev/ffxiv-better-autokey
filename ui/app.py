@@ -5,7 +5,9 @@ import ui.settings as s
 from ui.frames.craft import CraftTab
 from ui.frames.macros import MacrosTab
 import utils.macro_exe as crafter
+from utils.process import Process
 s.MACRO_LIST = crafter.read_json()
+s.FFXIV = Process()
 
 
 class App:
