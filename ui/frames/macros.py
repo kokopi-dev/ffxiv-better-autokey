@@ -27,7 +27,10 @@ def parse_wait(text) -> int:
     re_wait = re.compile(r"<wait.(.+?)>")
     for line in text.strip().split("\n"):
         timer = re_wait.findall(line)
-        wait += int(timer[0])
+        try:
+            wait += int(timer[0])
+        except IndexError:
+            pass
     return wait
 
 class MacrosTab:
