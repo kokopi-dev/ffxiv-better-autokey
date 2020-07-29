@@ -7,7 +7,6 @@ import utils.macro_exe as crafter
 from time import sleep
 import multiprocessing as m
 
-
 class CraftTab:
     def __init__(self, notebook):
         self.frame = tk.Frame(notebook, padx=10, pady=10, bg=s.BG1)
@@ -86,8 +85,12 @@ class CraftTab:
         if craft_check:
             flags = self.create_flags()
             total_time = crafter.get_time_estimation(data["macro"], data["amt"])
+            crafter.use_macro(data["macro"], data["amt"], flags)
+            # Multiprocess can be used on non exe
+            """
             p1 = m.Process(target=crafter.use_macro, args=(data["macro"], data["amt"], flags))
             p1.start()
             p1.join()
+            """
             self.display2["text"] = f"{data['amt']} crafts finished."
         self.collect_cb.deselect()
