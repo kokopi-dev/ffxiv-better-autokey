@@ -6,3 +6,6 @@ profiles.json
 exec.spec
 build/*
 housing.py
+.logs.json
+macros/*
+test.py

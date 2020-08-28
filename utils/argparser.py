@@ -3,22 +3,22 @@
 implement later:
 python main.py craft coolcraft1 50 -food -pot -repair
 """
-import utils.macro as macro
+import utils.autocrafter_funcs as func
+import sys
 COMMANDS = {
-	"make": macro.make_macro,
-	"delete": macro.delete_macro,
-	"craft": macro.use_macro,
-	"list": macro.list_macros
+	"craft": func.use_macro,
+	"create": func.create_macro,
+	"delete": func.delete_macro,
+	"list": func.list_macros
 }
 
 
 def parse(args: list):
-	if not COMMANDS.get(args[0], None):
+	if len(args) == 0:
+		print("ERROR: Please enter a command.")
+		sys.exit()
+	elif not COMMANDS.get(args[0], None):
 		print(f"ERROR: {args[0]} is not a command.")
-	if args[0] == "craft":
-		profile = macro.read_macro(args[1])
-		COMMANDS[args[0]](profile, int(args[2]), args[3:])
-	elif len(args) > 1:
-		COMMANDS[args[0]](args[1])
+		sys.exit()
 	else:
-		COMMANDS[args[0]]()
+		COMMANDS[args[0]](args)
