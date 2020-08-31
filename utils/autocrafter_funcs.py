@@ -24,21 +24,19 @@ def create_macro(args):
 def delete_macro(args):
     inputs = input_handler.delete(args)
     profile = inputs["profile"]
-    profile_list = inputs["list"]
-    if os.path.isfile(profile_list[profile]["path"]):
-        os.remove(profile_list[profile]["path"])
+    if os.path.isfile(s.PROFILES[profile]["path"]):
+        os.remove(s.PROFILES[profile]["path"])
     else:
         print("ERROR: Macro file does not exist.")
         sys.exit()
-    del profile_list[profile]
-    h.write_json(s.PROFILES_PATH, profile_list)
+    del s.PROFILES[profile]
+    h.write_json(s.PROFILES_PATH, s.PROFILES)
     logs = h.read_json(s.LOGS_PATH)
     del logs[profile]
     h.write_json(s.LOGS_PATH, logs)
 
 def list_macros(args):
-    profile_list = list(h.read_json(s.PROFILES_PATH))
-    print(f"Available macros: {profile_list}")
+    print(f"Available macros: {list(s.PROFILES)}")
 
 def opt_repair(proc):
     """Repairing rotation, 9.5s sleep"""
@@ -98,6 +96,7 @@ def use_macro(args):
             proc.press_key(key)
             print(f"   > Waiting {wait}s")
             sleep(wait)
+            sleep(1)
         if repair_counter > s.REPAIR_COUNTER:
             if options["-repair"] == True:
                 print("Self repairing...")

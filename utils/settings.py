@@ -14,6 +14,7 @@ PROFILES_PATH = os.path.join(Path(ABSPATH).parent, FILENAME_MACROS)
 LOGS_PATH = os.path.join(Path(ABSPATH).parent, FILENAME_LOGS)
 MACROS_FOLDER = "macros"
 FLAGS = ["-repair", "-food", "-pot"]
+PROFILES = []
 
 # MESSAGES
 PROMPT = " > "
@@ -25,6 +26,7 @@ CREATE_MACRO = f"What is the filename in the macros folder?\n{PROMPT}"
 
 # SETTINGS
 REPAIR_COUNTER = 85
+TIME_PADDING_0 = 3 # Time padding for in between pressing keys
 
 # BUTTONS
 REPAIR = "4"

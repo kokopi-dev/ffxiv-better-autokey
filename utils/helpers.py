@@ -5,8 +5,8 @@ import os
 import json
 
 
-def check_profile_exists(profile_list, profile):
-    if profile not in profile_list:
+def check_profile_exists(profile):
+    if profile not in list(s.PROFILES):
         print(f"ERROR: {profile} does not exist, try creating it.")
         sys.exit()
 
@@ -73,10 +73,9 @@ def parse_key(line):
         return key
 
 def update_macro(macroname, filepath):
-    profiles = read_json(s.PROFILES_PATH)
-    profiles[macroname] = {}
-    profiles[macroname]["updated_at"] = os.stat(filepath).st_mtime
-    profiles[macroname]["path"] = filepath
+    s.PROFILES[macroname] = {}
+    s.PROFILES[macroname]["updated_at"] = os.stat(filepath).st_mtime
+    s.PROFILES[macroname]["path"] = filepath
     macro = {"keys": [], "wait": []}
     with open(filepath, "r") as f:
         for line in f.readlines():
@@ -88,9 +87,9 @@ def update_macro(macroname, filepath):
                 macro["wait"].append(0)
             if wait:
                 macro["wait"][key_idx] += wait
-    profiles[macroname]["macro"] = macro
-    write_json(s.PROFILES_PATH, profiles)
-    log_timestamp(macroname, profiles[macroname]["updated_at"])
+    s.PROFILES[macroname]["macro"] = macro
+    write_json(s.PROFILES_PATH, s.PROFILES)
+    log_timestamp(macroname, s.PROFILES[macroname]["updated_at"])
 
 def log_timestamp(name, timestamp):
     logs = read_json(s.LOGS_PATH)
@@ -101,11 +100,10 @@ def refresh_timestamps():
     """Checks for any changes to macros"""
     logs = read_json(s.LOGS_PATH)
     if len(list(logs)) != 0:
-        macros = read_json(s.PROFILES_PATH)
         for macro in logs:
-            macros[macro]["updated_at"] = os.stat(macros[macro]["path"]).st_mtime
-            if logs[macro] != macros[macro]["updated_at"]:
-                update_macro(macro, macros[macro]["path"])
+            s.PROFILES[macro]["updated_at"] = os.stat(s.PROFILES[macro]["path"]).st_mtime
+            if logs[macro] != s.PROFILES[macro]["updated_at"]:
+                update_macro(macro, s.PROFILES[macro]["path"])
 
 def get_time_estimation(macro, amt):
     total_wait = 0
