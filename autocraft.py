@@ -6,9 +6,10 @@ import utils.settings as s
 
 
 def main():
-    s.PROFILES = h.read_json(s.PROFILES_PATH)
     h.setup()
-    h.refresh_timestamps()
+    s.PROFILES = h.read_json(s.PROFILES_PATH)
+    s.LOGS = h.read_json(s.LOGS_PATH)
+    h.scan_macros()
     args = sys.argv[1:]
     parse(args)
 

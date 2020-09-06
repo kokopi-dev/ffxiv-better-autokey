@@ -14,7 +14,8 @@ PROFILES_PATH = os.path.join(Path(ABSPATH).parent, FILENAME_MACROS)
 LOGS_PATH = os.path.join(Path(ABSPATH).parent, FILENAME_LOGS)
 MACROS_FOLDER = "macros"
 FLAGS = ["-repair", "-food", "-pot"]
-PROFILES = []
+PROFILES = {}
+LOGS = {}
 
 # MESSAGES
 PROMPT = " > "

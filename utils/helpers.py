@@ -73,6 +73,7 @@ def parse_key(line):
         return key
 
 def update_macro(macroname, filepath):
+    """Updates profiles json"""
     s.PROFILES[macroname] = {}
     s.PROFILES[macroname]["updated_at"] = os.stat(filepath).st_mtime
     s.PROFILES[macroname]["path"] = filepath
@@ -89,21 +90,6 @@ def update_macro(macroname, filepath):
                 macro["wait"][key_idx] += wait
     s.PROFILES[macroname]["macro"] = macro
     write_json(s.PROFILES_PATH, s.PROFILES)
-    log_timestamp(macroname, s.PROFILES[macroname]["updated_at"])
-
-def log_timestamp(name, timestamp):
-    logs = read_json(s.LOGS_PATH)
-    logs[name] = timestamp
-    write_json(s.LOGS_PATH, logs)
-
-def refresh_timestamps():
-    """Checks for any changes to macros"""
-    logs = read_json(s.LOGS_PATH)
-    if len(list(logs)) != 0:
-        for macro in logs:
-            s.PROFILES[macro]["updated_at"] = os.stat(s.PROFILES[macro]["path"]).st_mtime
-            if logs[macro] != s.PROFILES[macro]["updated_at"]:
-                update_macro(macro, s.PROFILES[macro]["path"])
 
 def get_time_estimation(macro, amt):
     total_wait = 0
@@ -114,10 +100,41 @@ def get_time_estimation(macro, amt):
     total_wait += s.AFTER_COLLECT_MENU
     return total_wait * amt
 
+def scan_macros():
+    """Scans macros folder, adds new macro files, updates profiles files,
+    updates logs file"""
+    # Cross check current files and profiles.json files, update, add, delete
+    logs = read_json(s.LOGS_PATH)
+    macros_folder = os.path.join(s.CWDPATH, s.MACROS_FOLDER)
+    files = os.listdir(macros_folder)
+    files.remove("README.txt") # README.txt required in this folder
+    profiles_list = [f.replace(".txt", "") for f in files]
+    for profile in profiles_list:
+        if s.PROFILES.get(profile, "") != "":
+            # Profile exists in profiles.json, check timestamps
+            old_timestamp = s.PROFILES[profile]["updated_at"]
+            curr_timestamp = os.stat(s.PROFILES[profile]["path"]).st_mtime
+            if curr_timestamp != old_timestamp:
+                update_macro(profile, s.PROFILES[profile]["path"])
+        else:
+            # Profile does not exist in profiles.json
+            name = profile + ".txt"
+            fpath = os.path.join(macros_folder, name)
+            update_macro(profile, fpath)
+            s.LOGS["added"].append(profile)
+    # Check for deleted txt files
+    for item in s.LOGS["added"]:
+        if item not in profiles_list:
+            del s.PROFILES[item]
+            write_json(s.PROFILES_PATH, s.PROFILES)
+            s.LOGS["added"].remove(item)
+    write_json(s.LOGS_PATH, s.LOGS)
+
+
 def setup():
     if not check_path(s.PROFILES_PATH):
         write_json(s.PROFILES_PATH, {})
     if not check_path(s.MACROS_FOLDER):
         os.mkdir(s.MACROS_FOLDER)
     if not check_path(s.LOGS_PATH):
-        write_json(s.LOGS_PATH, {})
+        write_json(s.LOGS_PATH, {"added": []})

@@ -7,8 +7,6 @@ import utils.autocrafter_funcs as func
 import sys
 COMMANDS = {
 	"craft": func.use_macro,
-	"create": func.create_macro,
-	"delete": func.delete_macro,
 	"list": func.list_macros
 }
 

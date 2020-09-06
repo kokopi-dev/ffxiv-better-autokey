@@ -10,31 +10,6 @@ import os
 import sys
 
 
-def create_macro(args):
-    temp_input = input_handler.create(args)
-    user_input = h.last_path(temp_input)
-    filepath = os.path.join(s.CWDPATH, s.MACROS_FOLDER, user_input)
-    if not h.check_path(filepath):
-        print(f"ERROR: {user_input} does not exist in the macros\\ folder")
-        sys.exit()
-    macroname = user_input.replace(".txt", "")
-    h.update_macro(macroname, filepath)
-    print(f"Created profile: {user_input}")
-
-def delete_macro(args):
-    inputs = input_handler.delete(args)
-    profile = inputs["profile"]
-    if os.path.isfile(s.PROFILES[profile]["path"]):
-        os.remove(s.PROFILES[profile]["path"])
-    else:
-        print("ERROR: Macro file does not exist.")
-        sys.exit()
-    del s.PROFILES[profile]
-    h.write_json(s.PROFILES_PATH, s.PROFILES)
-    logs = h.read_json(s.LOGS_PATH)
-    del logs[profile]
-    h.write_json(s.LOGS_PATH, logs)
-
 def list_macros(args):
     print(f"Available macros: {list(s.PROFILES)}")
 

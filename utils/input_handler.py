@@ -4,22 +4,6 @@ import utils.settings as s
 import utils.helpers as h
 
 
-def create(args):
-	if len(args) > 1:
-		profile = args[1]
-	else:
-		profile = input(s.CREATE_MACRO)
-	return profile
-
-def delete(args):
-	if len(args) > 1:
-		profile = args[1]
-	else:
-		print(f"Macros: {list(s.PROFILES)}")
-		profile = input()
-	h.check_profile_exists(profile)
-	return {"profile": profile}
-
 def craft(args):
 	"""Manual input: autocraft.py craft macro1 50 -repair"""
 	if len(args) > 1:
