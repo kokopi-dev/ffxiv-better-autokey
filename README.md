@@ -15,36 +15,25 @@ https://www.python.org/downloads/windows/
 ![path_check](../assets/pythonpathcheck.PNG)
 
 ### Requirements
-Run `cmd.bat`
+Run/double-click `cmd.bat`
 
-Type and enter `setup.bat` in cmd
-
-If it doesn't download, re-read the top of this README.
+It should make an env\ folder and install python requirements
 
 ---
 
 ## Instructions
-Make a text file in the auto crafter folder with the key you press for your macro, and the macro below it like in the image below:
+#### Make a text file in the macros\\ folder with the key you press for your macro, and the macro below it like in the image below:
 ![demo1](../assets/demo1.PNG)
 
 ### Creating a macro profile
-Make a macro profile with this command in the cmd:
-```
-python main.py make whitescripts.txt
-```
-* Your filename will become the macro profile's name
-
-### Deleting a macro profile
-Delete a macro profile with this command in cmd:
-```
-python main.py delete whitescripts
-```
-
-### Listing macro profiles
-List all profiles saved with this command in cmd:
+The text file you created is the macro profie
+List your profiles with:
 ```
 python main.py list
 ```
+
+### Deleting a macro profile
+To delete a profile, delete the text file.
 
 ### Crafting with a macro profile
 Start crafting with this command in cmd:
@@ -55,10 +44,7 @@ python main.py craft whitescripts 8
 
 
 ### Crafting options
-Collectables:
-```
-python main.py craft whitescripts 8 -collect
-```
+WIP
 
 ---
 
