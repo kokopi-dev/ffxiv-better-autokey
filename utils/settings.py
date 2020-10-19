@@ -1,6 +1,17 @@
 import re
 import os
 from pathlib import Path
+# BUTTONS
+REPAIR = "4"
+CRAFT_ITEM = "5"
+FOOD_KEY = ""
+POTION_KEY = ""
+
+# SETTINGS
+REPAIR_COUNTER = 85
+TIME_PADDING_0 = 3 # Time padding for in between pressing keys
+
+# MISC
 RE_WAIT = re.compile(r"<wait.(.+?)>")
 RE_KEY = re.compile(r"KEY")
 MACRO_TIME_PAD = 3 # Time padding for misclicks on macro
@@ -24,11 +35,3 @@ CRAFT_AMT = f"\nHow many crafts?\n{PROMPT}"
 FLAGS_LIST = f"\nAvailable options: {FLAGS}\nLeave blank if none\n{PROMPT}"
 DELETE_MACRO = f"Which macro do you want to delete?\n{PROMPT}"
 CREATE_MACRO = f"What is the filename in the macros folder?\n{PROMPT}"
-
-# SETTINGS
-REPAIR_COUNTER = 85
-TIME_PADDING_0 = 3 # Time padding for in between pressing keys
-
-# BUTTONS
-REPAIR = "4"
-CRAFT_ITEM = "5"

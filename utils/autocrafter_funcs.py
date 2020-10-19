@@ -36,6 +36,12 @@ def opt_repair(proc):
     proc.press_key(s.CRAFT_ITEM)
     sleep(1)
 
+def opt_food(proc):
+    pass
+
+def opt_potion(proc):
+    pass
+
 def use_macro(args):
     """Uses the selected macro on a set amt of cycles.
     Args:
