@@ -32,6 +32,10 @@ List your profiles with:
 python main.py list
 ```
 
+### Updating a macro profile
+Update the text file, it will immediately change after saving the file
+
+
 ### Deleting a macro profile
 To delete a profile, delete the text file.
 
