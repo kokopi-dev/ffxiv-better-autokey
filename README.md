@@ -19,6 +19,13 @@ Run/double-click `cmd.bat`
 
 It should make an env\ folder and install python requirements
 
+### Caveats
+In order to be fully automatic while doing other things in the background, **FFXIV needs to be in windowed mode on your display #2**
+
+![ffxivauto2](../assets/ffxivauto2.PNG)
+
+![ffxivauto1](../assets/ffxivauto1.png)
+
 ---
 
 ## Instructions
