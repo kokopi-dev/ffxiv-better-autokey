@@ -58,31 +58,31 @@ def use_macro(args):
     for f in inputs["opt"]:
         if options.get(f, "") != "":
             options[f] = True
-    sys.stdout.write(f"Starting {inputs['amt']} crafts:")
+    print(f"Starting {inputs['amt']} crafts:")
     proc = Process()
     select = "{VK_NUMPAD0}"
     # TODO new macro layout
     steps = len(macro["macro"]["keys"])
     repair_counter = 0
     for i in range(inputs["amt"]):
-        sys.stdout.write(f" > Craft #{i + 1}")
+        print(f" > Craft #{i + 1}")
         for _ in range(4):
             proc.press_key(select)
         sleep(1)
         for step in range(steps):
             wait = macro["macro"]["wait"][step]
             key = macro["macro"]["keys"][step]
-            sys.stdout.write(f"   > Pressing {key}")
+            print(f"   > Pressing {key}")
             sleep(0.5)
             proc.press_key(key)
-            sys.stdout.write(f"   > Waiting {wait}s")
+            print(f"   > Waiting {wait}s")
             sleep(wait)
             sleep(1)
         if repair_counter > s.REPAIR_COUNTER:
             if options["-repair"] == True:
-                sys.stdout.write("Self repairing...")
+                print("Self repairing...")
                 opt_repair(proc)
             repair_counter = 0
         repair_counter += 1
         sleep(2.5)
-    sys.stdout.write("Crafts finished.")
+    print("Crafts finished.")
