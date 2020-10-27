@@ -7,18 +7,18 @@ import json
 
 def check_profile_exists(profile):
     if profile not in list(s.PROFILES):
-        print(f"ERROR: {profile} does not exist, try creating it.")
+        sys.stderr.write(s.ERROR_CHECK_0.format(profile))
         sys.exit()
 
 def check_integer(number):
     if not number.isdigit() or int(number) < 0:
-        print(f"ERROR: Please enter a positive number.")
+        sys.stderr.write(s.ERROR_CHECK_1)
         sys.exit()
 
 def check_options(options):
     for o in options:
         if o not in s.FLAGS:
-            print(f"ERROR: {o} is not an option.")
+            sys.stderr.write(s.ERROR_CHECK_2.format(o))
             sys.exit()
 
 def check_path(filepath):
@@ -45,7 +45,7 @@ def get_macro(name: str) -> dict:
     macro_name: {last_updated: 0, macro:{keys: [], wait: []}, filepath: string}
     """
     if not check_path(s.CONFIG_PATH):
-        print("ERROR: No profiles have been made. Use the command 'make'")
+        sys.stderr.write(s.ERROR_CHECK_3)
         sys.exit()
     with open(CONFIG_PATH, "r") as f:
         macro = json.load(f).get(name, None)
@@ -129,7 +129,6 @@ def scan_macros():
             write_json(s.PROFILES_PATH, s.PROFILES)
             s.LOGS["added"].remove(item)
     write_json(s.LOGS_PATH, s.LOGS)
-
 
 def setup():
     if not check_path(s.PROFILES_PATH):
