@@ -7,17 +7,17 @@ import utils.autocrafter_funcs as func
 import sys
 import utils.settings as s
 COMMANDS = {
-	"craft": func.use_macro,
-	"list": func.list_macros
+    "craft": func.use_macro,
+    "list": func.list_macros
 }
 
 
 def parse(args: list):
-	if len(args) == 0:
-		sys.stderr.write(s.ERROR_ENTRY_0)
-		sys.exit()
-	elif not COMMANDS.get(args[0], None):
-		sys.stderr.write(s.ERROR_ENTRY_1.format(args[0]))
-		sys.exit()
-	else:
-		COMMANDS[args[0]](args)
+    if len(args) == 0:
+        sys.stderr.write(s.ERROR_ENTRY_0)
+        sys.exit()
+    elif not COMMANDS.get(args[0], None):
+        sys.stderr.write(s.ERROR_ENTRY_1.format(args[0]))
+        sys.exit()
+    else:
+        COMMANDS[args[0]](args)
