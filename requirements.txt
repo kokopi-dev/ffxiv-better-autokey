@@ -3,3 +3,4 @@ psutil==5.7.0
 pywin32==227
 pywinauto==0.6.8
 six==1.15.0
+playsound==1.2.2
