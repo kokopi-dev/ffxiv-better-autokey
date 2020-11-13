@@ -1,4 +1,4 @@
-![github version](https://d25lcipzij17d.cloudfront.net/badge.svg?id=gh&type=6&v=2.0.0&x2=0)
+![github version](https://d25lcipzij17d.cloudfront.net/badge.svg?id=gh&type=6&v=2.0.1&x2=0)
 # FFXIV Auto Crafter
 Terminal tool for FFXIV crafting
 

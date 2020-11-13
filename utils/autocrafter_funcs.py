@@ -4,6 +4,7 @@
 import utils.helpers as h
 import utils.input_handler as input_handler
 import utils.settings as s
+import utils.notifications as notify
 from utils.process import Process
 from time import sleep
 import os
@@ -86,3 +87,4 @@ def use_macro(args):
         repair_counter += 1
         sleep(2.5)
     print("Crafts finished.")
+    notify.finished()
