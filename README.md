@@ -42,11 +42,15 @@ python main.py list
 ### Updating a macro profile
 Update the text file, it will immediately change after saving the file
 
-
 ### Deleting a macro profile
 To delete a profile, delete the text file.
 
 ### Crafting with a macro profile
+Before starting the craft command:
+ - Make sure **only** your craft window is out
+ - The craft you want to do is highlighted
+ - Your last action was **not** a chat message
+ 
 Start crafting with this command in cmd:
 ```
 python main.py craft whitescripts 8
