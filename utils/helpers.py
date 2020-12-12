@@ -91,14 +91,15 @@ def update_macro(macroname, filepath):
     s.PROFILES[macroname]["macro"] = macro
     write_json(s.PROFILES_PATH, s.PROFILES)
 
-def get_time_estimation(macro, amt):
+def get_time_estimation(macro, amt, sleeps):
+    steps = len(macro["macro"]["keys"])
+    steps_sleep = steps * (sleeps["step1"] + sleeps["step2"])
     total_wait = 0
-    total_wait += macro["wait1"]
-    if macro.get("wait2", "") != "":
-        total_wait += macro["wait2"]
-    total_wait += s.BEFORE_KEY
-    total_wait += s.AFTER_COLLECT_MENU
-    return total_wait * amt
+    for idx in range(steps):
+        total_wait += macro["macro"]["wait"][idx]
+    seconds = (amt * total_wait) + (amt * steps_sleep)
+    minutes = (seconds / 60)
+    return minutes
 
 def scan_macros():
     """Scans macros folder, adds new macro files, updates profiles files,

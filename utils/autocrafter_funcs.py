@@ -15,7 +15,9 @@ def list_macros(args):
     sys.stdout.write(f"Available macros: {list(s.PROFILES)}")
 
 def opt_repair(proc):
-    """Repairing rotation, 9.5s sleep"""
+    """Repairing rotation
+    Sleep: 9.5s
+    """
     select = "{VK_NUMPAD0}"
     esc = "{VK_ESCAPE}"
     left = "{LEFT}"
@@ -62,9 +64,16 @@ def use_macro(args):
     print(f"Starting {inputs['amt']} crafts:")
     proc = Process()
     select = "{VK_NUMPAD0}"
-    # TODO new macro layout
     steps = len(macro["macro"]["keys"])
     repair_counter = 0
+    # Can adjust sleeps according to lag
+    sleeps = {
+        "step1": 0.5,
+        "step2": 1,
+        "input": 2.5
+    }
+    est = h.get_time_estimation(macro, inputs["amt"], sleeps)
+    print(f" > Time estimation: {est:.2f} minutes.")
     for i in range(inputs["amt"]):
         print(f" > Craft #{i + 1}")
         for _ in range(4):
@@ -74,17 +83,17 @@ def use_macro(args):
             wait = macro["macro"]["wait"][step]
             key = macro["macro"]["keys"][step]
             print(f"   > Pressing {key}")
-            sleep(0.5)
+            sleep(sleeps["step1"])
             proc.press_key(key)
             print(f"   > Waiting {wait}s")
             sleep(wait)
-            sleep(1)
+            sleep(sleeps["step2"])
         if repair_counter > s.REPAIR_COUNTER:
             if options["-repair"] == True:
                 print("Self repairing...")
                 opt_repair(proc)
             repair_counter = 0
         repair_counter += 1
-        sleep(2.5)
+        sleep(sleeps["input"])
     print("Crafts finished.")
     notify.finished()
