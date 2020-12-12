@@ -53,47 +53,38 @@ def use_macro(args):
     """
     inputs = input_handler.craft(args) #inputs has macro amt opt
     macro = inputs["macro"]
-    options = {
-        "-repair": False,
-        "-food": False,
-        "-pot": False
-    }
     for f in inputs["opt"]:
-        if options.get(f, "") != "":
-            options[f] = True
+        if s.CRAFT_OPTS.get(f, "") != "":
+            s.CRAFT_OPTS[f] = True
     print(f"Starting {inputs['amt']} crafts:")
     proc = Process()
     select = "{VK_NUMPAD0}"
     steps = len(macro["macro"]["keys"])
     repair_counter = 0
     # Can adjust sleeps according to lag
-    sleeps = {
-        "step1": 0.5,
-        "step2": 1,
-        "input": 2.5
-    }
-    est = h.get_time_estimation(macro, inputs["amt"], sleeps)
+    est = h.get_time_estimation(macro, inputs["amt"])
     print(f" > Time estimation: {est:.2f} minutes.")
     for i in range(inputs["amt"]):
         print(f" > Craft #{i + 1}")
         for _ in range(4):
             proc.press_key(select)
-        sleep(1)
+        sleep(s.CRAFT_SLEEPS["input1"])
         for step in range(steps):
             wait = macro["macro"]["wait"][step]
             key = macro["macro"]["keys"][step]
             print(f"   > Pressing {key}")
-            sleep(sleeps["step1"])
+            sleep(s.CRAFT_SLEEPS["step1"])
             proc.press_key(key)
             print(f"   > Waiting {wait}s")
             sleep(wait)
-            sleep(sleeps["step2"])
+            sleep(s.CRAFT_SLEEPS["step2"])
         if repair_counter > s.REPAIR_COUNTER:
-            if options["-repair"] == True:
+            if s.CRAFT_OPTS["-repair"] == True:
                 print("Self repairing...")
                 opt_repair(proc)
             repair_counter = 0
         repair_counter += 1
-        sleep(sleeps["input"])
+        sleep(s.CRAFT_SLEEPS["input2"])
     print("Crafts finished.")
     notify.finished()
+    

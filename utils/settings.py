@@ -10,6 +10,17 @@ POTION_KEY = ""
 # SETTINGS
 REPAIR_COUNTER = 85
 TIME_PADDING_0 = 3 # Time padding for in between pressing keys
+CRAFT_SLEEPS = {
+    "step1": 0.5,
+    "step2": 1,
+    "input1": 1,
+    "input2": 2.5
+}
+CRAFT_OPTS = {
+    "-repair": False,
+    "-food": False,
+    "-pot": False
+}
 
 # MISC
 RE_WAIT = re.compile(r"<wait.(.+?)>")
