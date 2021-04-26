@@ -99,7 +99,7 @@ def auto_leve(*args, **kwargs):
     for a in range(amt):
         proc = Process()
         proc.press_to_leve_menu_seq()
-        idx = get_quest_index()
+        idx = ocr.get_quest_index()
         print(f"found cookie quest index @ {idx}")
         proc.press_leve_menu_seq(idx)
         proc.press_tfocus_macro()

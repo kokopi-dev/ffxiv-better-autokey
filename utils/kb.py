@@ -6,3 +6,4 @@ class Keyboard:
         self.select = "{VK_NUMPAD0}"
         self.up = "{UP}"
         self.down = "{DOWN}"
+        self.submenu = "'"

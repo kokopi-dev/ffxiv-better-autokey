@@ -4,6 +4,7 @@ import psutil
 from pywinauto.application import Application
 from pywinauto.keyboard import *
 from utils.kb import Keyboard
+import utils.autoleve_settings as asettings
 from time import sleep
 import sys
 PROCESS_TARGET = "ffxiv_dx11.exe"
@@ -92,19 +93,25 @@ class Process:
         sleep(1.1)
 
     def press_leve_quest_seq(self):
+        amt = 9
+        lastamt = 8
         sleep(0.1)
         self.press_key(self.kbd.select)
-        sleep(2)
+        sleep(1)
         self.press_key(self.kbd.select)
-        amt = 9
+        if asettings.LANG == "Japanese":
+            sleep(0.3)
+            self.press_key(self.kbd.select)
+            sleep(0.3)
+            lastamt = 5
         for i in range(3):
             sleep(2.6)
-            self.press_key("'")
-            self.press_key("'")
-            self.press_key("'")
+            self.press_key(self.kbd.submenu)
+            self.press_key(self.kbd.submenu)
+            self.press_key(self.kbd.submenu)
             if i == 2:
-                amt = 8
+                amt = lastamt
             for _ in range(amt):
-                sleep(0.2)
+                sleep(0.3)
                 self.press_key(self.kbd.select)
         sleep(2)
