@@ -6,17 +6,29 @@ REPAIR = "4"
 CRAFT_ITEM = "5"
 FOOD_KEY = ""
 POTION_KEY = ""
+ESC = "{VK_ESCAPE}"
+LEFT = "{LEFT}"
+RIGHT = "{RIGHT}"
+SELECT = "{VK_NUMPAD0}"
 
 # SETTINGS
 REPAIR_COUNTER = 85
 TIME_PADDING_0 = 3 # Time padding for in between pressing keys
+CRAFT_SLEEPS = {
+    "step1": 0.5,
+    "step2": 1,
+    "input1": 1,
+    "input2": 2.5
+}
+CRAFT_OPTS = {
+    "-repair": False,
+    "-food": False,
+    "-pot": False
+}
 
-# MISC
+# SYSTEM
 RE_WAIT = re.compile(r"<wait.(.+?)>")
 RE_KEY = re.compile(r"KEY")
-MACRO_TIME_PAD = 3 # Time padding for misclicks on macro
-BEFORE_KEY = 1 # If laggy in game, make this higher
-AFTER_COLLECT_MENU = 2
 FILENAME_MACROS = ".profiles.json"
 FILENAME_LOGS = ".logs.json"
 CWDPATH = os.getcwd()

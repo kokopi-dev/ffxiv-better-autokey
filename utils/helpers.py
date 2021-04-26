@@ -91,13 +91,14 @@ def update_macro(macroname, filepath):
     s.PROFILES[macroname]["macro"] = macro
     write_json(s.PROFILES_PATH, s.PROFILES)
 
-def get_time_estimation(macro, amt, sleeps):
+def get_time_estimation(macro, amt):
     steps = len(macro["macro"]["keys"])
-    steps_sleep = steps * (sleeps["step1"] + sleeps["step2"])
+    steps_sleep = steps * (s.CRAFT_SLEEPS["step1"] + s.CRAFT_SLEEPS["step2"])
+    input_sleep = s.CRAFT_SLEEPS["input1"] + s.CRAFT_SLEEPS["input2"]
     total_wait = 0
     for idx in range(steps):
         total_wait += macro["macro"]["wait"][idx]
-    seconds = (amt * total_wait) + (amt * steps_sleep)
+    seconds = (amt * total_wait) + (amt * steps_sleep) + (amt * input_sleep)
     minutes = (seconds / 60)
     return minutes
 

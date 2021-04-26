@@ -8,7 +8,8 @@ import sys
 import utils.settings as s
 COMMANDS = {
     "craft": func.use_macro,
-    "list": func.list_macros
+    "list": func.list_macros,
+    "leve": func.auto_leve,
 }
 
 
