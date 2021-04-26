@@ -63,5 +63,33 @@ WIP
 
 ---
 
+## Auto Cookie (BETA)
+
+Automatically turn in cookie leves
+
+### Requirements
+
+**2 macros**
+ - key 1: `/tnpc`
+ - key 2: `/ta <f>`
+
+### Setup
+- [https://sourceforge.net/projects/capture2text/files/Capture2Text/Capture2Text_v4.6.2/](https://sourceforge.net/projects/capture2text/files/Capture2Text/Capture2Text_v4.6.2/)
+  - Download the 64bit ver zip file
+- Unzip the folder in `utils/`
+- Run the .exe version to find your window location for converting immage to text
+- Set the window position in autoleve_settings.py
+- Set your language in autoleve_settings.py
+
+### Instructions
+
+- Move FFXIV to your sub monitor (If you want to full auto afk)
+- Button 1 will handle targeting Eirikur
+- Focus target Moyce, and button 2 will handle targeting Moyce.
+- Stand in FRONT of Eirikur
+- Run the program on your main monitor
+
+---
+
 ## Author
 * [kai-dg](https://github.com/kai-dg)

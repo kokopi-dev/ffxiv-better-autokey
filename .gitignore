@@ -1,11 +1,6 @@
 */__pycache__/*
 **/__pycache__/
-macros/35dura.txt
-macros/consume.txt
-macros/cust.txt
-macros/skysteel.txt
-macros/skysteel2.txt
-macros/yellow.txt
+macros/*.txt
 env/
 .profiles.json
 notes.txt
@@ -15,3 +10,6 @@ build/*
 .logs.json
 test.py
 cookie.txt
+Capture2Text_v4.6.2_64bit
+Capture2Text_v4.6.2_64bit.zip
+.vim
