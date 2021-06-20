@@ -4,7 +4,7 @@ import psutil
 from pywinauto.application import Application
 from pywinauto.keyboard import *
 from utils.kb import Keyboard
-import utils.autoleve_settings as asettings
+import utils.conf.autoleve_settings as asettings
 from time import sleep
 import sys
 PROCESS_TARGET = "ffxiv_dx11.exe"
@@ -12,7 +12,9 @@ WINDOW_TITLE = "FINAL FANTASY XIV"
 
 
 class Process:
-    """Gets PID of PROCESS_TARGET, then hooks onto the PID on init"""
+    """Gets PID of PROCESS_TARGET, then hooks onto the PID on init.
+    Also contains key press sequences.
+    """
     def __init__(self):
         self.pid = self.find_pid()
         self.app = self.connect_to_pid()
@@ -93,8 +95,8 @@ class Process:
         sleep(1.1)
 
     def press_leve_quest_seq(self):
-        amt = 9
-        lastamt = 8
+        amt = 8
+        lastamt = 7
         sleep(0.1)
         self.press_key(self.kbd.select)
         sleep(1)
@@ -105,7 +107,7 @@ class Process:
             sleep(0.3)
             lastamt = 5
         for i in range(3):
-            sleep(2.6)
+            sleep(2.2)
             self.press_key(self.kbd.submenu)
             self.press_key(self.kbd.submenu)
             self.press_key(self.kbd.submenu)
@@ -115,3 +117,33 @@ class Process:
                 sleep(0.3)
                 self.press_key(self.kbd.select)
         sleep(2)
+    # TODO update
+    def opt_repair(self, proc):
+        """Sleep: 9.5s
+        """
+        for _ in range(4):
+            proc.press_key(s.ESC)
+        sleep(3)
+        proc.press_key(s.REPAIR)
+        sleep(0.5)
+        proc.press_key(s.RIGHT)
+        sleep(0.5)
+        proc.press_key(s.SELECT)
+        sleep(0.5)
+        proc.press_key(s.LEFT)
+        sleep(0.5)
+        proc.press_key(s.SELECT)
+        sleep(0.5)
+        proc.press_key(s.ESC)
+        sleep(3)
+        proc.press_key(s.CRAFT_ITEM)
+        sleep(1)
+
+    def opt_food(self, proc):
+        for _ in range(4):
+            proc.press_key(s.ESC)
+
+    def opt_potion(self, proc):
+        for _ in range(4):
+            proc.press_key(s.ESC)
+

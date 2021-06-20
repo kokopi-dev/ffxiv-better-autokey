@@ -5,6 +5,7 @@ from time import sleep
 
 
 def finished():
+    """Notification sound for finishing a craft or something."""
     if "win" in sys.platform:
         winsound.PlaySound("audio\\finished.wav", winsound.SND_ASYNC)
         sleep(3)

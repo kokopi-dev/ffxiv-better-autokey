@@ -5,7 +5,7 @@ python main.py craft coolcraft1 50 -food -pot -repair
 """
 import utils.autocrafter_funcs as func
 import sys
-import utils.settings as s
+import utils.conf.settings as s
 COMMANDS = {
     "craft": func.use_macro,
     "list": func.list_macros,

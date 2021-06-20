@@ -2,7 +2,7 @@
 """TODO, create profile_list as global var
 """
 import utils.helpers as h
-import utils.settings as s
+import utils.conf.settings as s
 import utils.notifications as notify
 from utils import input_handler
 from utils import ocr
@@ -14,35 +14,6 @@ import sys
 
 def list_macros(args):
     sys.stdout.write(f"Available macros: {list(s.PROFILES)}")
-
-def opt_repair(proc):
-    """Sleep: 9.5s
-    """
-    for _ in range(4):
-        proc.press_key(s.ESC)
-    sleep(3)
-    proc.press_key(s.REPAIR)
-    sleep(0.5)
-    proc.press_key(s.RIGHT)
-    sleep(0.5)
-    proc.press_key(s.SELECT)
-    sleep(0.5)
-    proc.press_key(s.LEFT)
-    sleep(0.5)
-    proc.press_key(s.SELECT)
-    sleep(0.5)
-    proc.press_key(s.ESC)
-    sleep(3)
-    proc.press_key(s.CRAFT_ITEM)
-    sleep(1)
-
-def opt_food(proc):
-    for _ in range(4):
-        proc.press_key(s.ESC)
-
-def opt_potion(proc):
-    for _ in range(4):
-        proc.press_key(s.ESC)
 
 def use_macro(args):
     """Uses the selected macro on a set amt of cycles.

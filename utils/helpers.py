@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-import utils.settings as s
+import utils.conf.settings as s
 import sys
 import os
 import json

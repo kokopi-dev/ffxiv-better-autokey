@@ -3,7 +3,7 @@ import sys
 import os
 import subprocess
 from utils.process import Process
-from utils.autoleve_settings import LANG, WINDOW_POS
+from utils.conf.autoleve_settings import LANG, WINDOW_POS
 import base64
 
 

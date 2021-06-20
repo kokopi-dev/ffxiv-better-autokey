@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 import sys
-import utils.settings as s
+import utils.conf.settings as s
 import utils.helpers as h
 
 

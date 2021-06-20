@@ -1,8 +1,9 @@
 #!/usr/bin/env python3
+"""Entry point for autocraft"""
 import sys
 from utils.argparser import parse
 import utils.helpers as h
-import utils.settings as s
+import utils.conf.settings as s
 
 
 def main():
