@@ -1,5 +1,5 @@
 comtypes==1.1.7
 psutil==5.7.0
-pywin32==227
+pywin32==301
 pywinauto==0.6.8
 six==1.15.0
