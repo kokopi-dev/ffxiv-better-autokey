@@ -1,10 +1,11 @@
 #!/usr/bin/env python3
-"""Do not use typing for old python3 compatability"""
+"""Do not use typing for older python3 compatability"""
 from utils.process import Process
 from time import sleep
 from utils.remap import BUTTONS
 import cmd
 import logging
+from utils.argcheck import do_key_input_check
 logging_format = "%(msecs)d %(levelname)-8s [%(filename)s:%(lineno)d] %(message)s"
 logging.basicConfig(format=logging_format)
 
@@ -31,21 +32,13 @@ class BetterAutoKey(cmd.Cmd):
 
     def do_key(self, arg):
         """Requires key:str and interval:int"""
-        args = arg.split()
-        if len(args) != 2:
-            print("Requires key:str and interval:int")
-            return
-
-        key = args[0]
-        interval = args[1]
-        try:
-            interval = int(interval)
-        except:
-            print("Interval needs to be a number.")
+        key, interval = do_key_input_check(arg)
+        if not key or interval:
             return
 
         if key in BUTTONS:
             key = BUTTONS[key]
+
         print(f"Press CTRL+C to quit.\nInterval: {interval}s")
         while True:
             try:
@@ -54,6 +47,9 @@ class BetterAutoKey(cmd.Cmd):
                 sleep(interval)
             except KeyboardInterrupt:
                 break
+
+    def do_craft(self, arg):
+        print(f"Press CTRL+C to quit.\n")
 
 
 if __name__ == "__main__":
