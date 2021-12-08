@@ -1,7 +1,8 @@
 # Custom
 venv/
-.env
-database.db
+.craft_config.json
+.general_config.json
+macros/*
 
 # Byte-compiled / optimized / DLL files
 __pycache__/

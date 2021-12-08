@@ -19,3 +19,32 @@ Currently for Windows only due to background keystroke working for win32
 
 - Python LATEST recommended: 3.8+ (https://www.python.org/downloads/windows/)
 
+### Check PATH during installation
+![path_check](../assets/pythonpathcheck.PNG)
+
+---
+
+## How To Run
+
+Run/double-click `cmd.bat`
+
+---
+
+## Commands
+
+### Key
+Description: `key [KEY] [INTERVAL]`
+
+Primarily for afking or background afking
+
+Example:
+
+```
+# Press c for opening and closing character menu every 60 seconds
+(BetterAutoKey) key c 60
+```
+
+### Craft
+Description: `craft [macro] [OPT:amt]`
+
+Background automated crafting

@@ -22,19 +22,26 @@ class Process:
                 if p.name() == PROCESS_TARGET:
                     query = re.search("pid=(.+?), name=", str(p))
                     pid = int(query.group(1))
+                    print(f"> Found FFXIV PID: {pid}")
             except psutil.AccessDenied:
                 # Psutil cannot read system processes like CPU, so need this exception
                 pass
-        print(f"> Found FFXIV PID: {pid}")
         return pid
 
     def connect_to_pid(self):
         """Returns a pywinauto Application object created with find_pid()"""
         if not self.pid:
-            return f"ERROR: Could not find process name: {PROCESS_TARGET}."
-        app = Application().connect(process=self.pid)
-        print("> Connected to FFXIV PID")
-        return app
+            print(f"ERROR: Could not find process name: {PROCESS_TARGET}")
+            return None
+
+        try:
+            app = Application().connect(process=self.pid)
+            print(f"> Connected to FFXIV PID {self.pid}")
+            return app
+        except:
+            print(f"> Could not connect to FFXIV PID {self.pid}")
+
+        return None
 
     def press_key(self, key: str):
         """Presses a key. Refer to:
