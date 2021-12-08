@@ -9,9 +9,10 @@ Config keys layout:
 import os
 import json
 from utils import debug
+from utils.macros import CraftMacroHandler
 
 
-class BAKConfig:
+class BAKConfig(CraftMacroHandler):
     config = {}
     # General Config
     general_filename = ".general_config.json"
@@ -25,7 +26,7 @@ class BAKConfig:
 
     # Craft Config
     craft_filename = ".craft_config.json"
-    craft_template = {"last_modified": {}, "macros": []}
+    craft_template = {"last_modified": {}, "macros": {}, "macros_list": []}
     craft_folder = "macros"
 
     def __init__(self):
@@ -33,7 +34,7 @@ class BAKConfig:
         self.craft_config_init()
         self.debug_check()
 
-    def _write_config(self, config_filename: str, config_type: str):
+    def write_config(self, config_filename: str, config_type: str):
         """Writes to config_filename using self.config['config_type']
         Args:
             config_filename = attribute _filename ext
@@ -73,6 +74,9 @@ class BAKConfig:
 
     def craft_config_init(self):
         self._config_init("craft_filename", "craft_template", "craft")
+        if not os.path.exists(self.craft_folder):
+            os.mkdir(self.craft_folder)
+            print("> Created new folder: macros/")
 
     def debug_check(self):
         """Run debug command for win32 error"""
