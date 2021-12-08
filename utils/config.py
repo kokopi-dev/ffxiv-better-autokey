@@ -9,19 +9,19 @@ Config keys layout:
 import os
 import json
 from utils import debug
-from utils.macros import CraftMacroHandler
+from utils.craft import MacroHandler
 
 
-class BAKConfig(CraftMacroHandler):
+class BAKConfig(MacroHandler):
     config = {}
     # General Config
     general_filename = ".general_config.json"
     general_template = {"debug_status": False}
-    buttons_remap = { # Remapping of special keys
+    buttons = { # Remapping of special keys
         "left": "{LEFT}",
         "right": "{RIGHT}",
-        "ESC": "{VK_ESCAPE}",
-        "SELECT": "{VK_NUMPAD0}",
+        "esc": "{VK_ESCAPE}",
+        "select": "{VK_NUMPAD0}",
     }
 
     # Craft Config

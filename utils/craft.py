@@ -18,13 +18,13 @@ def parse_macro_line(line):
 
     return key, wait
 
-class CraftMacroHandler:
+class MacroHandler:
     @classmethod
     def check_modified_macros(cls):
         has_changed = False
         allfiles = os.listdir(cls.craft_folder)
-        allfiles = [os.path.join(cls.craft_folder, fp) for fp in allfiles]
-        current_mod_config = {k: os.path.getmtime(k) for k in allfiles}
+        allfilepaths = [os.path.join(cls.craft_folder, fp) for fp in allfiles]
+        current_mod_config = {k: os.path.getmtime(k) for k in allfilepaths}
         last_mod_config = cls.config["craft"]["last_modified"]
         macros_config = cls.config["craft"]["macros"]
 
@@ -33,7 +33,7 @@ class CraftMacroHandler:
             has_changed = True
             macros_config = {}
 
-            for fp in allfiles:
+            for fp in allfilepaths:
                 parsed_macro = cls._parse_update_macro(fp)
                 macros_config[fp] = parsed_macro
 
@@ -53,3 +53,8 @@ class CraftMacroHandler:
                 if wait:
                     macro["wait"][key_idx] += wait
         return macro
+
+class Craft:
+    @staticmethod
+    def run():
+        pass

@@ -3,6 +3,7 @@
 from time import sleep
 from utils.config import BAKConfig
 import cmd
+import os
 import logging
 from utils.argcheck import do_key_input_check, do_craft_input_check
 logging_format = "%(msecs)d %(levelname)-8s [%(filename)s:%(lineno)d] %(message)s"
@@ -45,8 +46,8 @@ class BetterAutoKey(cmd.Cmd):
         if not key or not interval:
             return
 
-        if key in self.config.buttons_remap:
-            key = self.config.buttons_remap[key]
+        if key in self.config.buttons:
+            key = self.config.buttons[key]
 
         print(f"Press CTRL+C to quit.\nInterval: {interval}s")
         while True:
@@ -71,11 +72,33 @@ class BetterAutoKey(cmd.Cmd):
             # write new configs
             self.config.write_config("craft_filename", "craft")
 
-        command = do_craft_input_check(arg, macros_list)
+        command, macro_name = do_craft_input_check(arg, macros_list)
+
         if command == "list":
             print(f"{macros_list}")
+        elif command == "craft":
+            print(f">>> Press CTRL+C to quit.\n")
+            buttons = self.config.buttons
+            name = os.path.join(self.config.craft_folder, macro_name)
+            macro = self.config.config["craft"]["macros"][name]
+            amt = 5
+            count = 0
+            print(f">>> Using macro: {name}")
+            while True:
+                try:
+                    if amt and count > amt:
+                        break
+                    for _ in range(4):
+                        self.process.press_key(buttons["select"])
+                    # sleep
+                    for step in range():
+                        pass
+                    count += 1
+                except KeyboardInterrupt:
+                    print("> Stopping craft")
+                    break
         else:
-            print(f"Press CTRL+C to quit.\n")
+            return
         # parse command arg if there is command
         # check if command arg is in macro list
         # run macro
