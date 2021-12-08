@@ -45,6 +45,22 @@ Example:
 ```
 
 ### Craft
-Description: `craft [macro] [OPT:amt]`
+Description: `craft [OPT:list] [macro] [OPT:amt]`
 
 Background automated crafting
+
+**Adding/Deleting macros**:
+  - Make a new **one** word file to `macros/` folder with the example template below:
+
+```
+KEY 1
+/ac Reflect <wait.3>
+/ac Manipulation <wait.2>
+/ac "Waste Not" <wait.2>
+/ac Innovation <wait.2>
+
+KEY 2
+/ac "Preparatory Touch" <wait.3>
+/ac "Preparatory Touch" <wait.3>
+/ac "Groundwork" <wait.3>
+```

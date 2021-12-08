@@ -83,4 +83,4 @@ class BAKConfig(CraftMacroHandler):
         if self.config["general"]["debug_status"] == False:
             debug.setupme()
             self.config["general"]["debug_status"] = True
-            self._write_config("general_filename", "general")
+            self.write_config("general_filename", "general")

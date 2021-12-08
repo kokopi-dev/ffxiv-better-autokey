@@ -29,6 +29,7 @@ class CraftMacroHandler:
         macros_config = cls.config["craft"]["macros"]
 
         if current_mod_config != last_mod_config:
+            print("> Found new macro changes.")
             has_changed = True
             macros_config = {}
 
@@ -36,7 +37,7 @@ class CraftMacroHandler:
                 parsed_macro = cls._parse_update_macro(fp)
                 macros_config[fp] = parsed_macro
 
-        return has_changed, current_mod_config, macros_config
+        return has_changed, current_mod_config, macros_config, allfiles
 
     @classmethod
     def _parse_update_macro(cls, fp: str):

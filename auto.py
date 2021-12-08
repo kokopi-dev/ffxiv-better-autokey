@@ -4,7 +4,7 @@ from time import sleep
 from utils.config import BAKConfig
 import cmd
 import logging
-from utils.argcheck import do_key_input_check
+from utils.argcheck import do_key_input_check, do_craft_input_check
 logging_format = "%(msecs)d %(levelname)-8s [%(filename)s:%(lineno)d] %(message)s"
 logging.basicConfig(format=logging_format)
 
@@ -60,15 +60,22 @@ class BetterAutoKey(cmd.Cmd):
 
     def do_craft(self, arg):
         """craft [OPT:delete|list] [macro_name]"""
-        print(f"Press CTRL+C to quit.\n")
-
         # Check for modified macros before running
-        has_changed, last_mod_config, macros_config = self.config.check_modified_macros()
+        (has_changed, last_mod_config,
+        macros_config, macros_list) = self.config.check_modified_macros()
+
         if has_changed:
             self.config.config["craft"]["last_modified"] = last_mod_config
             self.config.config["craft"]["macros"] = macros_config
+            self.config.config["craft"]["macros_list"] = macros_list
             # write new configs
             self.config.write_config("craft_filename", "craft")
+
+        command = do_craft_input_check(arg, macros_list)
+        if command == "list":
+            print(f"{macros_list}")
+        else:
+            print(f"Press CTRL+C to quit.\n")
         # parse command arg if there is command
         # check if command arg is in macro list
         # run macro
