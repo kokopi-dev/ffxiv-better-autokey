@@ -65,6 +65,18 @@ KEY 2
 /ac "Groundwork" <wait.3>
 ```
 
+Command Examples:
+```
+(BetterAutoKey) craft list
+['4star.txt', 'dura40.txt', 'test.txt']
+
+(BetterAutoKey) craft dura40
+
+>>> Press CTRL+C to quit.
+>>> Using macro: macros\dura40.txt
+...
+```
+
 **Adjusting Sleep Timers**:
 There are 3 sleep steps during a craft:
   - `prestart`: Sleep after selecting the Synthesize button, before starting the craft
