@@ -39,7 +39,7 @@ class CraftConfig:
     def _parse_update_macro(cls, fp: str):
         macro = {"keys": [], "wait": []}
         key_idx = 0
-        with open(fp, "r") as f:
+        with open(fp, "r", encoding="utf-8") as f:
             for line in f.readlines():
                 key, wait = CraftConfig.parse_macro_line(line)
                 if key:
