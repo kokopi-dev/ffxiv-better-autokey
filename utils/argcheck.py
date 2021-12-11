@@ -17,29 +17,29 @@ def do_key_input_check(arg:str):
 
     return None, None
 
-def do_config_craft_sleeps_check(args: list):
-    """config craft sleeps: value"""
+# def do_config_craft_sleeps_check(args: list):
+    # """config craft sleeps: value"""
 
-    keys = args[0:-1]
-    try:
-        value = float(args[-1])
-    except ValueError:
-        print("> Time specified needs to be a float (ex. 1.0).")
-        return None, None
+    # keys = args[0:-1]
+    # try:
+        # value = float(args[-1])
+    # except ValueError:
+        # print("> Time specified needs to be a float (ex. 1.0).")
+        # return None, None
 
-    return keys, value
+    # return keys, value
 
-def do_config_input_check(arg: str):
-    args = arg.split()
-    if len(args) < 2:
-        print("Requires atleast 2 keys.")
-        return None, None
+# def do_config_input_check(arg: str):
+    # args = arg.split()
+    # if len(args) < 2:
+        # print("Requires atleast 2 keys.")
+        # return None, None
 
-    key1, key2 = args[0], args[1]
-    if key1 == "craft" and key2 == "sleeps":
-        keys, value = do_config_craft_sleeps_check(args)
-        return keys, value
-    return None, None
+    # key1, key2 = args[0], args[1]
+    # if key1 == "craft" and key2 == "sleeps":
+        # keys, value = do_config_craft_sleeps_check(args)
+        # return keys, value
+    # return None, None
 
 def do_craft_input_check(arg:str, macro_list:list):
     """Return: (str|None, str|None, int|None)"""

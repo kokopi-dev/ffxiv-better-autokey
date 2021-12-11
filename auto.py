@@ -6,8 +6,7 @@ import cmd
 import logging
 from utils.argcheck import (
     do_key_input_check,
-    do_craft_input_check,
-    do_config_input_check
+    do_craft_input_check
 )
 from utils.craft import Craft
 logging_format = "%(msecs)d %(levelname)-8s [%(filename)s:%(lineno)d] %(message)s"
@@ -26,7 +25,6 @@ class BetterAutoKey(cmd.Cmd):
 
     def do_quit(self, arg):
         """Quit the program."""
-        breakpoint()
         return True
 
     def do_EOF(self, arg):
@@ -46,10 +44,17 @@ class BetterAutoKey(cmd.Cmd):
 
     def do_config(self, arg):
         """Edit configs."""
-        keys, value = do_config_input_check(arg)
-        if keys and value:
-            self.config.config_nested_keys_set(keys, value)
-            self.config.write_config("craft_filename", "craft")
+        args = arg.split()
+        try:
+            key1, key2, key3, value = args[0], args[1], args[2], args[3]
+            if key1 == "craft" and key2 == "sleeps":
+                check = self.config.config[key1][key2].get(key3, None)
+                if check:
+                    self.config.config[key1][key2][key3] = float(value)
+                    self.write_config("craft_filename", "craft")
+                    print(f"> Config set: {key3} to {value}.")
+        except:
+            print("Invalid input.")
 
     def do_key(self, arg):
         """Requires key:str and interval:int"""
