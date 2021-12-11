@@ -3,9 +3,9 @@
 from time import sleep
 from utils.config import BAKConfig
 import cmd
-import os
 import logging
 from utils.argcheck import do_key_input_check, do_craft_input_check
+from utils.craft import Craft
 logging_format = "%(msecs)d %(levelname)-8s [%(filename)s:%(lineno)d] %(message)s"
 logging.basicConfig(format=logging_format)
 
@@ -18,11 +18,11 @@ class BetterAutoKey(cmd.Cmd):
 
     def preloop(self):
         self.config = BAKConfig()
-        print("> Initialized configs...")
-        self.do_process("")
+        self.do_process("") # Creating ffxiv process hook
 
     def do_quit(self, arg):
         """Quit the program."""
+        breakpoint()
         return True
 
     def do_EOF(self, arg):
@@ -69,36 +69,15 @@ class BetterAutoKey(cmd.Cmd):
             self.config.config["craft"]["last_modified"] = last_mod_config
             self.config.config["craft"]["macros"] = macros_config
             self.config.config["craft"]["macros_list"] = macros_list
-            # write new configs
             self.config.write_config("craft_filename", "craft")
 
-        command, macro_name = do_craft_input_check(arg, macros_list)
+        command, macro_name, amt = do_craft_input_check(arg, macros_list)
 
         if command == "list":
             print(f"{macros_list}")
         elif command == "craft":
             print(f">>> Press CTRL+C to quit.\n")
-            buttons = self.config.buttons
-            name = os.path.join(self.config.craft_folder, macro_name)
-            macro = self.config.config["craft"]["macros"][name]
-            amt = 5
-            count = 0
-            print(f">>> Using macro: {name}")
-            while True:
-                try:
-                    if amt and count > amt:
-                        break
-                    for _ in range(4):
-                        self.process.press_key(buttons["select"])
-                    # sleep
-                    for step in range():
-                        pass
-                    count += 1
-                except KeyboardInterrupt:
-                    print("> Stopping craft")
-                    break
-        else:
-            return
+            Craft.run(self.process, self.config, macro_name, amt)
         # parse command arg if there is command
         # check if command arg is in macro list
         # run macro
@@ -108,4 +87,4 @@ if __name__ == "__main__":
     try:
         comm = BetterAutoKey().cmdloop()
     except KeyboardInterrupt:
-        print("\nRun python auto.py to enter the cmd again.")
+        print("\nRun `python auto.py` to enter the cmd again.")

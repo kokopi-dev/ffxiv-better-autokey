@@ -1,7 +1,9 @@
 #!/usr/bin/env python3
-"""Inherited by BAKConfig, this is a little messy. update later"""
+"""Crafting related functionalities"""
 import os
+from time import sleep
 import re
+from typing import Optional
 REGEX_WAIT = re.compile(r"<wait.(.+?)>")
 REGEX_KEY = re.compile(r"KEY")
 
@@ -56,5 +58,32 @@ class MacroHandler:
 
 class Craft:
     @staticmethod
-    def run():
-        pass
+    def run(proc, config, macro_name: str, amt: Optional[int]):
+        buttons = config.buttons
+        name = os.path.join(config.craft_folder, macro_name)
+        macro = config.config["craft"]["macros"][name]
+        amt, count = 5, 0
+
+        print(f">>> Using macro: {name}")
+        while True:
+            try:
+                if amt and count > amt:
+                    print(">> Crafts finished.")
+                    break
+
+                print(f"> Craft #{count}")
+                for _ in range(4):
+                    proc.press_key(buttons["select"])
+                sleep(0.5) # sleep post select
+
+                for step in range(len(macro["keys"])):
+                    key, wait = macro["keys"][step], macro["wait"][step]
+                    print(f">> Pressing {key}")
+                    proc.press_key(key)
+                    print(f">> Waiting {wait}s")
+                    sleep(wait + 0.5) # sleep + select padding
+                count += 1
+                sleep(1.5) # sleep post craft finish
+            except KeyboardInterrupt:
+                print("> Stopping craft")
+                break

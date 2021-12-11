@@ -33,6 +33,7 @@ class BAKConfig(MacroHandler):
         self.general_config_init()
         self.craft_config_init()
         self.debug_check()
+        print("> Initialized configs...")
 
     def write_config(self, config_filename: str, config_type: str):
         """Writes to config_filename using self.config['config_type']
