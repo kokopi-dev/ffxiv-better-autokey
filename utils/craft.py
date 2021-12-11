@@ -8,19 +8,9 @@ REGEX_WAIT = re.compile(r"<wait.(.+?)>")
 REGEX_KEY = re.compile(r"KEY")
 
 
-def parse_macro_line(line):
-    key, wait = None, None
-    key_check = REGEX_KEY.findall(line)
-    wait_check = REGEX_WAIT.findall(line)
-
-    if key_check != []:
-        key = line.split()[1]
-    if wait_check != []:
-        wait = int(wait_check[0])
-
-    return key, wait
-
 class MacroHandler:
+    """Craft Macro settings -> inherited by the main config: BAKConfig"""
+
     @classmethod
     def check_modified_macros(cls):
         has_changed = False
@@ -47,7 +37,7 @@ class MacroHandler:
         key_idx = 0
         with open(fp, "r") as f:
             for line in f.readlines():
-                key, wait = parse_macro_line(line)
+                key, wait = MacroHandler.parse_macro_line(line)
                 if key:
                     macro["keys"].append(key)
                     key_idx = len(macro["keys"]) - 1
@@ -56,13 +46,27 @@ class MacroHandler:
                     macro["wait"][key_idx] += wait
         return macro
 
+    @staticmethod
+    def parse_macro_line(line):
+        key, wait = None, None
+        key_check = REGEX_KEY.findall(line)
+        wait_check = REGEX_WAIT.findall(line)
+
+        if key_check != []:
+            key = line.split()[1]
+        if wait_check != []:
+            wait = int(wait_check[0])
+
+        return key, wait
+
+
 class Craft:
     @staticmethod
     def run(proc, config, macro_name: str, amt: Optional[int]):
         buttons = config.buttons
         name = os.path.join(config.craft_folder, macro_name)
         macro = config.config["craft"]["macros"][name]
-        amt, count = 5, 0
+        count = 0
 
         print(f">>> Using macro: {name}")
         while True:

@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Do not use typing for older python3 compatability"""
+"""Entry point"""
 from time import sleep
 from utils.config import BAKConfig
 import cmd
@@ -11,7 +11,7 @@ logging.basicConfig(format=logging_format)
 
 
 class BetterAutoKey(cmd.Cmd):
-    intro = "\nCommands: craft|key|process|help\nRun [COMMAND] help for more details.\n"
+    intro = "\nCommands: craft|key|process|help\nRun `[COMMAND] help` for more details.\n"
     prompt = "(BetterAutoKey) "
     process = None
     config = None
@@ -60,7 +60,10 @@ class BetterAutoKey(cmd.Cmd):
                 break
 
     def do_craft(self, arg):
-        """craft [OPT:delete|list] [macro_name]"""
+        """craft [OPT:delete|list] [macro_name].
+        Add macro text files to the macros/ folder.
+        Check the readme on repo's github for how to configure macros in detail.
+        """
         # Check for modified macros before running
         (has_changed, last_mod_config,
         macros_config, macros_list) = self.config.check_modified_macros()

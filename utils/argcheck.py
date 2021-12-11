@@ -23,7 +23,7 @@ def do_craft_input_check(arg:str, macro_list:list):
     commands = ["list"]
     if len(args) < 1:
         print("Requires atleast 1 input. Use craft help for details.")
-        return None, None, amt
+        return None, None, None
 
     # One of the commands
     if args[0] not in macro_list and args[0] in commands:
@@ -38,7 +38,11 @@ def do_craft_input_check(arg:str, macro_list:list):
 
     # Optional: amt
     if len(args) == 2:
-        amt = int(args[1])
+        try:
+            amt = int(args[1])
+        except:
+            print("Amt needs to be an integer.")
+            return None, None, None
 
     if idx:
         return "craft", macro_list[idx], amt
