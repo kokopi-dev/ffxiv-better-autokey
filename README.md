@@ -64,3 +64,9 @@ KEY 2
 /ac "Preparatory Touch" <wait.3>
 /ac "Groundwork" <wait.3>
 ```
+
+**Adjusting Sleep Timers**:
+There are 3 sleep steps during a craft:
+  - `prestart`: Sleep after selecting the Synthesize button, before starting the craft
+  - `poststep`: Sleep added to after final <wait> due to speed of next key press
+  - `postfinish`: Sleep added after finishing the craft due to speed of next key press

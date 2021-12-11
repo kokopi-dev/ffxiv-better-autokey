@@ -9,10 +9,10 @@ Config keys layout:
 import os
 import json
 from utils import debug
-from utils.craft import MacroHandler
+from utils.craft import CraftConfig
 
 
-class BAKConfig(MacroHandler):
+class BAKConfig(CraftConfig):
     config = {}
     # General Config
     general_filename = ".general_config.json"
@@ -26,7 +26,16 @@ class BAKConfig(MacroHandler):
 
     # Craft Config
     craft_filename = ".craft_config.json"
-    craft_template = {"last_modified": {}, "macros": {}, "macros_list": []}
+    craft_template = {
+        "last_modified": {},
+        "macros": {},
+        "macros_list": [],
+        "sleeps": {
+            "prestart": 0.5,
+            "poststep": 1,
+            "postfinish": 1
+        }
+    }
     craft_folder = "macros"
 
     def __init__(self):
@@ -69,6 +78,15 @@ class BAKConfig(MacroHandler):
         else:
             with open(type_filename, "r") as f:
                 self.config[config_type] = json.load(f)
+
+    def config_nested_keys_set(self, keys, value):
+        temp = {}
+        for key in keys:
+            if self.config.get(key, None):
+                temp = self.config.get(key)
+        if temp and temp != {}:
+            temp[keys[-1]] = value # pointing to config
+            print(f"> Config set: {keys[-1]} to {value}.")
 
     def general_config_init(self):
         self._config_init("general_filename", "general_template", "general")

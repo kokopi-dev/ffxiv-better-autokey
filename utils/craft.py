@@ -4,12 +4,12 @@ import os
 from time import sleep
 import re
 from typing import Optional
-REGEX_WAIT = re.compile(r"<wait.(.+?)>")
-REGEX_KEY = re.compile(r"KEY")
 
 
-class MacroHandler:
-    """Craft Macro settings -> inherited by the main config: BAKConfig"""
+class CraftConfig:
+    """Craft Config settings -> inherited by the main config: BAKConfig"""
+    REGEX_WAIT = re.compile(r"<wait.(.+?)>")
+    REGEX_KEY = re.compile(r"KEY")
 
     @classmethod
     def check_modified_macros(cls):
@@ -32,12 +32,16 @@ class MacroHandler:
         return has_changed, current_mod_config, macros_config, allfiles
 
     @classmethod
+    def adjust_sleeps(cls):
+        pass
+
+    @classmethod
     def _parse_update_macro(cls, fp: str):
         macro = {"keys": [], "wait": []}
         key_idx = 0
         with open(fp, "r") as f:
             for line in f.readlines():
-                key, wait = MacroHandler.parse_macro_line(line)
+                key, wait = CraftConfig.parse_macro_line(line)
                 if key:
                     macro["keys"].append(key)
                     key_idx = len(macro["keys"]) - 1
@@ -49,8 +53,8 @@ class MacroHandler:
     @staticmethod
     def parse_macro_line(line):
         key, wait = None, None
-        key_check = REGEX_KEY.findall(line)
-        wait_check = REGEX_WAIT.findall(line)
+        key_check = CraftConfig.REGEX_KEY.findall(line)
+        wait_check = CraftConfig.REGEX_WAIT.findall(line)
 
         if key_check != []:
             key = line.split()[1]
@@ -63,6 +67,10 @@ class MacroHandler:
 class Craft:
     @staticmethod
     def run(proc, config, macro_name: str, amt: Optional[int]):
+        prestart = config.config["craft"]["sleeps"]["prestart"]
+        poststep = config.config["craft"]["sleeps"]["poststep"]
+        postfinish = config.config["craft"]["sleeps"]["postfinish"]
+
         buttons = config.buttons
         name = os.path.join(config.craft_folder, macro_name)
         macro = config.config["craft"]["macros"][name]
@@ -78,16 +86,16 @@ class Craft:
                 print(f"> Craft #{count}")
                 for _ in range(4):
                     proc.press_key(buttons["select"])
-                sleep(0.5) # sleep post select
+                sleep(prestart) # sleep prestart
 
                 for step in range(len(macro["keys"])):
                     key, wait = macro["keys"][step], macro["wait"][step]
                     print(f">> Pressing {key}")
                     proc.press_key(key)
                     print(f">> Waiting {wait}s")
-                    sleep(wait + 0.5) # sleep + select padding
+                    sleep(wait + poststep) # sleep + select padding
                 count += 1
-                sleep(1.5) # sleep post craft finish
+                sleep(postfinish) # sleep post craft finish
             except KeyboardInterrupt:
                 print("> Stopping craft")
                 break

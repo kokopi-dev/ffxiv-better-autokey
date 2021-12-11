@@ -4,7 +4,11 @@ from time import sleep
 from utils.config import BAKConfig
 import cmd
 import logging
-from utils.argcheck import do_key_input_check, do_craft_input_check
+from utils.argcheck import (
+    do_key_input_check,
+    do_craft_input_check,
+    do_config_input_check
+)
 from utils.craft import Craft
 logging_format = "%(msecs)d %(levelname)-8s [%(filename)s:%(lineno)d] %(message)s"
 logging.basicConfig(format=logging_format)
@@ -39,6 +43,13 @@ class BetterAutoKey(cmd.Cmd):
             from utils.process import Process
             print("> Looking for FFXIV PID...")
             self.process = Process()
+
+    def do_config(self, arg):
+        """Edit configs."""
+        keys, value = do_config_input_check(arg)
+        if keys and value:
+            self.config.config_nested_keys_set(keys, value)
+            self.config.write_config("craft_filename", "craft")
 
     def do_key(self, arg):
         """Requires key:str and interval:int"""
