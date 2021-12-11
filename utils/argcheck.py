@@ -69,7 +69,7 @@ def do_craft_input_check(arg:str, macro_list:list):
             print("Amt needs to be an integer.")
             return None, None, None
 
-    if idx:
+    if idx != None:
         return "craft", macro_list[idx], amt
 
     print("Wrong input. Use craft help for details.")
