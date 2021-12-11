@@ -1,15 +1,33 @@
-*/__pycache__/*
-**/__pycache__/
-macros/*.txt
-env/
-.profiles.json
-notes.txt
-profiles.json
-exec.spec
-build/*
-.logs.json
-test.py
-cookie.txt
-Capture2Text_v4.6.2_64bit
-Capture2Text_v4.6.2_64bit.zip
-.vim
+# Custom
+venv/
+.craft_config.json
+.general_config.json
+macros/*
+
+# Byte-compiled / optimized / DLL files
+__pycache__/
+*.py[cod]
+*$py.class
+
+# C extensions
+*.so
+
+# Distribution / packaging
+.Python
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+wheels/
+share/python-wheels/
+*.egg-info/
+.installed.cfg
+*.egg
+MANIFEST

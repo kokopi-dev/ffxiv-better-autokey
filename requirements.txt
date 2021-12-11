@@ -1,0 +1,6 @@
+comtypes==1.1.7
+psutil
+requests
+pywin32==227
+pywinauto==0.6.8
+six==1.15.0
