@@ -21,9 +21,11 @@ class BetterAutoKey(cmd.Cmd):
     prompt = "(BetterAutoKey) "
     process = None
     config = None
+    craft_service = None
 
     def preloop(self):
         self.config = BAKConfig()
+        self.craft_service = Craft()
         self.do_process("") # Creating ffxiv process hook
 
     def do_quit(self, arg):
@@ -104,13 +106,15 @@ class BetterAutoKey(cmd.Cmd):
             self.config.config["craft"]["macros_list"] = macros_list
             self.config.write_config("craft_filename", "craft")
 
-        command, macro_name, amt = do_craft_input_check(arg, macros_list)
+        command, macro_name, amt, opts = do_craft_input_check(
+            arg, macros_list, self.craft_service.OPTIONS
+        )
 
         if command == "list":
             print(f"{macros_list}")
         elif command == "craft":
             print(f">>> Press CTRL+C to quit.\n")
-            Craft.run(self.process, self.config, macro_name, amt)
+            self.craft_service.run(self.process, self.config, macro_name, amt, opts)
         # parse command arg if there is command
         # check if command arg is in macro list
         # run macro

@@ -3,7 +3,7 @@
 import os
 from time import sleep
 import re
-from typing import Optional
+from typing import Optional, List
 
 
 class CraftConfig:
@@ -65,8 +65,17 @@ class CraftConfig:
 
 
 class Craft:
+    def __init__(self):
+        self.OPTIONS = {
+            "repair": Craft.repair
+        }
+
     @staticmethod
-    def run(proc, config, macro_name: str, amt: Optional[int]):
+    def repair():
+        print("> Repairing")
+
+    @staticmethod
+    def run(proc, config, macro_name: str, amt: Optional[int], opts: List):
         prestart = config.config["craft"]["sleeps"]["prestart"]
         poststep = config.config["craft"]["sleeps"]["poststep"]
         postfinish = config.config["craft"]["sleeps"]["postfinish"]
@@ -76,8 +85,13 @@ class Craft:
         macro = config.config["craft"]["macros"][name]
         count = 0
 
+        if len(opts) > 0:
+            print(f">>> Options selected: {opts}")
+
         if not amt:
             print(f">>> Amount not specified, running until CTRL+C is pressed.")
+        else:
+            print(f">>> Amount specified: {amt} crafts.")
 
         print(f">>> Using macro: {name}")
         while True:

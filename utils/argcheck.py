@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-from typing import Tuple
+from typing import List, Dict
 """Temporary arg check solution"""
 
 
@@ -24,31 +24,20 @@ def do_key_input_check(arg:str):
 
     return None, None
 
-# def do_config_input_check(arg: str):
-    # args = arg.split()
-    # if len(args) < 2:
-        # print("Requires atleast 2 keys.")
-        # return None, None
-
-    # key1, key2 = args[0], args[1]
-    # if key1 == "craft" and key2 == "sleeps":
-        # keys, value = do_config_craft_sleeps_check(args)
-        # return keys, value
-    # return None, None
-
-def do_craft_input_check(arg:str, macro_list:list):
+def do_craft_input_check(arg: str, macro_list: List, options: Dict):
     """Return: (str|None, str|None, int|None)"""
     args = arg.split()
     amt = None
     commands = ["list"]
+    opts = []
     if len(args) < 1:
         print("Requires atleast 1 input. Use craft help for details.")
-        return None, None, None
+        return None, None, None, None
 
     # One of the commands
     if args[0] not in macro_list and args[0] in commands:
         command = args[0]
-        return command, None, amt
+        return command, None, amt, opts
 
     # Formatting
     if ".txt" not in args[0]:
@@ -56,16 +45,23 @@ def do_craft_input_check(arg:str, macro_list:list):
     else:
         idx = macro_list.index(args[0])
 
-    # Optional: amt
-    if len(args) == 2:
+    # Amount detected
+    if len(args) > 1:
         try:
             amt = int(args[1])
         except:
-            print("Amt needs to be an integer.")
-            return None, None, None
+            print("Amt needs to be a number.")
+            return None, None, None, opts
 
+    if len(args) > 2:
+        opts = args[2:]
+        for item in opts:
+            if item not in options:
+                print(f"{item} is not an option.")
+                return None, None, None, []
+    
     if idx != None:
-        return "craft", macro_list[idx], amt
+        return "craft", macro_list[idx], amt, opts
 
     print("Wrong input. Use craft help for details.")
-    return None, None, amt
+    return None, None, None, opts
