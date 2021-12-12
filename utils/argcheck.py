@@ -11,6 +11,14 @@ def check_float(name, value):
         print(f"> {name} specified needs to be a float (ex. 1.0).")
         return None
 
+def check_int(name, value):
+    try:
+        value = int(value)
+        return value
+    except ValueError:
+        print(f"> {name} specified needs to be a number (ex. 5).")
+        return None
+
 def do_key_input_check(arg:str):
     args = arg.split()
     if len(args) != 2:

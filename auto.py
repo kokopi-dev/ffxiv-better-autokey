@@ -8,7 +8,8 @@ import logging
 from utils.argcheck import (
     do_key_input_check,
     do_craft_input_check,
-    check_float
+    check_float,
+    check_int
 )
 from utils.craft import Craft
 logging_format = "%(msecs)d %(levelname)-8s [%(filename)s:%(lineno)d] %(message)s"
@@ -52,23 +53,38 @@ class BetterAutoKey(cmd.Cmd):
     def do_config(self, arg):
         """Edit configs:
         `sleeps [prestart|poststep|postfinish] [interval]`
+        `buttons [repair|craft_item] [key]`
+        `repair [threshold] [amount]`
         """
         args = arg.split()
         try:
             section, key, value = args[0], args[1], args[2]
+            if len(args) != 3:
+                print("> Needs 2 inputs. Check `help config` for details.")
+                return
             if section == "sleeps":
-                if len(args) != 3:
-                    print("> Needs 2 inputs. Check `help config` for details.")
-                    return
-
-                if not check_float("Interval", value):
+                if not check_float("interval", value):
                     return
 
                 check = self.config.config["craft"]["sleeps"].get(key, None)
                 if check:
                     self.config.config["craft"]["sleeps"][key] = float(value)
-                    print(f"> Config set: {key} to {value}.")
-                    self.config.write_config("craft_filename", "craft")
+            elif section == "buttons":
+                check = self.config.config["craft"]["opt_buttons"].get(key, None)
+                if check:
+                    self.config.config["craft"]["opt_buttons"][key] = value
+            elif section == "repair":
+                if not check_int("threshold", value):
+                    return
+                real_key = "repair_" + key
+                check = self.config.config["craft"]["opt_buttons"].get(real_key, None)
+                if check:
+                    self.config.config["craft"]["opt_buttons"][real_key] = int(value)
+
+            print(f"> Config set: {key} to {value}.")
+
+            # Currently, all config opts are craft opts
+            self.config.write_config("craft_filename", "craft")
         except:
             print("Invalid input.")
 
