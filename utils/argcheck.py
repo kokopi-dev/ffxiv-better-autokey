@@ -3,11 +3,18 @@ from typing import Tuple
 """Temporary arg check solution"""
 
 
+def check_float(name, value):
+    try:
+        value = float(value)
+        return value
+    except ValueError:
+        print(f"> {name} specified needs to be a float (ex. 1.0).")
+        return None
 
 def do_key_input_check(arg:str):
     args = arg.split()
     if len(args) != 2:
-        print("Requires 2 inputs. key:str, interval:int")
+        print("Requires 2 inputs. key, interval (seconds)")
 
     try:
         key, interval = args[0], int(args[1])
@@ -16,18 +23,6 @@ def do_key_input_check(arg:str):
         print("Interval needs to be an int.")
 
     return None, None
-
-# def do_config_craft_sleeps_check(args: list):
-    # """config craft sleeps: value"""
-
-    # keys = args[0:-1]
-    # try:
-        # value = float(args[-1])
-    # except ValueError:
-        # print("> Time specified needs to be a float (ex. 1.0).")
-        # return None, None
-
-    # return keys, value
 
 # def do_config_input_check(arg: str):
     # args = arg.split()

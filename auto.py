@@ -7,7 +7,8 @@ import cmd
 import logging
 from utils.argcheck import (
     do_key_input_check,
-    do_craft_input_check
+    do_craft_input_check,
+    check_float
 )
 from utils.craft import Craft
 logging_format = "%(msecs)d %(levelname)-8s [%(filename)s:%(lineno)d] %(message)s"
@@ -15,7 +16,8 @@ logging.basicConfig(format=logging_format)
 
 
 class BetterAutoKey(cmd.Cmd):
-    intro = "\nCommands: craft|key|process|help\nRun `[COMMAND] help` for more details.\n"
+    intro = ("\nCommands: craft|key|process|config|help\n" +
+            "Run `help [COMMAND]` for more details.\n")
     prompt = "(BetterAutoKey) "
     process = None
     config = None
@@ -36,24 +38,35 @@ class BetterAutoKey(cmd.Cmd):
         pass
 
     def do_process(self, arg):
-        """Rehook FFXIV PID again."""
+        """Try to rehook FFXIV PID again."""
         if not self.process or not self.process.app:
             # Importing here due to initializing a new venv debug check
             from utils.process import Process
             print("> Looking for FFXIV PID...")
             self.process = Process()
+        else:
+            print("> FFXIV PID is already hooked.")
 
     def do_config(self, arg):
-        """Edit configs."""
+        """Edit configs:
+        `sleeps [prestart|poststep|postfinish] [interval]`
+        """
         args = arg.split()
         try:
-            key1, key2, key3, value = args[0], args[1], args[2], args[3]
-            if key1 == "craft" and key2 == "sleeps":
-                check = self.config.config[key1][key2].get(key3, None)
+            section, key, value = args[0], args[1], args[2]
+            if section == "sleeps":
+                if len(args) != 3:
+                    print("> Needs 2 inputs. Check `help config` for details.")
+                    return
+
+                if not check_float("Interval", value):
+                    return
+
+                check = self.config.config["craft"]["sleeps"].get(key, None)
                 if check:
-                    self.config.config[key1][key2][key3] = float(value)
-                    self.write_config("craft_filename", "craft")
-                    print(f"> Config set: {key3} to {value}.")
+                    self.config.config["craft"]["sleeps"][key] = float(value)
+                    print(f"> Config set: {key} to {value}.")
+                    self.config.write_config("craft_filename", "craft")
         except:
             print("Invalid input.")
 
@@ -102,6 +115,18 @@ class BetterAutoKey(cmd.Cmd):
         # check if command arg is in macro list
         # run macro
 
+    def do_debug(self, arg):
+        """Developer command:
+        `config`: Check the current loaded .*_config.json extension files.
+        """
+        args = arg.split()
+        try:
+            command = args[0]
+            if command == "config":
+                print(f"{self.config.config}")
+        except Exception as e:
+            print(f"Invalid Input: {e}")
+
 
 if __name__ == "__main__":
     python_version = f"{sys.version_info[0]}.{sys.version_info[1]}"
@@ -109,7 +134,7 @@ if __name__ == "__main__":
         print("Please install python version 3.8+")
         print("Refer to the README.md of this folder to manage your python versions on windows.")
     else:
-        print(f"Python version detected: {python_version}")
+        print(f"> Python version detected: {python_version}")
         try:
             comm = BetterAutoKey().cmdloop()
         except KeyboardInterrupt:

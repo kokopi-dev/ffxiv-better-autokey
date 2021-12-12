@@ -83,3 +83,10 @@ There are 3 sleep steps during a craft:
   - `prestart`: Sleep after selecting the Synthesize button, before starting the craft
   - `poststep`: Sleep added to after final <wait> due to speed of next key press
   - `postfinish`: Sleep added after finishing the craft due to speed of next key press
+
+Examples:
+```
+(BetterAutoKey) config sleeps prestart 1.5
+> Config set: prestart to 1.5.
+> Wrote new config to .craft_config.json.
+```
