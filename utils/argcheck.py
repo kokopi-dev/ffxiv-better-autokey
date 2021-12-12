@@ -57,7 +57,10 @@ def do_craft_input_check(arg: str, macro_list: List, options: Dict):
         opts = args[2:]
         for item in opts:
             if item not in options:
-                print(f"{item} is not an option.")
+                if "--" not in item:
+                    print(f"Try using --{item} instead of {item}.")
+                else:
+                    print(f"{item} is not an option.")
                 return None, None, None, []
     
     if idx != None:

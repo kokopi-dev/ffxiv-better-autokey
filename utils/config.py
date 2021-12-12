@@ -34,6 +34,11 @@ class BAKConfig(CraftConfig):
             "prestart": 2,
             "poststep": 1,
             "postfinish": 2
+        },
+        "opt_buttons": {
+            "repair": "4",
+            "repair_threshold": 90,
+            "craft_item": "5"
         }
     }
     craft_folder = "macros"

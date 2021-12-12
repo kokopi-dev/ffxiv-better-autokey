@@ -67,25 +67,44 @@ class CraftConfig:
 class Craft:
     def __init__(self):
         self.OPTIONS = {
-            "repair": Craft.repair
+            "--repair": Craft.repair
         }
 
     @staticmethod
-    def repair():
-        print("> Repairing")
+    def repair(proc, count, buttons, opt_buttons):
+        if count % opt_buttons["repair_threshold"] == 0:
+            print("> Repairing...", end="")
+            sequence = [
+                buttons["esc"],
+                opt_buttons["repair"],
+                buttons["left"],
+                buttons["select"],
+                buttons["left"],
+                buttons["select"]
+            ]
+            for key in sequence:
+                proc.press_key(key)
+                sleep(0.5)
+            sleep(4) # repair animation
+            proc.press_key(opt_buttons["craft_item"]) # craft item button
+            print("done.")
 
-    @staticmethod
-    def run(proc, config, macro_name: str, amt: Optional[int], opts: List):
+    def run(self, proc, config, macro_name: str, amt: Optional[int], opts: List):
         prestart = config.config["craft"]["sleeps"]["prestart"]
         poststep = config.config["craft"]["sleeps"]["poststep"]
         postfinish = config.config["craft"]["sleeps"]["postfinish"]
 
         buttons = config.buttons
+        opt_buttons = config.config["craft"]["opt_buttons"]
+
         name = os.path.join(config.craft_folder, macro_name)
         macro = config.config["craft"]["macros"][name]
-        count = 0
+
+        count = 1
+        run_opts = False
 
         if len(opts) > 0:
+            run_opts = True
             print(f">>> Options selected: {opts}")
 
         if not amt:
@@ -99,6 +118,10 @@ class Craft:
                 if amt and count > amt:
                     print(">> Crafts finished.")
                     break
+
+                if run_opts == True:
+                    for opt in opts:
+                        self.OPTIONS[opt](proc, count, buttons, opt_buttons)
 
                 print(f"> Craft #{count}")
                 for _ in range(4):
