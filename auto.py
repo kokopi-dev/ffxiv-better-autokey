@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 """Entry point"""
 from time import sleep
+import sys
 from utils.config import BAKConfig
 import cmd
 import logging
@@ -103,7 +104,13 @@ class BetterAutoKey(cmd.Cmd):
 
 
 if __name__ == "__main__":
-    try:
-        comm = BetterAutoKey().cmdloop()
-    except KeyboardInterrupt:
-        print("\nRun `python auto.py` to enter the cmd again.")
+    python_version = f"{sys.version_info[0]}.{sys.version_info[1]}"
+    if float(python_version) < 3.8:
+        print("Please install python version 3.8+")
+        print("Refer to the README.md of this folder to manage your python versions on windows.")
+    else:
+        print(f"Python version detected: {python_version}")
+        try:
+            comm = BetterAutoKey().cmdloop()
+        except KeyboardInterrupt:
+            print("\nRun `python auto.py` to enter the cmd again.")

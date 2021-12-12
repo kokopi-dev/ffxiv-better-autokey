@@ -18,6 +18,7 @@ In order to be fully automatic while doing other things in the background, **FFX
 Currently for Windows only due to background keystroke working for win32
 
 - Python LATEST recommended: 3.8+ (https://www.python.org/downloads/windows/)
+- Manage Python Versions On Windows Reference: (https://changhsinlee.com/windows-py-launcher/)
 
 ### Check PATH during installation
 ![path_check](../assets/pythonpathcheck.PNG)
