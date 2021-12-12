@@ -76,6 +76,9 @@ class Craft:
         macro = config.config["craft"]["macros"][name]
         count = 0
 
+        if not amt:
+            print(f">>> Amount not specified, running until CTRL+C is pressed.")
+
         print(f">>> Using macro: {name}")
         while True:
             try:
