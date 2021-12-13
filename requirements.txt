@@ -1,6 +1,11 @@
+certifi==2021.10.8
+charset-normalizer==2.0.9
+colorama==0.4.4
 comtypes==1.1.7
-psutil
-requests
+idna==3.3
+psutil==5.8.0
 pywin32==301
 pywinauto==0.6.8
+requests==2.26.0
 six==1.15.0
+urllib3==1.26.7

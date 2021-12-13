@@ -12,6 +12,7 @@ from utils.argcheck import (
     check_int
 )
 from utils.craft import Craft
+from utils.tty_colors import PrintColor as printc
 logging_format = "%(msecs)d %(levelname)-8s [%(filename)s:%(lineno)d] %(message)s"
 logging.basicConfig(format=logging_format)
 
@@ -45,10 +46,10 @@ class BetterAutoKey(cmd.Cmd):
         if not self.process or not self.process.app:
             # Importing here due to initializing a new venv debug check
             from utils.process import Process
-            print("> Looking for FFXIV PID...")
+            printc.text("> Looking for FFXIV PID...", "yel")
             self.process = Process()
         else:
-            print("> FFXIV PID is already hooked.")
+            printc.text("> FFXIV PID is already hooked.", "gre")
 
     def do_config(self, arg):
         """Edit configs:
@@ -60,7 +61,7 @@ class BetterAutoKey(cmd.Cmd):
         try:
             section, key, value = args[0], args[1], args[2]
             if len(args) != 3:
-                print("> Needs 2 inputs. Check `help config` for details.")
+                printc.text("> Needs 2 inputs. Check `help config` for details.", "red")
                 return
             if section == "sleeps":
                 if not check_float("interval", value):
@@ -86,7 +87,7 @@ class BetterAutoKey(cmd.Cmd):
             # Currently, all config opts are craft opts
             self.config.write_config("craft_filename", "craft")
         except:
-            print("Invalid input.")
+            printc.text("Invalid input.", "red")
 
     def do_key(self, arg):
         """Requires key:str and interval:int"""
@@ -97,14 +98,14 @@ class BetterAutoKey(cmd.Cmd):
         if key in self.config.buttons:
             key = self.config.buttons[key]
 
-        print(f"Press CTRL+C to quit.\nInterval: {interval}s")
+        printc.text(f"Press CTRL+C to quit.\nInterval: {interval}s", "yel")
         while True:
             try:
                 print(f"> Pressing {key}")
                 self.process.press_key(key)
                 sleep(interval)
             except KeyboardInterrupt:
-                print(f"> Stopping key")
+                printc.text(f"> Stopping key", "yel")
                 break
 
     def do_craft(self, arg):
@@ -129,7 +130,7 @@ class BetterAutoKey(cmd.Cmd):
         if command == "list":
             print(f"{macros_list}")
         elif command == "craft":
-            print(f">>> Press CTRL+C to quit.\n")
+            printc.text(f">>> Press CTRL+C to quit.\n", "yel")
             self.craft_service.run(self.process, self.config, macro_name, amt, opts)
         # parse command arg if there is command
         # check if command arg is in macro list
@@ -145,17 +146,17 @@ class BetterAutoKey(cmd.Cmd):
             if command == "config":
                 print(f"{self.config.config}")
         except Exception as e:
-            print(f"Invalid Input: {e}")
+            printc.text(f"Invalid Input: {e}", "red")
 
 
 if __name__ == "__main__":
     python_version = f"{sys.version_info[0]}.{sys.version_info[1]}"
     if float(python_version) < 3.8:
-        print("Please install python version 3.8+")
-        print("Refer to the README.md of this folder to manage your python versions on windows.")
+        printc.text("Please install python version 3.8+", "red")
+        printc.text("Refer to the README.md of this folder to manage your python versions on windows.", "red")
     else:
-        print(f"> Python version detected: {python_version}")
+        printc.text(f"> Python version detected: {python_version}", "gre")
         try:
             comm = BetterAutoKey().cmdloop()
         except KeyboardInterrupt:
-            print("\nRun `python auto.py` to enter the cmd again.")
+            printc.text("\nRun `python auto.py` to enter the cmd again.", "yel")

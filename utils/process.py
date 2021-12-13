@@ -3,6 +3,7 @@ import re
 import psutil
 from pywinauto.application import Application
 from pywinauto.keyboard import *
+from utils.tty_colors import PrintColor as printc
 PROCESS_TARGET = "ffxiv_dx11.exe"
 WINDOW_TITLE = "FINAL FANTASY XIV"
 
@@ -22,7 +23,7 @@ class Process:
                 if p.name() == PROCESS_TARGET:
                     query = re.search("pid=(.+?), name=", str(p))
                     pid = int(query.group(1))
-                    print(f"> Found FFXIV PID: {pid}")
+                    printc.text(f"> Found FFXIV PID: {pid}", "gre")
             except psutil.AccessDenied:
                 # Psutil cannot read system processes like CPU, so need this exception
                 pass
@@ -31,15 +32,15 @@ class Process:
     def connect_to_pid(self):
         """Returns a pywinauto Application object created with find_pid()"""
         if not self.pid:
-            print(f"ERROR: Could not find process name: {PROCESS_TARGET}")
+            printc.text(f"ERROR: Could not find process name: {PROCESS_TARGET}", "red")
             return None
 
         try:
             app = Application().connect(process=self.pid)
-            print(f"> Connected to FFXIV PID {self.pid}")
+            printc.text(f"> Connected to FFXIV PID {self.pid}", "gre")
             return app
         except:
-            print(f"> Could not connect to FFXIV PID {self.pid}")
+            printc.text(f"> Could not connect to FFXIV PID {self.pid}", "red")
 
         return None
 
