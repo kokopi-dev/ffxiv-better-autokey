@@ -73,7 +73,7 @@ class Craft:
 
     @staticmethod
     def repair(proc, count, buttons, opt_buttons):
-        if count % opt_buttons["repair_threshold"] == 0:
+        if count % int(opt_buttons["repair_threshold"]) == 0:
             print("> Repairing...", end="")
             sequence = [
                 buttons["esc"],
