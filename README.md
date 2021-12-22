@@ -41,8 +41,17 @@ Primarily for afking or background afking
 Example:
 
 ```
-# Press c for opening and closing character menu every 60 seconds
-(BetterAutoKey) key c 60
+# Press c for opening and closing character menu every 60.5 seconds
+(BetterAutoKey) key c 60.5
+Interval: [60.5] in secs
+> Pressing c <wait.(60.5)>
+...
+
+# Map each key to a specific interval
+(BetterAutoKey) key 1,2 2.5,3
+Interval: [2.5, 3.0] in secs
+> Pressing 1 <wait.(2.5)>
+> Pressing 2 <wait.(3.0)>
 ```
 
 ### Craft

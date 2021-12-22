@@ -91,8 +91,8 @@ class BetterAutoKey(cmd.Cmd):
 
     def do_key(self, arg):
         """Requires key:str and interval:int"""
-        keys, interval = do_key_input_check(arg)
-        if not keys or not interval:
+        keys, intervals = do_key_input_check(arg)
+        if not arg or not keys or not intervals:
             return
 
         modded_keys = []
@@ -102,15 +102,28 @@ class BetterAutoKey(cmd.Cmd):
             else:
                 modded_keys.append(k)
 
-        printc.text(f"Press CTRL+C to quit.\nInterval: {interval}s", "yel")
+        multi_interval = False
+        # TODO move to interval checking function
+        if len(intervals) > 1 and len(intervals) == len(keys):
+            multi_interval = True
+        elif len(intervals) > 1 and len(intervals) != len(keys):
+            printc.text(f"> Number of keys do not match number of intervals.", "red")
+            printc.text(f"> Setting interval to first interval\n", "yel")
+
+        printc.text(f"Press CTRL+C to quit.\nInterval: {intervals} in secs", "yel")
         while True:
             try:
-                for k in modded_keys:
-                    print(f"> Pressing {k}")
-                    self.process.press_key(k)
-                    sleep(interval)
+                for idx in range(len(modded_keys)):
+                    print(f"> Pressing {k}", end="")
+                    self.process.press_key(modded_keys[idx])
+                    if multi_interval:
+                        sleep(intervals[idx])
+                        print(f" <wait.({intervals[idx]})>")
+                    else:
+                        sleep(intervals[0])
+                        print(f" <wait.({intervals[0]})>")
             except KeyboardInterrupt:
-                printc.text(f"> Stopping key", "yel")
+                printc.text(f"\n> Stopping key", "yel")
                 break
 
     def do_craft(self, arg):
