@@ -68,7 +68,8 @@ class CraftConfig:
 class Craft:
     def __init__(self):
         self.OPTIONS = {
-            "--repair": Craft.repair
+            "--repair": Craft.repair,
+            "--afk": None
         }
 
     @staticmethod

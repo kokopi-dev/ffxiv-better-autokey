@@ -25,10 +25,10 @@ def do_key_input_check(arg:str):
         print("Requires 2 inputs. key, interval (seconds)")
 
     try:
-        key, interval = args[0], int(args[1])
-        return key, interval
+        keys, interval = args[0].split(","), float(args[1])
+        return keys, interval
     except:
-        print("Interval needs to be an int.")
+        print("Interval needs to be an int or float.")
 
     return None, None
 

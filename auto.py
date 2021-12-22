@@ -91,19 +91,24 @@ class BetterAutoKey(cmd.Cmd):
 
     def do_key(self, arg):
         """Requires key:str and interval:int"""
-        key, interval = do_key_input_check(arg)
-        if not key or not interval:
+        keys, interval = do_key_input_check(arg)
+        if not keys or not interval:
             return
 
-        if key in self.config.buttons:
-            key = self.config.buttons[key]
+        modded_keys = []
+        for k in keys:
+            if k in self.config.buttons:
+                modded_keys.append(self.config.buttons[k])
+            else:
+                modded_keys.append(k)
 
         printc.text(f"Press CTRL+C to quit.\nInterval: {interval}s", "yel")
         while True:
             try:
-                print(f"> Pressing {key}")
-                self.process.press_key(key)
-                sleep(interval)
+                for k in modded_keys:
+                    print(f"> Pressing {k}")
+                    self.process.press_key(k)
+                    sleep(interval)
             except KeyboardInterrupt:
                 printc.text(f"> Stopping key", "yel")
                 break
@@ -132,6 +137,8 @@ class BetterAutoKey(cmd.Cmd):
         elif command == "craft":
             printc.text(f">>> Press CTRL+C to quit.\n", "yel")
             self.craft_service.run(self.process, self.config, macro_name, amt, opts)
+            if opts and "--afk" in opts:
+                self.do_key("c 500")
         # parse command arg if there is command
         # check if command arg is in macro list
         # run macro
