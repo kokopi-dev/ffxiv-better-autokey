@@ -114,12 +114,13 @@ class BetterAutoKey(cmd.Cmd):
         while True:
             try:
                 for idx in range(len(modded_keys)):
-                    print(f"> Pressing {k}", end="")
+                    print(f"> Pressing {modded_keys[idx]}", end="")
                     self.process.press_key(modded_keys[idx])
                     if multi_interval:
                         sleep(intervals[idx])
                         print(f" <wait.({intervals[idx]})>")
                     else:
+                        print("in not multi interval")
                         sleep(intervals[0])
                         print(f" <wait.({intervals[0]})>")
             except KeyboardInterrupt:
@@ -168,6 +169,9 @@ class BetterAutoKey(cmd.Cmd):
         except Exception as e:
             printc.text(f"Invalid Input: {e}", "red")
 
+    def do_update(self, arg):
+        """Updates this program if there is a new update."""
+        pass
 
 if __name__ == "__main__":
     python_version = f"{sys.version_info[0]}.{sys.version_info[1]}"
