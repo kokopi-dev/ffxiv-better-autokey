@@ -120,7 +120,6 @@ class BetterAutoKey(cmd.Cmd):
                         sleep(intervals[idx])
                         print(f" <wait.({intervals[idx]})>")
                     else:
-                        print("in not multi interval")
                         sleep(intervals[0])
                         print(f" <wait.({intervals[0]})>")
             except KeyboardInterrupt:
