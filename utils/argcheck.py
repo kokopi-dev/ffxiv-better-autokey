@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 from typing import List, Dict
+from utils.tty_colors import PrintColor as printc
 """Temporary arg check solution"""
 
 
@@ -42,16 +43,15 @@ def do_craft_input_check(arg: str, macro_list: List, options: Dict):
         print("Requires atleast 1 input. Use craft help for details.")
         return None, None, None, None
 
+    filename = args[0] if ".txt" not in args[0] else args[0] + ".txt"
     # One of the commands
-    if args[0] not in macro_list and args[0] in commands:
+    if filename not in macro_list and args[0] in commands:
         command = args[0]
         return command, None, amt, opts
 
-    # Formatting
-    if ".txt" not in args[0]:
-        idx = macro_list.index((args[0] + ".txt"))
-    else:
-        idx = macro_list.index(args[0])
+    if filename not in macro_list:
+        printc.text(f"{args[0]} is not in macros folder.", "red")
+        return None, None, None, None
 
     # Amount detected
     if len(args) > 1:
@@ -71,6 +71,8 @@ def do_craft_input_check(arg: str, macro_list: List, options: Dict):
                     print(f"{item} is not an option.")
                 return None, None, None, []
     
+    idx = macro_list.index(filename)
+
     if idx != None:
         return "craft", macro_list[idx], amt, opts
 

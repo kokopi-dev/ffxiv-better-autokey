@@ -21,8 +21,11 @@ class BAKConfig(CraftConfig):
     buttons = { # Remapping of special keys
         "left": "{LEFT}",
         "right": "{RIGHT}",
+        "up": "{UP}",
+        "down": "{DOWN}",
         "esc": "{VK_ESCAPE}",
         "select": "{VK_NUMPAD0}",
+        "submenu": "'"
     }
 
     # Craft Config

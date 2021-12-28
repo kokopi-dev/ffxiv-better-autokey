@@ -12,6 +12,7 @@ from utils.argcheck import (
     check_int
 )
 from utils.craft import Craft
+from utils.fccraft import FCCraft
 from utils.tty_colors import PrintColor as printc
 logging_format = "%(msecs)d %(levelname)-8s [%(filename)s:%(lineno)d] %(message)s"
 logging.basicConfig(format=logging_format)
@@ -39,6 +40,10 @@ class BetterAutoKey(cmd.Cmd):
         return True
 
     def do_emptyline(self):
+        pass
+
+    def do_precmd(self):
+        # check integrity of process, if it cannot find ffxiv, rehook process
         pass
 
     def do_process(self, arg):
@@ -149,9 +154,11 @@ class BetterAutoKey(cmd.Cmd):
             print(f"{macros_list}")
         elif command == "craft":
             printc.text(f">>> Press CTRL+C to quit.\n", "yel")
-            self.craft_service.run(self.process, self.config, macro_name, amt, opts)
-            if opts and "--afk" in opts:
-                self.do_key("c 500")
+            if macro_name:
+                self.craft_service.run(self.process, self.config, macro_name, amt, opts)
+                if opts and "--afk" in opts:
+                    self.do_key("c 500")
+
         # parse command arg if there is command
         # check if command arg is in macro list
         # run macro
@@ -171,6 +178,13 @@ class BetterAutoKey(cmd.Cmd):
     def do_update(self, arg):
         """Updates this program if there is a new update."""
         pass
+
+    def do_fccraft(self, arg):
+        args = arg.split()
+        command = args[0]
+        amt = int(args[1])
+        if command == "pilgram":
+            FCCraft.pilgram(self.process, amt)
 
 if __name__ == "__main__":
     python_version = f"{sys.version_info[0]}.{sys.version_info[1]}"

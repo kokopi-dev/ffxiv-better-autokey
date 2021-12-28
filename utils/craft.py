@@ -72,6 +72,14 @@ class Craft:
             "--afk": None
         }
 
+    def _estimate_time_completion(self, amt:int, config, macro) -> float:
+        result = 0
+        sleep_buffers = sum(list(config.config["craft"]["sleeps"].values()))
+        step_sleep = sum(macro["wait"])
+        result = amt * (sleep_buffers + step_sleep)
+        print(result)
+        return result / 60 # in minutes
+
     @staticmethod
     def repair(proc, count, buttons, opt_buttons):
         if count % int(opt_buttons["repair_threshold"]) == 0:
@@ -113,6 +121,8 @@ class Craft:
             printc.text(f">>> Amount not specified, running until CTRL+C is pressed.", "yel")
         else:
             print(f">>> Amount specified: {amt} crafts.")
+            est = self._estimate_time_completion(amt, config, macro)
+            print(f">>> Estimated completion time: {est:.2f}m")
 
         print(f">>> Using macro: {name}")
         while True:
