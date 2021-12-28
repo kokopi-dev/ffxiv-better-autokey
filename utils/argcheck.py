@@ -43,7 +43,7 @@ def do_craft_input_check(arg: str, macro_list: List, options: Dict):
         print("Requires atleast 1 input. Use craft help for details.")
         return None, None, None, None
 
-    filename = args[0] if ".txt" not in args[0] else args[0] + ".txt"
+    filename = args[0] if ".txt" in args[0] else args[0] + ".txt"
     # One of the commands
     if filename not in macro_list and args[0] in commands:
         command = args[0]
