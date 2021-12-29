@@ -69,7 +69,7 @@ class Craft:
     def __init__(self):
         self.OPTIONS = {
             "--repair": Craft.repair,
-            "--afk": None
+            "--afk": Craft.afk
         }
 
     def _estimate_time_completion(self, amt:int, config, macro) -> float:
@@ -79,6 +79,11 @@ class Craft:
         result = amt * (sleep_buffers + step_sleep)
         print(result)
         return result / 60 # in minutes
+
+    @staticmethod
+    def afk(proc, count, buttons, opt_buttons):
+        """Afk function happens in auto.py after craft finishes"""
+        pass
 
     @staticmethod
     def repair(proc, count, buttons, opt_buttons):
@@ -127,13 +132,13 @@ class Craft:
         print(f">>> Using macro: {name}")
         while True:
             try:
-                if amt and count > amt:
-                    printc.text(">> Crafts finished.", "gre")
-                    break
-
                 if run_opts == True:
                     for opt in opts:
                         self.OPTIONS[opt](proc, count, buttons, opt_buttons)
+
+                if amt and count > amt:
+                    printc.text(">> Crafts finished.", "gre")
+                    break
 
                 print(f"> Craft #{count}")
                 for _ in range(4):
