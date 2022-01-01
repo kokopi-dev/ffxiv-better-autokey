@@ -77,7 +77,6 @@ class Craft:
         sleep_buffers = sum(list(config.config["craft"]["sleeps"].values()))
         step_sleep = sum(macro["wait"])
         result = amt * (sleep_buffers + step_sleep)
-        print(result)
         return result / 60 # in minutes
 
     @staticmethod
