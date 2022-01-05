@@ -157,7 +157,7 @@ class BetterAutoKey(cmd.Cmd):
             if macro_name:
                 self.craft_service.run(self.process, self.config, macro_name, amt, opts)
                 if opts and "--afk" in opts:
-                    self.do_key("c 500")
+                    self.do_key("c,c 0.2,500")
 
         # parse command arg if there is command
         # check if command arg is in macro list
