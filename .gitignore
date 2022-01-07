@@ -1,5 +1,6 @@
 # Custom
 venv/
+linux_venv/
 .craft_config.json
 .general_config.json
 macros/*

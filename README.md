@@ -134,3 +134,11 @@ Examples:
  (BetterAutoKey) config repair threshold 91
  ...
  ```
+
+---
+
+### Development
+
+Vim pyright environment access (no pywinauto intellisense, but better than nothing):
+- Linux venv: `. ./run linux`
+  - `pip install -r linux_requirements.txt`

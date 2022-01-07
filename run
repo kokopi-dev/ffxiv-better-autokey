@@ -1,0 +1,7 @@
+#!/bin/bash
+CMD=$1
+case $CMD in
+  "linux")
+    source linux_venv/bin/activate
+    ;;
+esac
