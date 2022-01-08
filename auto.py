@@ -14,6 +14,7 @@ from utils.argcheck import (
 from utils.craft import Craft
 from utils.fccraft import FCCraft
 from utils.tty_colors import PrintColor as printc
+from utils.tty_colors import Colors
 logging_format = "%(msecs)d %(levelname)-8s [%(filename)s:%(lineno)d] %(message)s"
 logging.basicConfig(format=logging_format)
 
@@ -51,10 +52,10 @@ class BetterAutoKey(cmd.Cmd):
         if not self.process or not self.process.app:
             # Importing here due to initializing a new venv debug check
             from utils.process import Process
-            printc.text("> Looking for FFXIV PID...", "yel")
+            printc.text("> Looking for FFXIV PID...", Colors.YEL)
             self.process = Process()
         else:
-            printc.text("> FFXIV PID is already hooked.", "gre")
+            printc.text("> FFXIV PID is already hooked.", Colors.GRE)
 
     def do_config(self, arg):
         """Edit configs:
@@ -66,7 +67,7 @@ class BetterAutoKey(cmd.Cmd):
         try:
             section, key, value = args[0], args[1], args[2]
             if len(args) != 3:
-                printc.text("> Needs 2 inputs. Check `help config` for details.", "red")
+                printc.text("> Needs 2 inputs. Check `help config` for details.", Colors.RED)
                 return
             if section == "sleeps":
                 if not check_float("interval", value):
@@ -92,7 +93,7 @@ class BetterAutoKey(cmd.Cmd):
             # Currently, all config opts are craft opts
             self.config.write_config("craft_filename", "craft")
         except:
-            printc.text("Invalid input.", "red")
+            printc.text("Invalid input.", Colors.RED)
 
     def do_key(self, arg):
         """Requires key:str and interval:int"""
@@ -112,10 +113,10 @@ class BetterAutoKey(cmd.Cmd):
         if len(intervals) > 1 and len(intervals) == len(keys):
             multi_interval = True
         elif len(intervals) > 1 and len(intervals) != len(keys):
-            printc.text(f"> Number of keys do not match number of intervals.", "red")
+            printc.text(f"> Number of keys do not match number of intervals.", Colors.RED)
             printc.text(f"> Setting interval to first interval\n", "yel")
 
-        printc.text(f"Press CTRL+C to quit.\nInterval: {intervals} in secs", "yel")
+        printc.text(f"Press CTRL+C to quit.\nInterval: {intervals} in secs", Colors.YEL)
         while True:
             try:
                 for idx in range(len(modded_keys)):
@@ -128,7 +129,7 @@ class BetterAutoKey(cmd.Cmd):
                         sleep(intervals[0])
                         print(f" <wait.({intervals[0]})>")
             except KeyboardInterrupt:
-                printc.text(f"\n> Stopping key", "yel")
+                printc.text(f"\n> Stopping key", Colors.YEL)
                 break
 
     def do_craft(self, arg):
@@ -153,7 +154,7 @@ class BetterAutoKey(cmd.Cmd):
         if command == "list":
             print(f"{macros_list}")
         elif command == "craft":
-            printc.text(f">>> Press CTRL+C to quit.\n", "yel")
+            printc.text(f">>> Press CTRL+C to quit.\n", Colors.YEL)
             if macro_name:
                 self.craft_service.run(self.process, self.config, macro_name, amt, opts)
                 if opts and "--afk" in opts:
@@ -173,7 +174,7 @@ class BetterAutoKey(cmd.Cmd):
             if command == "config":
                 print(f"{self.config.config}")
         except Exception as e:
-            printc.text(f"Invalid Input: {e}", "red")
+            printc.text(f"Invalid Input: {e}", Colors.RED)
 
     def do_update(self, arg):
         """Updates this program if there is a new update."""
@@ -189,11 +190,11 @@ class BetterAutoKey(cmd.Cmd):
 if __name__ == "__main__":
     python_version = f"{sys.version_info[0]}.{sys.version_info[1]}"
     if float(python_version) < 3.8:
-        printc.text("Please install python version 3.8+", "red")
-        printc.text("Refer to the README.md of this folder to manage your python versions on windows.", "red")
+        printc.text("Please install python version 3.8+", Colors.RED)
+        printc.text("Refer to the README.md of this folder to manage your python versions on windows.", Colors.RED)
     else:
-        printc.text(f"> Python version detected: {python_version}", "gre")
+        printc.text(f"> Python version detected: {python_version}", Colors.GRE)
         try:
             comm = BetterAutoKey().cmdloop()
         except KeyboardInterrupt:
-            printc.text("\nRun `python auto.py` to enter the cmd again.", "yel")
+            printc.text("\nRun `python auto.py` to enter the cmd again.", Colors.YEL)

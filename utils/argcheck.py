@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 from typing import List, Dict
 from utils.tty_colors import PrintColor as printc
+from utils.tty_colors import Colors
 """Temporary arg check solution"""
 
 
@@ -50,7 +51,7 @@ def do_craft_input_check(arg: str, macro_list: List, options: Dict):
         return command, None, amt, opts
 
     if filename not in macro_list:
-        printc.text(f"{args[0]} is not in macros folder.", "red")
+        printc.text(f"{args[0]} is not in macros folder.", Colors.RED)
         return None, None, None, None
 
     # Amount detected

@@ -5,6 +5,7 @@ from time import sleep
 import re
 from typing import Optional, List
 from utils.tty_colors import PrintColor as printc
+from utils.tty_colors import Colors
 
 
 class CraftConfig:
@@ -22,7 +23,7 @@ class CraftConfig:
         macros_config = cls.config["craft"]["macros"]
 
         if current_mod_config != last_mod_config:
-            printc.text("> Found new macro changes.", "yel")
+            printc.text("> Found new macro changes.", Colors.YEL)
             has_changed = True
             macros_config = {}
 
@@ -122,7 +123,7 @@ class Craft:
             print(f">>> Options selected: {opts}")
 
         if not amt:
-            printc.text(f">>> Amount not specified, running until CTRL+C is pressed.", "yel")
+            printc.text(f">>> Amount not specified, running until CTRL+C is pressed.", Colors.YEL)
         else:
             print(f">>> Amount specified: {amt} crafts.")
             est = self._estimate_time_completion(amt, config, macro)
@@ -136,7 +137,7 @@ class Craft:
                         self.OPTIONS[opt](proc, count, buttons, opt_buttons)
 
                 if amt and count > amt:
-                    printc.text(">> Crafts finished.", "gre")
+                    printc.text(">> Crafts finished.", Colors.GRE)
                     break
 
                 print(f"> Craft #{count}")

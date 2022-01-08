@@ -11,6 +11,7 @@ import json
 from utils import debug
 from utils.craft import CraftConfig
 from utils.tty_colors import PrintColor as printc
+from utils.tty_colors import Colors
 
 
 class BAKConfig(CraftConfig):
@@ -51,7 +52,7 @@ class BAKConfig(CraftConfig):
         self.general_config_init()
         self.craft_config_init()
         self.debug_check()
-        printc.text("> Initialized configs...", "gre")
+        printc.text("> Initialized configs...", Colors.GRE)
 
     def write_config(self, config_filename: str, config_type: str):
         """Writes to config_filename using self.config['config_type']
@@ -60,12 +61,12 @@ class BAKConfig(CraftConfig):
         """
         type_filename = getattr(self, config_filename, None)
         if not type_filename: #TODO create custom exceptions
-            printc.text(f"ERROR: {type_filename} attr does not exist in {self.__class__}", "red")
+            printc.text(f"ERROR: {type_filename} attr does not exist in {self.__class__}", Colors.RED)
             return
 
         with open(type_filename, "w+") as f:
             json.dump(self.config[config_type], f)
-            printc.text(f"> Wrote new config to {type_filename}.", "gre")
+            printc.text(f"> Wrote new config to {type_filename}.", Colors.GRE)
 
     def _config_init(self, config_filename: str, template: str, config_type: str):
         """
@@ -76,14 +77,14 @@ class BAKConfig(CraftConfig):
         type_filename = getattr(self, config_filename, None)
         type_template = getattr(self, template, None)
         if not type_filename or not type_template: #TODO create custom exceptions
-            printc.text(f"ERROR: {config_filename} or {template} attr does not exist in {self.__class__}", "red")
+            printc.text(f"ERROR: {config_filename} or {template} attr does not exist in {self.__class__}", Colors.RED)
             return
 
         if not os.path.exists(type_filename):
             with open(type_filename, "w") as f:
                 json.dump(type_template, f)
                 self.config[config_type] = type_template
-                printc.text(f"> Created new config file: {type_filename}", "gre")
+                printc.text(f"> Created new config file: {type_filename}", Colors.GRE)
         else:
             with open(type_filename, "r") as f:
                 self.config[config_type] = json.load(f)
@@ -104,7 +105,7 @@ class BAKConfig(CraftConfig):
         self._config_init("craft_filename", "craft_template", "craft")
         if not os.path.exists(self.craft_folder):
             os.mkdir(self.craft_folder)
-            printc.text("> Created new folder: macros/", "gre")
+            printc.text("> Created new folder: macros/", Colors.GRE)
 
     def debug_check(self):
         """Run debug command for win32 error"""

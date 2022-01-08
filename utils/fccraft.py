@@ -1,12 +1,13 @@
 #!/usr/bin/env python3
 from utils.tty_colors import PrintColor as printc
+from utils.tty_colors import Colors
 from time import sleep
 
 
 class FCCraft:
     @staticmethod
     def pilgram(proc, amt):
-        printc.text("> Make sure that key 1 has a macro with /ta <f> in it.", "yel")
+        printc.text("> Make sure that key 1 has a macro with /ta <f> in it.", Colors.YEL)
         start_sequence = [
             "1", "{VK_NUMPAD0}", "{VK_NUMPAD0}", "{VK_NUMPAD0}", "{DOWN}", "{VK_NUMPAD0}",
             "{UP}", "{VK_NUMPAD0}", "{VK_NUMPAD0}", "{LEFT}", "{VK_NUMPAD0}"
@@ -25,7 +26,7 @@ class FCCraft:
         while True:
             try:
                 if amt and count > amt:
-                    printc.text(">> Crafts finished.", "gre")
+                    printc.text(">> Crafts finished.", Colors.GRE)
                     break
 
                 for k in start_sequence:
