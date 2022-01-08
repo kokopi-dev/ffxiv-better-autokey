@@ -68,6 +68,21 @@ class Process:
 
         return None
 
+    def switch_pids(self, pid_id: int):
+        pid = [p for p in self.all_pids if p.id == pid_id]
+        if len(pid) > 0:
+            printc.text(f"Switched pids to {pid[0]}", Colors.GRE)
+            self.pid = pid[0]
+
+    def change_current_name(self, name: str):
+        if self.pid:
+            idx = self.all_pids.index(self.pid)
+            printc.text(f"Changed {self.pid.name} to {name}", Colors.GRE)
+            self.pid.name = name
+            self.all_pids[idx] = self.pid
+        else:
+            printc.text(f"{self.pid} not found in all_pids", Colors.RED)
+
     def press_key(self, key: str):
         """Presses a key. Refer to:
         https://pywinauto.readthedocs.io/en/latest/code/pywinauto.keyboard.html

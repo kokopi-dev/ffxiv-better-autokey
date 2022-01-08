@@ -1,9 +1,78 @@
 #!/usr/bin/env python3
-from typing import List, Dict
+from typing import List, Dict, Optional
 from utils.tty_colors import PrintColor as printc
 from utils.tty_colors import Colors
+from pydantic import BaseModel
 """Temporary arg check solution"""
 
+
+class CraftOptArgs(BaseModel):
+    repair: Optional[bool]
+    afk: Optional[bool]
+    pot: Optional[int]
+    food: Optional[int]
+
+class CraftSingleArgs(BaseModel):
+    listm: Optional[bool]
+
+class CraftArgs(BaseModel):
+    macro: Optional[str]
+    amt: Optional[int]
+    opts: Optional[CraftOptArgs]
+    singles: Optional[CraftSingleArgs]
+    opts_amt: int = 0
+
+def create_craft_args(arg, macro_dict: Dict) -> CraftArgs:
+    """Return None if error occured, prints a message if error"""
+    valid_single_args = CraftSingleArgs.schema()["properties"]
+    valid_opt_args = CraftOptArgs.schema()["properties"]
+    args = arg.split()
+
+    if len(args) == 0:
+        printc.text("Need commands, run 'help craft' for info.", Colors.RED)
+
+    opt_result = {}
+    single_result = {}
+    macro = None
+    amt = None
+    for a in args:
+        pair = a.split("=")
+        if len(pair) == 1:
+            filename = a if ".txt" in a else a + ".txt"
+            if filename in macro_dict:
+                macro = filename
+            elif valid_single_args.get(a):
+                single_result[a] = True
+            elif macro and a.isdigit():
+                amt = a
+        elif len(pair) == 2:
+            if pair[0] not in valid_opt_args:
+                printc.text(f"{pair} is not a valid option.", Colors.RED)
+            else:
+                opt_result[pair[0]] = pair[1]
+        else:
+            printc.text(f"{a} not a valid arg, run 'help craft' for info.", Colors.RED)
+
+    try:
+        singles = None if single_result == {} else CraftSingleArgs(**single_result)
+        opts = None if opt_result == {} else CraftOptArgs(**opt_result)
+        craft_args = CraftArgs(
+            macro=macro,
+            amt=amt,
+            opts=opts,
+            singles=singles,
+            opts_amt=len(opt_result)
+        )
+    except Exception as e:
+        printc.text(f"{e}", Colors.RED)
+        craft_args = CraftArgs(**{})
+
+    if not craft_args.singles and not craft_args.macro:
+        printc.text("No commands ran. Use 'help craft' for more info.", Colors.RED)
+    if not craft_args.macro:
+        printc.text(f"Could not find macro {args[0]}.", Colors.RED)
+
+    return craft_args
 
 def check_float(name, value):
     try:
@@ -33,49 +102,3 @@ def do_key_input_check(arg:str):
         print("Interval needs to be an int or float.")
 
     return None, None
-
-def do_craft_input_check(arg: str, macro_list: List, options: Dict):
-    """Return: (str|None, str|None, int|None)"""
-    args = arg.split()
-    amt = None
-    commands = ["list"]
-    opts = []
-    if len(args) < 1:
-        print("Requires atleast 1 input. Use craft help for details.")
-        return None, None, None, None
-
-    filename = args[0] if ".txt" in args[0] else args[0] + ".txt"
-    # One of the commands
-    if filename not in macro_list and args[0] in commands:
-        command = args[0]
-        return command, None, amt, opts
-
-    if filename not in macro_list:
-        printc.text(f"{args[0]} is not in macros folder.", Colors.RED)
-        return None, None, None, None
-
-    # Amount detected
-    if len(args) > 1:
-        try:
-            amt = int(args[1])
-        except:
-            print("Amt needs to be a number.")
-            return None, None, None, opts
-
-    if len(args) > 2:
-        opts = args[2:]
-        for item in opts:
-            if item not in options:
-                if "--" not in item:
-                    print(f"Try using --{item} instead of {item}.")
-                else:
-                    print(f"{item} is not an option.")
-                return None, None, None, []
-    
-    idx = macro_list.index(filename)
-
-    if idx != None:
-        return "craft", macro_list[idx], amt, opts
-
-    print("Wrong input. Use craft help for details.")
-    return None, None, None, opts
