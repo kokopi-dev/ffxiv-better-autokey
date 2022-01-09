@@ -52,7 +52,10 @@ class Config:
     config = {}
     # General Config
     general_filename = ".general_config.json"
-    general_template = {"debug_status": False}
+    general_template = {
+        "debug_status": False,
+        "requirements": os.path.getmtime("requirements.txt")
+    }
     REGEX_WAIT = re.compile(r"<wait.(.+?)>")
     REGEX_KEY = re.compile(r"KEY")
 
@@ -123,6 +126,13 @@ class Config:
     def debug_check(self):
         """Run debug command for win32 error"""
         if self.config["general"]["debug_status"] == False:
+            new_mod_time = os.path.getmtime("requirements.txt")
+            updated = debug.update_requirements(
+                self.config["general"]["requirements"],
+                new_mod_time
+            )
+            if updated:
+                self.config["general"]["requirements"] = new_mod_time
             debug.setupme()
             self.config["general"]["debug_status"] = True
             self.write_config("general_filename", "general")

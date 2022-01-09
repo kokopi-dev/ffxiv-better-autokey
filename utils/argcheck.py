@@ -22,6 +22,11 @@ class CraftArgs(BaseModel):
     singles: Optional[CraftSingleArgs]
     opts_amt: int = 0
 
+def create_singles(args: List):
+    # currently only for listm
+    if len(args) == 1:
+        pass
+        
 def create_craft_args(arg, macro_dict: Dict) -> CraftArgs:
     """Return None if error occured, prints a message if error"""
     valid_single_args = CraftSingleArgs.schema()["properties"]

@@ -1,16 +1,12 @@
 #!/usr/bin/env python3
 """Crafting related functionalities"""
-import os
 from pathlib import PurePath
 from time import sleep
-import re
-from typing import Optional, List
 from utils.argcheck import CraftArgs
 from utils.tty_colors import PrintColor as printc
 from utils.tty_colors import Colors
 from utils.craft_options import CraftOpts
 from config import conf, buttons, opt_buttons
-
 
 
 class Craft:
