@@ -16,7 +16,7 @@ craft = {
     "opt_buttons": {
         "repair": "3",
         "repair_threshold": 90,
-        "craft_item": "4",
+        "item": "4",
         "food": "5",
         "pot": "6"
     }

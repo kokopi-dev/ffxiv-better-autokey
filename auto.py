@@ -12,9 +12,12 @@ from utils.process import Process
 from typing import Optional
 from handlers.craft import CraftHandler
 from handlers.key import KeyHandler
+from handlers.config import ConfigHandler
 from argparsers.craft_parse import parse as craft_parse
+from argparsers.config_parse import parse as config_parse
 from argparsers.key_parse import parse as key_parse
 from argparsers.craft import MainArgsCraft
+from argparsers.config import MainArgsConfig
 from argparsers.key import MainArgsKey
 import sys
 import cmd
@@ -33,6 +36,7 @@ class BetterAutoKey(cmd.Cmd):
     process: Process
     config: Config
     craft_handler: CraftHandler
+    config_handler: ConfigHandler
     key_handler: KeyHandler
 
     def preloop(self):
@@ -40,6 +44,7 @@ class BetterAutoKey(cmd.Cmd):
         self.config = Config()
         self.craft_handler = CraftHandler()
         self.key_handler = KeyHandler()
+        self.config_handler = ConfigHandler()
         if self.process.app:
             self.craft_handler.set_proc(self.process)
             self.key_handler.set_proc(self.process)
@@ -84,11 +89,15 @@ class BetterAutoKey(cmd.Cmd):
 
     def do_config(self, arg):
         """Edit configs:
-        `sleeps [prestart|poststep|postfinish] [interval]`
-        `buttons [repair|craft_item] [key]`
-        `repair [threshold] [amount]`
+        `list`
+        `buttons [craft] [repair|item|food|pot] [key]`
         """
-        pass
+        args: Optional[MainArgsConfig] = config_parse(arg, self.config)
+        if args:
+            if args.single:
+                self.config_handler.commands[args.single](self.config)
+            else:
+                self.config_handler.update_config(self.config, args)
 
     def do_key(self, arg):
         """Requires key:str and interval:int.
@@ -98,7 +107,6 @@ class BetterAutoKey(cmd.Cmd):
             args: Optional[MainArgsKey] = key_parse(arg, self.config)
             if args:
                 self.key_handler.key_sequence(args)
-
 
     def do_craft(self, arg):
         """Single commands: list
@@ -121,13 +129,7 @@ class BetterAutoKey(cmd.Cmd):
         """Developer command:
         `config`: Check the current loaded .*_config.json extension files.
         """
-        args = arg.split()
-        try:
-            command = args[0]
-            if command == "config":
-                print(f"{conf.config}")
-        except Exception as e:
-            printc.text(f"Invalid Input: {e}", Colors.RED)
+        pass
 
 if __name__ == "__main__":
     python_version = f"{sys.version_info[0]}.{sys.version_info[1]}"

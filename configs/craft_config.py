@@ -43,7 +43,7 @@ class CraftOptButtons(BaseModel):
     """User defined option button mappings"""
     repair: str = "3"
     repair_threshold: int = 90
-    craft_item: str = "4"
+    item: str = "4"
     food: str = "5"
     pot: str = "6"
 
