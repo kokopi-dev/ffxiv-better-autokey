@@ -18,7 +18,7 @@ class OptArgsCraft(Enum):
 
 class MainArgsCraft(BaseModel):
     """Main craft args container"""
-    macro: Optional[Dict] = None
+    macro: Optional[Dict[str, List]] = None
     macros_dict: Optional[Dict] = None
     macro_name: Optional[str] = None
     macro_file: Optional[str] = None

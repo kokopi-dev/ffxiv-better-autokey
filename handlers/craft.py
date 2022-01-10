@@ -12,7 +12,7 @@ from utils.process import Process
 class CraftOptsHandler:
     """Namespace for craft opt functions"""
     @staticmethod
-    def repair(proc: Process, args: MainArgsCraft, config: Config, count: int):
+    def repair(proc: Process, args: MainArgsCraft, config: Config, count: int, **kwargs):
         if count % config.craft.opt_buttons.repair_threshold == 0:
             print("> Repairing...", end="")
             buttons = config.buttons
@@ -34,15 +34,37 @@ class CraftOptsHandler:
             print("done.")
 
     @staticmethod
-    def food(proc: Process, args: MainArgsCraft, config: Config, count: int):
-        pass
+    def food(proc: Process, args: MainArgsCraft, config: Config, count: int, **kwargs) -> int:
+        """Assuming 30 min duration for now"""
+        buttons = config.buttons
+        opt_buttons = config.craft.opt_buttons
+        if kwargs["food_count"] > (1800 - kwargs["one_step"]) or kwargs["food_count"] == 0:
+            proc.press_key(buttons.esc)
+            sleep(1.7)
+            proc.press_key(opt_buttons.food)
+            sleep(3)
+            proc.press_key(opt_buttons.craft_item)
+            sleep(0.3)
+            return 3
+        return kwargs["food_count"]
 
     @staticmethod
-    def pot(proc: Process, args: MainArgsCraft, config: Config, count: int):
-        pass
+    def pot(proc: Process, args: MainArgsCraft, config: Config, count: int, **kwargs) -> int:
+        """Assuming 15 min duration for now"""
+        buttons = config.buttons
+        opt_buttons = config.craft.opt_buttons
+        if kwargs["pot_count"] > (900 - kwargs["one_step"]) or kwargs["pot_count"] == 0:
+            proc.press_key(buttons.esc)
+            sleep(1.7)
+            proc.press_key(opt_buttons.pot)
+            sleep(3)
+            proc.press_key(opt_buttons.craft_item)
+            sleep(0.3)
+            return 3
+        return kwargs["pot_count"]
 
     @staticmethod
-    def afk(proc: Process, args: MainArgsCraft, config: Config, count: int):
+    def afk(proc: Process, args: MainArgsCraft, config: Config, count: int, **kwargs):
         if args.amt < count:
             printc.text(">> Crafts have finished, starting afk sequence. CTRL+C to quit:", Colors.GRE)
             try:
@@ -74,27 +96,32 @@ class CraftHandler(BaseHandler):
             print(f"{list(args.macros_dict)}")
 
     def craft(self, args: MainArgsCraft, config: Config):
-        def _estimate_time_completion(amt:int, macro) -> float:
+        def _estimate_time_completion(amt:int, step_total_wait: int) -> float:
             result = 0
-            sleep_buffers = sum(config.craft.sleeps.dict().values())
-            step_sleep = sum(macro["wait"])
-            result = amt * (sleep_buffers + step_sleep)
+            result = amt * (step_total_wait)
             return result / 60 # in minutes
 
         def _print_opt_messages(opts: List[OptArgsCraft], config: Config) -> None:
             for a in opts:
                 printc.text(f"> Options selected: {a.name}", Colors.GRE)
                 if a.name == "repair":
-                    printc.text(f">> Repair keys:", Colors.YEL)
-                    printc.text(f">>> Repair: {config.craft.opt_buttons.repair}", Colors.YEL)
+                    printc.text(f">>> Repair Key: {config.craft.opt_buttons.repair}", Colors.YEL)
                     printc.text(f">>> Craft Item Key: {config.craft.opt_buttons.craft_item}", Colors.YEL)
                 if a.name == "food":
                     printc.text(f">> Food Key: {config.craft.opt_buttons.food}", Colors.YEL)
+                    printc.text(f">>> Craft Item Key: {config.craft.opt_buttons.craft_item}", Colors.YEL)
                 if a.name == "pot":
                     printc.text(f">> Pot Key: {config.craft.opt_buttons.pot}", Colors.YEL)
+                    printc.text(f">>> Craft Item Key: {config.craft.opt_buttons.craft_item}", Colors.YEL)
 
         # START
+        sleep_buffers = sum(config.craft.sleeps.dict().values())
+        total_wait = sum(args.macro["wait"])
+        step_total_wait = sleep_buffers + total_wait
+
         count = 1
+        food_count = 0
+        pot_count = 0
         printc.text(f">>> Press CTRL+C to quit.\n", Colors.YEL)
         if args.opts:
             _print_opt_messages(args.opts, config)
@@ -103,7 +130,7 @@ class CraftHandler(BaseHandler):
             printc.text(f">>> Amount not specified, running until CTRL+C is pressed.", Colors.YEL)
         else:
             print(f">>> Amount specified: {args.amt} crafts.")
-            est = _estimate_time_completion(args.amt, args.macro)
+            est = _estimate_time_completion(args.amt, step_total_wait)
             print(f">>> Estimated completion time: {est:.2f}m")
 
         print(f">>> Using macro: {args.macro_name}")
@@ -112,12 +139,33 @@ class CraftHandler(BaseHandler):
             try:
                 if args.opts:
                     for o in args.opts:
-                        self.opt_commands[o](
-                            proc=self.proc,
-                            args=args,
-                            config=config,
-                            count=count
-                        )
+                        if o == OptArgsCraft.food:
+                            result = self.opt_commands[o](
+                                proc=self.proc,
+                                args=args,
+                                config=config,
+                                count=count,
+                                food_count=food_count,
+                                one_step=step_total_wait
+                            )
+                            food_count += step_total_wait
+                        elif o == OptArgsCraft.pot:
+                            result = self.opt_commands[o](
+                                proc=self.proc,
+                                args=args,
+                                config=config,
+                                count=count,
+                                pot_count=pot_count,
+                                one_step=step_total_wait
+                            )
+                            pot_count += step_total_wait
+                        else:
+                            self.opt_commands[o](
+                                proc=self.proc,
+                                args=args,
+                                config=config,
+                                count=count
+                            )
 
                 if args.amt and count > args.amt:
                     printc.text(">> Crafts finished.", Colors.GRE)
