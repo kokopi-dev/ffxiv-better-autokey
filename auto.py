@@ -76,10 +76,8 @@ class BetterAutoKey(cmd.Cmd):
                 elif args[0] == "switch" and len(args) > 1:
                     self.process.switch_pids(int(args[1]))
             return
-        if self.process.app:
-            # Importing here due to initializing a new venv debug check
-            printc.text("> Looking for FFXIV PID...", Colors.YEL)
-            self.process = Process()
+        if not self.process.app:
+            self.process.check_pid_integrity()
         else:
             printc.text(f"> {self.process.pid}", Colors.GRE)
             printc.text("> FFXIV PID is already hooked.", Colors.GRE)

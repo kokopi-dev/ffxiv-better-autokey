@@ -3,26 +3,46 @@ from argparsers.craft import OptArgsCraft, SingleArgsCraft, MainArgsCraft
 from configs.config import Config
 from enum import Enum
 from handlers.base import BaseHandler
-from typing import Callable, Dict
+from typing import Callable, Dict, List
 from utils.tty_colors import PrintColor as printc
 from utils.tty_colors import Colors
 from time import sleep
 from utils.process import Process
 
-
 class CraftOptsHandler:
     """Namespace for craft opt functions"""
     @staticmethod
-    def repair(proc, args, count):
-        pass
+    def repair(proc: Process, args: MainArgsCraft, config: Config, count: int):
+        if count % config.craft.opt_buttons.repair_threshold == 0:
+            print("> Repairing...", end="")
+            buttons = config.buttons
+            opt_buttons = config.craft.opt_buttons
+            sequence = [
+                buttons.esc,
+                opt_buttons.repair,
+                buttons.left,
+                buttons.select,
+                buttons.left,
+                buttons.select,
+                buttons.esc
+            ]
+            for key in sequence:
+                proc.press_key(key)
+                sleep(0.6)
+            sleep(3) # repair animation
+            proc.press_key(opt_buttons.craft_item) # craft item button
+            print("done.")
+
     @staticmethod
-    def food(proc, args, count):
+    def food(proc: Process, args: MainArgsCraft, config: Config, count: int):
         pass
+
     @staticmethod
-    def pot(proc, args, count):
+    def pot(proc: Process, args: MainArgsCraft, config: Config, count: int):
         pass
+
     @staticmethod
-    def afk(proc, args, count):
+    def afk(proc: Process, args: MainArgsCraft, config: Config, count: int):
         if args.amt < count:
             printc.text(">> Crafts have finished, starting afk sequence. CTRL+C to quit:", Colors.GRE)
             try:
@@ -60,11 +80,16 @@ class CraftHandler(BaseHandler):
             step_sleep = sum(macro["wait"])
             result = amt * (sleep_buffers + step_sleep)
             return result / 60 # in minutes
+
+        def _print_opt_messages(opts: List[OptArgsCraft]) -> None:
+            for a in opts:
+                printc.text(f">>> Options selected: {a.name}", Colors.YEL)
+        # START
         count = 1
         printc.text(f">>> Press CTRL+C to quit.\n", Colors.YEL)
 
         if args.opts:
-            print(f">>> Options selected: {[i.name for i in args.opts]}")
+            _print_opt_messages(args.opts)
 
         if not args.amt:
             printc.text(f">>> Amount not specified, running until CTRL+C is pressed.", Colors.YEL)
@@ -79,7 +104,12 @@ class CraftHandler(BaseHandler):
             try:
                 if args.opts:
                     for o in args.opts:
-                        self.opt_commands[o](self.proc, args, count)
+                        self.opt_commands[o](
+                            proc=self.proc,
+                            args=args,
+                            config=config,
+                            count=count
+                        )
 
                 if args.amt and count > args.amt:
                     printc.text(">> Crafts finished.", Colors.GRE)

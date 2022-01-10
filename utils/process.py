@@ -14,11 +14,12 @@ WINDOW_TITLE = "FINAL FANTASY XIV"
 # PROCESS_TARGET = "notepad.exe"
 # WINDOW_TITLE = "Notepad - Untitled"
 
+
 class PID(BaseModel):
     name: str
     id: int
 
-class Process():
+class Process:
     """Gets PID of PROCESS_TARGET, then hooks onto the PID on init.
     Also contains key press sequences.
     """
@@ -33,6 +34,7 @@ class Process():
 
     def find_pid(self):
         """Finds and adds to list of PIDs. Returns last found PID"""
+        printc.text("> Looking for FFXIV PID...", Colors.YEL)
         pid = None
         for p in psutil.process_iter():
             try:

@@ -14,8 +14,10 @@ craft = {
         "postfinish": 2
     },
     "opt_buttons": {
-        "repair": "4",
+        "repair": "3",
         "repair_threshold": 90,
-        "craft_item": "5"
+        "craft_item": "4",
+        "food": "5",
+        "pot": "6"
     }
 }
