@@ -23,7 +23,7 @@ class Process():
     Also contains key press sequences.
     """
     pid: Optional[PID]
-    app: Application
+    app: Optional[Application]
     all_pids: List[PID] = []
     connected_apps: List[Application] = []
 
@@ -48,6 +48,18 @@ class Process():
                 pass
         return pid
 
+    def check_pid_integrity(self):
+        if self.pid:
+            try:
+                printc.text(f"> Checking {self.pid} integrity...", Colors.YEL)
+                new_instance = Application().connect(process=self.pid.id)
+                printc.text(f"> {self.pid} integrity is OK", Colors.GRE)
+                self.app = new_instance
+            except Exception as e:
+                printc.text(f"> Could not connect to {pid}", Colors.RED)
+                printc.text(f"> {e}", Colors.RED)
+        return
+
     def connect_to_pid(self, pid: PID = None):
         """Returns a pywinauto Application object created with find_pid()"""
         if pid:
@@ -63,8 +75,6 @@ class Process():
         else:
             printc.text(f"ERROR: Could not find process name: {PROCESS_TARGET}", Colors.RED)
             printc.text(f"Try running this again when FFXIV is opened.", Colors.YEL)
-            sys.exit()
-
         return None
 
     def switch_pids(self, pid_id: int):
@@ -73,11 +83,12 @@ class Process():
             printc.text(f"Switched pids to {pid[0]}", Colors.GRE)
             self.pid = pid[0]
 
-    def change_current_name(self, name: str):
+    def change_current_name(self, name: List[str]):
         if self.pid:
             idx = self.all_pids.index(self.pid)
-            printc.text(f"Changed {self.pid.name} to {name}", Colors.GRE)
-            self.pid.name = name
+            new_name = " ".join(name)
+            printc.text(f"Changed {self.pid.name} to {new_name}", Colors.GRE)
+            self.pid.name = new_name
             self.all_pids[idx] = self.pid
         else:
             printc.text(f"{self.pid} not found in all_pids", Colors.RED)

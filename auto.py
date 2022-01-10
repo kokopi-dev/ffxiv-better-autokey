@@ -16,7 +16,6 @@ from argparsers.craft_parse import parse as craft_parse
 from argparsers.key_parse import parse as key_parse
 from argparsers.craft import MainArgsCraft
 from argparsers.key import MainArgsKey
-from time import sleep
 import sys
 import cmd
 import logging
@@ -31,18 +30,17 @@ class BetterAutoKey(cmd.Cmd):
     intro = ("\nCommands: craft|key|process|config|help\n" +
             "Run `help [COMMAND]` for more details.\n")
     prompt = "(BetterAutoKey) "
-    process: Optional[Process]
+    process: Process
     config: Config
     craft_handler: CraftHandler
     key_handler: KeyHandler
 
     def preloop(self):
-        self.process = None
-        self.do_process("") # Creating ffxiv process hook
+        self.process = Process()
         self.config = Config()
         self.craft_handler = CraftHandler()
         self.key_handler = KeyHandler()
-        if self.process:
+        if self.process.app:
             self.craft_handler.set_proc(self.process)
             self.key_handler.set_proc(self.process)
 
@@ -58,22 +56,27 @@ class BetterAutoKey(cmd.Cmd):
         pass
 
     def do_precmd(self):
-        # check integrity of process, if it cannot find ffxiv, rehook process
         pass
 
     def do_process(self, arg):
-        """Try to rehook FFXIV PID again."""
+        """No args: Rehook the FFXIV process.
+        Single Commands:
+            list: List all FFXIV processes
+        Option Commands:
+            name NAME: Rename the current FFXIV process
+            switch PID: Switch current FFXIV processes
+        """
         args = arg.split()
         if len(args) > 0:
             if self.process:
                 if args[0] == "name" and len(args) > 1:
-                    self.process.change_current_name(args[1])
+                    self.process.change_current_name(args[1:])
                 elif args[0] == "list":
                     print(f"{self.process.all_pids}")
                 elif args[0] == "switch" and len(args) > 1:
                     self.process.switch_pids(int(args[1]))
             return
-        if not self.process or not self.process.app:
+        if self.process.app:
             # Importing here due to initializing a new venv debug check
             printc.text("> Looking for FFXIV PID...", Colors.YEL)
             self.process = Process()
@@ -93,10 +96,11 @@ class BetterAutoKey(cmd.Cmd):
         """Requires key:str and interval:int.
         Ex. To open and close character menu: c,c 0.5,500
         """
-        if self.process:
+        if self.process.app:
             args: Optional[MainArgsKey] = key_parse(arg, self.config)
             if args:
                 self.key_handler.key_sequence(args)
+
 
     def do_craft(self, arg):
         """Single commands: list
@@ -104,7 +108,7 @@ class BetterAutoKey(cmd.Cmd):
             Options: afk=true, repair=true, food=TIME_REMAINING*, pot=TIME_REMAINING*
         * Put your time remaining in minutes. Ex. 15m left on your food: food=15
         """
-        if self.process:
+        if self.process.app:
             self.config.craft.check_modified_macros()
             args: Optional[MainArgsCraft] = craft_parse(arg, self.config.craft)
             if args:
