@@ -81,15 +81,23 @@ class CraftHandler(BaseHandler):
             result = amt * (sleep_buffers + step_sleep)
             return result / 60 # in minutes
 
-        def _print_opt_messages(opts: List[OptArgsCraft]) -> None:
+        def _print_opt_messages(opts: List[OptArgsCraft], config: Config) -> None:
             for a in opts:
-                printc.text(f">>> Options selected: {a.name}", Colors.YEL)
+                printc.text(f"> Options selected: {a.name}", Colors.GRE)
+                if a.name == "repair":
+                    printc.text(f">> Repair keys:", Colors.YEL)
+                    printc.text(f">>> Repair: {config.craft.opt_buttons.repair}", Colors.YEL)
+                    printc.text(f">>> Craft Item Key: {config.craft.opt_buttons.craft_item}", Colors.YEL)
+                if a.name == "food":
+                    printc.text(f">> Food Key: {config.craft.opt_buttons.food}", Colors.YEL)
+                if a.name == "pot":
+                    printc.text(f">> Pot Key: {config.craft.opt_buttons.pot}", Colors.YEL)
+
         # START
         count = 1
         printc.text(f">>> Press CTRL+C to quit.\n", Colors.YEL)
-
         if args.opts:
-            _print_opt_messages(args.opts)
+            _print_opt_messages(args.opts, config)
 
         if not args.amt:
             printc.text(f">>> Amount not specified, running until CTRL+C is pressed.", Colors.YEL)

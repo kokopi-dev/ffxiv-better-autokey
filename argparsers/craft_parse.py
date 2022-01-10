@@ -62,7 +62,7 @@ def parse(arg, config: CraftConfig) -> Optional[MainArgsCraft]:
         for o in opt_args:
             pair = o.split("=")
             if len(pair) != 2:
-                printc.text(f"{o} is an incorrect option format or not an option", Colors.RED)
+                printc.text(f"> {o} is an incorrect option format or not an option", Colors.RED)
                 return
             try:
                 op = OptArgsCraft(pair[0])
@@ -71,16 +71,16 @@ def parse(arg, config: CraftConfig) -> Optional[MainArgsCraft]:
                 else:
                     result.opts = [op]
             except ValueError:
-                printc.text(f"{o} is not an option", Colors.RED)
+                printc.text(f"> {o} is not an option", Colors.RED)
                 return
 
             try:
                 if op == OptArgsCraft.food:
                     result.food_count = int(pair[1])
                 elif op == OptArgsCraft.pot:
-                    result.food_count = int(pair[1])
+                    result.pot_count = int(pair[1])
             except ValueError:
-                printc.text(f"{pair[0]}: {pair[1]} needs to be a number", Colors.RED)
-
+                printc.text(f"> {pair[0]}: {pair[1]} needs to be a number", Colors.RED)
+                return
 
     return result
