@@ -55,7 +55,7 @@ Interval: [2.5, 3.0] in secs
 ```
 
 ### Craft
-Description: `craft [OPT:list] [macro] [OPT:amt] [OPT:--repair]`
+Description: `craft [OPT:list] [macro_name] [OPT:amt] [OPT:repair=true|afk=true|pot=0|food=0]`
 
 Background automated crafting
 
@@ -80,22 +80,24 @@ Command Examples:
 (BetterAutoKey) craft list
 ['4star.txt', 'dura40.txt', 'test.txt']
 
-(BetterAutoKey) craft dura40
+(BetterAutoKey) craft dura35
 >>> Press CTRL+C to quit.
->>> Options selected: ['--repair']
->>> Amount specified: 2 crafts.
->>> Using macro: macros\dura40.txt
+>>> Amount not specified, running until CTRL+C is pressed.
+>>> Using macro: dura40
 ...
 
-(BetterAutoKey) craft dura40 12
+(BetterAutoKey) craft dura35 12
 >>> Press CTRL+C to quit.
->>> Amount specified: 2 crafts.
->>> Using macro: macros\dura40.txt
+>>> Amount specified: 12 crafts.
+>>> Using macro: dura40
 ...
 
-(BetterAutoKey) craft dura40 12 --repair
+(BetterAutoKey) craft dura35 12 repair=true
 >>> Press CTRL+C to quit.
->>> Using macro: macros\dura40.txt
+> Options selected: repair
+>>> Repair Key: 3
+>>> Craft Item Key: 4
+>>> Using macro: dura40
 ...
 ```
 
