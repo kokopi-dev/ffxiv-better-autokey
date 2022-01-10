@@ -50,6 +50,10 @@ def parse(arg, config: CraftConfig) -> Optional[MainArgsCraft]:
             amt = int(args[1])
         result.amt = amt
 
+    # no opts
+    if len(args) == 2:
+        return result
+
     # check for opts
     idx = 1
     if amt != 0 and len(args) > 2:
@@ -76,9 +80,9 @@ def parse(arg, config: CraftConfig) -> Optional[MainArgsCraft]:
 
             try:
                 if op == OptArgsCraft.food:
-                    result.food_count = int(pair[1])
+                    result.food_count = int(pair[1]) * 60
                 elif op == OptArgsCraft.pot:
-                    result.pot_count = int(pair[1])
+                    result.pot_count = int(pair[1]) * 60
             except ValueError:
                 printc.text(f"> {pair[0]}: {pair[1]} needs to be a number", Colors.RED)
                 return

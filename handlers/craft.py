@@ -120,8 +120,8 @@ class CraftHandler(BaseHandler):
         step_total_wait = sleep_buffers + total_wait
 
         count = 1
-        food_count = 0
-        pot_count = 0
+        food_count = 1800 - args.food_count
+        pot_count = 900 - args.pot_count
         printc.text(f">>> Press CTRL+C to quit.\n", Colors.YEL)
         if args.opts:
             _print_opt_messages(args.opts, config)
