@@ -2,17 +2,7 @@
 """For debugging the win32 error that occurs for pywinauto"""
 import requests
 import os
-import sys
 
-
-def update_requirements(old_mod_time, new_mod_time):
-    """Checks if there has been updates the requirements.txt, updates if
-    there is a change in modified file time against the recorded"""
-    if old_mod_time != new_mod_time:
-        os.system("python -m pip install -r requirements.txt")
-        print("> Just installed new dependency updates, please restart the program.")
-        return True
-    return False
 
 def setupme():
     print("> Checking pip:")

@@ -4,6 +4,7 @@ linux_venv/
 .craft_config.json
 .general_config.json
 macros/*
+test.py
 
 # Byte-compiled / optimized / DLL files
 __pycache__/
