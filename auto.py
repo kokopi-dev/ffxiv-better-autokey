@@ -19,6 +19,7 @@ from argparsers.key_parse import parse as key_parse
 from argparsers.craft import MainArgsCraft
 from argparsers.config import MainArgsConfig
 from argparsers.key import MainArgsKey
+from pywinauto.findwindows import ElementNotFoundError
 import sys
 import cmd
 import logging
@@ -39,6 +40,17 @@ class BetterAutoKey(cmd.Cmd):
     config_handler: ConfigHandler
     key_handler: KeyHandler
 
+    def onecmd(self, line):
+        try:
+            return super().onecmd(line)
+        except ElementNotFoundError:
+            print(f"FFXIV Not Found. Attemping to rehook... FFXIV\n")
+            self.process = Process()
+            if self.process.app:
+                self.craft_handler.set_proc(self.process)
+                self.key_handler.set_proc(self.process)
+            return False
+
     def preloop(self):
         self.process = Process()
         self.config = Config()
@@ -54,7 +66,7 @@ class BetterAutoKey(cmd.Cmd):
         return True
 
     def do_EOF(self, arg):
-        print()
+        self.do_process("")
         return True
 
     def do_emptyline(self):

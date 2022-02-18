@@ -57,10 +57,11 @@ class Process:
                 new_instance = Application().connect(process=self.pid.id)
                 printc.text(f"> {self.pid} integrity is OK", Colors.GRE)
                 self.app = new_instance
+                return True
             except Exception as e:
-                printc.text(f"> Could not connect to {pid}", Colors.RED)
+                printc.text(f"> Could not connect to {self.pid}", Colors.RED)
                 printc.text(f"> {e}", Colors.RED)
-        return
+        return False
 
     def connect_to_pid(self, pid: PID = None):
         """Returns a pywinauto Application object created with find_pid()"""
