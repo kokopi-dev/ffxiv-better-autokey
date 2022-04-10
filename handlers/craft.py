@@ -30,7 +30,7 @@ class CraftOptsHandler:
                 proc.press_key(key)
                 sleep(0.6)
             sleep(3) # repair animation
-            proc.press_key(opt_buttons.craft_item) # craft item button
+            proc.press_key(opt_buttons.item) # craft item button
             print("done.")
 
     @staticmethod
@@ -43,7 +43,7 @@ class CraftOptsHandler:
             sleep(1.7)
             proc.press_key(opt_buttons.food)
             sleep(3)
-            proc.press_key(opt_buttons.craft_item)
+            proc.press_key(opt_buttons.item)
             sleep(0.3)
             return 3
         return kwargs["food_count"]
@@ -58,7 +58,7 @@ class CraftOptsHandler:
             sleep(1.7)
             proc.press_key(opt_buttons.pot)
             sleep(3)
-            proc.press_key(opt_buttons.craft_item)
+            proc.press_key(opt_buttons.item)
             sleep(0.3)
             return 3
         return kwargs["pot_count"]
