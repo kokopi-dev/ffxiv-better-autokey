@@ -106,15 +106,15 @@ class CraftHandler(BaseHandler):
                 printc.text(f"> Options selected: {a.name}", Colors.GRE)
                 if a.name == "repair":
                     printc.text(f">>> Repair Key: {config.craft.opt_buttons.repair}", Colors.YEL)
-                    printc.text(f">>> Craft Item Key: {config.craft.opt_buttons.craft_item}", Colors.YEL)
+                    printc.text(f">>> Craft Item Key: {config.craft.opt_buttons.item}", Colors.YEL)
                 if a.name == "food":
                     printc.text(f">> Time remaining on food: {int(food/60)}m~", Colors.YEL)
                     printc.text(f">> Food Key: {config.craft.opt_buttons.food}", Colors.YEL)
-                    printc.text(f">>> Craft Item Key: {config.craft.opt_buttons.craft_item}", Colors.YEL)
+                    printc.text(f">>> Craft Item Key: {config.craft.opt_buttons.item}", Colors.YEL)
                 if a.name == "pot":
                     printc.text(f">> Time remaining on pot: {int(pot/60)}m~", Colors.YEL)
                     printc.text(f">> Pot Key: {config.craft.opt_buttons.pot}", Colors.YEL)
-                    printc.text(f">>> Craft Item Key: {config.craft.opt_buttons.craft_item}", Colors.YEL)
+                    printc.text(f">>> Craft Item Key: {config.craft.opt_buttons.item}", Colors.YEL)
 
         # START
         sleep_buffers = sum(config.craft.sleeps.dict().values())
