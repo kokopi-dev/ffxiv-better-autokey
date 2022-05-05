@@ -38,30 +38,33 @@ class CraftOptsHandler:
         """Assuming 30 min duration for now"""
         buttons = config.buttons
         opt_buttons = config.craft.opt_buttons
-        if kwargs["food_count"] > (1800 - kwargs["one_step"]) or kwargs["food_count"] == 0:
+        if kwargs["food_count"] >= (1800 - kwargs["one_step"]):
+            print("> Refreshing food...")
             proc.press_key(buttons.esc)
             sleep(1.7)
             proc.press_key(opt_buttons.food)
             sleep(3)
             proc.press_key(opt_buttons.item)
             sleep(0.3)
-            return 3
-        return kwargs["food_count"]
+            return 0
+        result = kwargs["food_count"] + kwargs["one_step"]
+        return result
 
     @staticmethod
     def pot(proc: Process, args: MainArgsCraft, config: Config, count: int, **kwargs) -> int:
         """Assuming 15 min duration for now"""
         buttons = config.buttons
         opt_buttons = config.craft.opt_buttons
-        if kwargs["pot_count"] > (900 - kwargs["one_step"]) or kwargs["pot_count"] == 0:
+        if kwargs["pot_count"] >= (900 - kwargs["one_step"]):
             proc.press_key(buttons.esc)
             sleep(1.7)
             proc.press_key(opt_buttons.pot)
             sleep(3)
             proc.press_key(opt_buttons.item)
             sleep(0.3)
-            return 3
-        return kwargs["pot_count"]
+            return 0
+        result = kwargs["pot_count"] + kwargs["one_step"]
+        return result
 
     @staticmethod
     def afk(proc: Process, args: MainArgsCraft, config: Config, count: int, **kwargs):
@@ -150,7 +153,7 @@ class CraftHandler(BaseHandler):
                                 food_count=food_count,
                                 one_step=step_total_wait
                             )
-                            food_count += step_total_wait
+                            food_count = result
                         elif o == OptArgsCraft.pot:
                             result = self.opt_commands[o](
                                 proc=self.proc,
@@ -160,7 +163,7 @@ class CraftHandler(BaseHandler):
                                 pot_count=pot_count,
                                 one_step=step_total_wait
                             )
-                            pot_count += step_total_wait
+                            pot_count = result
                         else:
                             self.opt_commands[o](
                                 proc=self.proc,
