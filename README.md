@@ -101,10 +101,9 @@ Command Examples:
 ...
 
 # food=15 means that you have 15 minutes remaining on your current food buff
-# food=0 means you have no food buff on, and apply it before crafting
 (BetterAutoKey) craft dura35 12 food=15
 >>> Press CTRL+C to quit.
-> Options selected: repair
+> Options selected: food
 >>> Repair Key: 3
 >>> Craft Item Key: 4
 >>> Using macro: dura40
