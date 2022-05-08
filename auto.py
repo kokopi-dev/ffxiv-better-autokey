@@ -101,6 +101,7 @@ class BetterAutoKey(cmd.Cmd):
 
     def do_config(self, arg):
         """Edit configs:
+        `refresh`: Reset config to defaults
         `list`
         `buttons [craft] [repair|item|food|pot] [key]`
         """

@@ -12,6 +12,7 @@ class ConfigLocation(Enum):
 class SingleArgsConfig(Enum):
     """Single craft arg commands, for len of 1 commands."""
     listm = "list"
+    refresh = "refresh"
 
 class OptArgsConfig(Enum):
     buttons = "buttons"

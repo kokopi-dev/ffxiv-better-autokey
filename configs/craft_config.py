@@ -55,6 +55,11 @@ class CraftSleeps(BaseModel):
     poststep: int = 1
     postfinish: int = 2
 
+class CraftRepair(BaseModel):
+    cursor_delay: float = 0.6
+    animation_wait: int = 5
+    craft_menu_wait: int = 2
+
 class CraftMacros(BaseModel):
     macros: Dict
     last_modified: Dict
@@ -66,6 +71,7 @@ class CraftConfig:
     macros: CraftMacros
     sleeps: CraftSleeps
     opt_buttons: CraftOptButtons
+    repair: CraftRepair
 
     def __init__(self):
         if not self.folder.is_dir():
@@ -86,12 +92,14 @@ class CraftConfig:
         })
         self.sleeps = CraftSleeps(**config["sleeps"])
         self.opt_buttons = CraftOptButtons(**config["opt_buttons"])
+        self.repair = CraftRepair(**config.get("repair", templates.craft["repair"]))
 
     def _getdict(self):
         result = {}
         result.update(**self.macros.dict())
         result.update({"sleeps": self.sleeps.dict()})
         result.update({"opt_buttons": self.opt_buttons.dict()})
+        result.update({"repair": self.repair.dict()})
         return result
 
     def write_config(self):
@@ -99,6 +107,14 @@ class CraftConfig:
         with open(self.filename, "w+") as f:
             json.dump(new_config, f)
             printc.text(f"> Wrote new config to {self.filename}.", Colors.GRE)
+
+    def refresh_config(self):
+        current = self._getdict()
+        current.update(**templates.craft["sleeps"])
+        current.update(**templates.craft["opt_buttons"])
+        current.update(**templates.craft["repair"])
+        printc.text(f"> Refreshing current config with default settings...", Colors.YEL)
+        self.write_config()
 
     def check_modified_macros(self):
         """Checks for new or modified macros, and updates+writes them"""

@@ -112,6 +112,21 @@ Command Examples:
 
 ### Config
 
+#### Listing all config values:
+```
+(BetterAutoKey) config list
+Craft Opt Settings: repair='3' repair_threshold=100 item='4' food='5' pot='6'
+Craft Sleep Settings: prestart=2 poststep=1 postfinish=2
+Craft Repair Settings: cursor_delay=0.6 animation_wait=5 craft_menu_wait=2
+```
+
+#### Refreshing config values to default:
+```
+(BetterAutoKey) config refresh
+> Refreshing current config with default settings...
+> Wrote new config to .craft_config.json.
+```
+
 #### Adjusting `sleeps` Timers:
 There are 3 sleep steps during a craft:
   - `prestart`: Sleep after selecting the Synthesize button, before starting the craft

@@ -18,11 +18,16 @@ class ConfigHandler(BaseHandler):
 
     def __init__(self):
         self.commands[SingleArgsConfig.listm] = self.run_listm
+        self.commands[SingleArgsConfig.refresh] = self.refresh
         super().__init__()
 
     def run_listm(self, config: Config):
         printc.text(f"Craft Opt Settings: {config.craft.opt_buttons}", Colors.GRE)
         printc.text(f"Craft Sleep Settings: {config.craft.sleeps}", Colors.GRE)
+        printc.text(f"Craft Repair Settings: {config.craft.repair}", Colors.GRE)
+
+    def refresh(self, config: Config):
+        config.craft.refresh_config()
 
     def update_config(self, config: Config, args: MainArgsConfig):
         if args.opt == OptArgsConfig.buttons and args.location == ConfigLocation.craft:

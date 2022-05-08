@@ -28,10 +28,10 @@ class CraftOptsHandler:
             ]
             for key in sequence:
                 proc.press_key(key)
-                sleep(0.6)
-            sleep(5) # repair animation
+                sleep(config.craft.repair.cursor_delay)
+            sleep(config.craft.repair.animation_wait) # repair animation
             proc.press_key(opt_buttons.item) # craft item button
-            sleep(2) # cancels if next sequence is too early
+            sleep(config.craft.repair.craft_menu_wait) # cancels if next sequence is too early
             print("done.")
 
     @staticmethod
